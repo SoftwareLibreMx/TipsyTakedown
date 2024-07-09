@@ -1,2 +1,16 @@
-<h1>Hello, worlds!</h1>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask with Bootstrap</title>
+    <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Hello, Flask with Bootstrap!</h1>
+        <p class="lead">This is a simple example of integrating Bootstrap with a Flask application.</p>
+    </div>
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
