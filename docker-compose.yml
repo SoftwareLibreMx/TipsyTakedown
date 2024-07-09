@@ -7,6 +7,7 @@ services:
       - ./db/flyway/flyway.conf:/flyway/conf/flyway.config
     depends_on:
       - db
+    container_name: tipsy_flyway
   db:
     image: postgres
     restart: always
@@ -16,6 +17,7 @@ services:
       POSTGRES_PASSWORD: 1P@ssw0rd2345
     ports:
       - 5432:5432
+    container_name: tipsy_db
   www:
     build: ./www
     volumes:
@@ -25,3 +27,4 @@ services:
     depends_on:
       - db
       - flyway
+    container_name: tipsy_www
