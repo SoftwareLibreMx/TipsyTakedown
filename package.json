@@ -1,0 +1,13 @@
+{
+  "name": "TipsyTakedown",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:SoftwareLibreMx/TipsyTakedown.git",
+  "license": "GNU",
+  "devDependencies": {
+    "husky": "^9.0.11"
+  },
+  "scripts": {
+    "prepare": "husky"
+  }
+}
