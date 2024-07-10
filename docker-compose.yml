@@ -12,7 +12,7 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_DB: todolist
+      POSTGRES_DB: tipsy_db
       POSTGRES_USER: db_user
       POSTGRES_PASSWORD: 1P@ssw0rd2345
     ports:
