@@ -6,5 +6,6 @@ CREATE TABLE Video (
     path text NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now(),
-    deleted_at TIMESTAMP DEFAULT NULL
+    deleted_at TIMESTAMP DEFAULT NULL,
+    CONSTRAINT fk_teacher_id FOREIGN KEY(user_id) REFERENCES users(id)
 );
