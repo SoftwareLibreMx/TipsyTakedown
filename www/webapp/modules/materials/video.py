@@ -12,4 +12,5 @@ def get_video_url(video_id):
 def show(video_id):
     video_source = get_video_url(video_id)
 
-    return render_template('material/videoPlayer.html', video_source=video_source)
+    return render_template('material/videoPlayer.html',
+                           video_source=video_source)
