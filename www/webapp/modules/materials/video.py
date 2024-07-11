@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-video = Blueprint('video', __name__)
+video_router = Blueprint('video', __name__)
 
 
 def get_video_url(video_id):
@@ -8,10 +8,8 @@ def get_video_url(video_id):
     return 'https://www.youtube.com/watch?v=abc123'
 
 
-@video.route('/video/<int:video_id>')
+@video_router.route('/<int:video_id>')
 def show(video_id):
     video_source = get_video_url(video_id)
 
-    return video_source
-
-    # return render_template('material/videoPlayer.html', video_source=video_source)
+    return render_template('material/videoPlayer.html', video_source=video_source)

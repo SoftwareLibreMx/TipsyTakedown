@@ -1,6 +1,6 @@
 from flask import Blueprint
-from .video import video
+from .video import video_router
 
-materials = Blueprint('materials', __name__)
+materials_router = Blueprint('materials', __name__)
 
-materials.register_blueprint(video)
+materials_router.register_blueprint(video_router, url_prefix='/video')

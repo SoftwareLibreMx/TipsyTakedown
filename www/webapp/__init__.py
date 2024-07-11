@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template
 
-from .modules.materials import materials
+from .modules.materials import materials_router
 
 webapp = Blueprint('web', __name__)
 
-webapp.register_blueprint(materials, url_prefix='/material')
+webapp.register_blueprint(materials_router, url_prefix='/material')
 
 
 @webapp.route('/')
