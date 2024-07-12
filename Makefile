@@ -7,5 +7,7 @@ migrate:
 	docker-compose up flyway
 ssh:
 	docker-compose exec www bash
+autopep8:
+	docker-compose exec www autopep8 --in-place --aggressive --recursive /$(path)
 add:
 	docker-compose exec www mmp install $(package)	
