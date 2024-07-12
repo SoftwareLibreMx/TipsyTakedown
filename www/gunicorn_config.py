@@ -8,7 +8,7 @@ reload = True
 reload_extra_files = sum(
     [
         glob(
-            'webapp/static/**/*.' +
+            'www/static/**/*.' +
             ext,
             recursive=True) +
         glob(
