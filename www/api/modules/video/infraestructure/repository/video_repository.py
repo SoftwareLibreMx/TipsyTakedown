@@ -44,8 +44,7 @@ class VideoRepository:
             if not video_db:
                 raise Exception('Video not found')
 
-            video_db.deleted_at = datetime.now()
-
+            video_db.soft_delete()
             session.commit()
             session.refresh(video_db)
             return video_db

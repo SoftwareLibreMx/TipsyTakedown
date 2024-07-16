@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.declarative import declarative_base
 
-from .sqlmodel_to_dict import as_json_dumps
+from .sqlmodel_utils import as_json_dumps
 
 
 class MockModel(declarative_base()):
