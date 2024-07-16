@@ -39,3 +39,12 @@ def update_video(video_id, video_dict) -> tuple[list[str], VideoModel]:
     video_repository = __init_classes()
 
     return None, video_repository.update_video(video_id, video_dict)
+
+
+def delete_video(video_id) -> VideoModel:
+    video_repository = __init_classes()
+
+    try:
+        video_repository.delete_video(video_id)
+    except Exception as e:
+        return [str(e)]

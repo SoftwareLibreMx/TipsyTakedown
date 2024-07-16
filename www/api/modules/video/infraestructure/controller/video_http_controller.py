@@ -41,3 +41,13 @@ def update_video(video_id):
         return Response(json.dumps({"errors": errors}), status=400)
 
     return Response(as_json_dumps(video), status=200)
+
+
+@video_api.route('/<video_id>', methods=['DELETE'])
+def delete_video(video_id):
+    errors = application.delete_video(video_id)
+
+    if errors:
+        return Response(json.dumps({"errors": errors}), status=400)
+
+    return Response(status=204)
