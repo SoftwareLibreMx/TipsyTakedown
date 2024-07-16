@@ -14,7 +14,7 @@ services:
     environment:
       POSTGRES_DB: tipsy_db
       POSTGRES_USER: db_user
-      POSTGRES_PASSWORD: 1P@ssw0rd2345
+      POSTGRES_PASSWORD: 1Passw0rd2345
     ports:
       - 5432:5432
     container_name: tipsy_db
