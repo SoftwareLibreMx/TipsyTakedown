@@ -21,7 +21,7 @@ def __init_classes() -> VideoRepository:
 def get_video_by_id(video_id):
     video_repository = __init_classes()
 
-    return video_repository.get_video_url(video_id)
+    return video_repository.get_video_by_id(video_id)
 
 
 def create_video(video_dict) -> tuple[list[str], VideoModel]:
@@ -33,3 +33,9 @@ def create_video(video_dict) -> tuple[list[str], VideoModel]:
         return errors, None
 
     return None, video_repository.create_video(video)
+
+
+def update_video(video_id, video_dict) -> tuple[list[str], VideoModel]:
+    video_repository = __init_classes()
+
+    return None, video_repository.update_video(video_id, video_dict)

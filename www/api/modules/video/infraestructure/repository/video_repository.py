@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy.orm import Session
 
 from ...domain.entity import VideoModel
@@ -17,3 +18,16 @@ class VideoRepository:
             session.commit()
             session.refresh(video)
             return video
+
+    def update_video(self, video_id: str, video_dict: dict) -> VideoModel:
+        with Session(self.db_engine) as session:
+            video_db = session.query(VideoModel).filter_by(id=video_id).first()
+
+            video_db.teacher_id = video_dict.get('teacher_id', video_db.teacher_id)
+            video_db.name = video_dict.get('name', video_db.name)
+            video_db.description = video_dict.get('description', video_db.description)
+            video_db.updated_at = datetime.now()
+
+            session.commit()
+            session.refresh(video_db)
+            return video_db
