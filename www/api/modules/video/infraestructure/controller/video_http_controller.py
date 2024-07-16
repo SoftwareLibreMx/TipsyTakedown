@@ -13,7 +13,8 @@ def get_video_url(video_id):
     video = application.get_video_by_id(video_id)
 
     if not video:
-        return Response(json.dumps({"errors": ["Video not found"]}), status=404)
+        return Response(json.dumps(
+            {"errors": ["Video not found"]}), status=404)
 
     return Response(as_json_dumps(video), status=200)
 

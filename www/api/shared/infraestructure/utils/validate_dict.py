@@ -17,11 +17,12 @@ def validate_dict(data: dict, vk_options: list[VKOptions]) -> list[str]:
         if vk_option.key not in data and vk_option.default:
             data[vk_option.key] = vk_option.default
             continue
-        
+
         if vk_option.required and vk_option.key not in data:
             errors.append(f'{vk_option.key} is required')
 
-        if vk_option.key in data and not isinstance(data[vk_option.key], vk_option.type):
+        if vk_option.key in data and not isinstance(
+                data[vk_option.key], vk_option.type):
             errors.append(f'{vk_option.key} must be of type {vk_option.type}')
 
         if vk_option.options and data[vk_option.key] not in vk_option.options:

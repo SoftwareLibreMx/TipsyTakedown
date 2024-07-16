@@ -9,5 +9,7 @@ ssh:
 	docker-compose exec www bash
 autopep8:
 	docker-compose exec www autopep8 --in-place --aggressive --recursive /$(path)
+autopep8-all:
+	docker-compose exec www autopep8 --in-place --aggressive --recursive .
 add:
 	docker-compose exec www mmp install $(package)	
