@@ -17,7 +17,7 @@ def get_staged_files():
 def autopep8_file(file_path):
     """Runs autopep8 on the given file."""
     result = subprocess.run(
-        ['make', 'autopep8', f'file={file_path}'])
+        ['make', 'autopep8', f'path={file_path}'])
 
     if result.returncode != 0:
         raise Exception(f'Error while running autopep8 on {file_path}')

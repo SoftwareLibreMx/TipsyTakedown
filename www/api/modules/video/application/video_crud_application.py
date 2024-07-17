@@ -1,18 +1,50 @@
 # here will be all the normal Crud applications
 from shared.globals import db_engine
-from ..domain.service import VideoService
 from ..infraestructure.repository import VideoRepository
+from ..domain.entity import VideoModel
+
+video_repository = None
 
 
-def __init_classes() -> [VideoRepository, VideoService]:
-    video_repository = VideoRepository(db_engine)
+def __init_classes() -> VideoRepository:
+    '''
+    Didn't create service layer on crud because it was not necessary
+    '''
+    video_repository = globals().get('video_repository')
 
-    return [
-        video_repository, VideoService(video_repository)
-    ]
+    if video_repository is None:
+        video_repository = VideoRepository(db_engine)
+
+    return video_repository
 
 
 def get_video_by_id(video_id):
-    _, video_service = __init_classes()
+    video_repository = __init_classes()
 
-    return video_service.get_video_url(video_id)
+    return video_repository.get_video_by_id(video_id)
+
+
+def create_video(video_dict) -> tuple[list[str], VideoModel]:
+    video_repository = __init_classes()
+
+    errors, video = VideoModel.from_dict(video_dict)
+
+    if errors:
+        return errors, None
+
+    return None, video_repository.create_video(video)
+
+
+def update_video(video_id, video_dict) -> tuple[list[str], VideoModel]:
+    video_repository = __init_classes()
+
+    return None, video_repository.update_video(video_id, video_dict)
+
+
+def delete_video(video_id) -> VideoModel:
+    video_repository = __init_classes()
+
+    try:
+        video_repository.delete_video(video_id)
+    except Exception as e:
+        return [str(e)]
