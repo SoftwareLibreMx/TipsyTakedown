@@ -17,6 +17,7 @@ def as_json_dumps(obj):
 
     return json.dumps(obj_dict, default=str)
 
+
 BaseModel = declarative_base()
 
 

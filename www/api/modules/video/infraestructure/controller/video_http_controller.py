@@ -22,7 +22,8 @@ def get_video_url(video_id):
 
 @video_api.route('/', methods=['POST'])
 async def create_video():
-    request_data = request.get_json() if request.headers['Content-Type'] == 'application/json' else request.form
+    request_data = request.get_json(
+    ) if request.headers['Content-Type'] == 'application/json' else request.form
 
     errors, video = application.create_video(request_data)
 
