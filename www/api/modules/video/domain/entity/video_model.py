@@ -16,6 +16,7 @@ class VideoModel(Base, TrackTimeMixin, SoftDeleteMixin):
     name: Mapped[str] = mapped_column()
     description: Mapped[str] = mapped_column()
     path: Mapped[str] = mapped_column()
+    is_file_encoded: Mapped[bool] = mapped_column()
 
     @staticmethod
     def from_dict(data: dict) -> list:
@@ -33,4 +34,5 @@ class VideoModel(Base, TrackTimeMixin, SoftDeleteMixin):
             teacher_id=data.get('teacher_id'),
             name=data.get('name'),
             description=data.get('description'),
+            is_file_encoded=data.get('isFileEncoded', False),
         )

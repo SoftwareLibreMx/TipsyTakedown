@@ -1,3 +1,4 @@
+import asyncio
 import json
 from flask import Blueprint, request
 
@@ -20,14 +21,17 @@ def get_video_url(video_id):
 
 
 @video_api.route('/', methods=['POST'])
-def create_video():
-    request_data = request.get_json()
+async def create_video():
+    request_data = request.get_json() if request.headers['Content-Type'] == 'application/json' else request.form
 
     errors, video = application.create_video(request_data)
 
     if errors:
         print(errors)
         return Response(json.dumps({"errors": errors}), status=400)
+
+    # Exec async function to save video file
+    request.files.get('video_file', None)
 
     return Response(as_json_dumps(video), status=201)
 

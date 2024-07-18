@@ -1,1 +1,2 @@
+from .vide_encoding_queue_model import VideoEncodingQueueModel
 from .video_model import VideoModel
