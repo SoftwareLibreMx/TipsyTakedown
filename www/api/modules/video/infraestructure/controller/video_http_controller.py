@@ -1,7 +1,7 @@
 import json
 from flask import Blueprint, request
 
-from api.shared.infraestructure.utils import (
+from api.shared.infrastructure.utils import (
     api_response as Response, as_json_dumps)
 
 from ... import application

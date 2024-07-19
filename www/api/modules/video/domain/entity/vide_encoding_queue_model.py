@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy.orm import Mapped, mapped_column
 
-from api.shared.infraestructure.utils import (
+from api.shared.infrastructure.utils import (
     TrackTimeMixin, SoftDeleteMixin, BaseModel)
 
 
@@ -12,4 +12,4 @@ class VideoEncodingQueueModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
     id: Mapped[str] = mapped_column(primary_key=True, default=uuid.uuid4())
     video_id: Mapped[str] = mapped_column()
     file_key: Mapped[str] = mapped_column()
-    status: Mapped[str] = mapped_column(default='pending')
+    status: Mapped[str] = mapped_column(default='PENDING')

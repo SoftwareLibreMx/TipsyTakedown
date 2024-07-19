@@ -1,7 +1,7 @@
 import flask
 
 from webapp import webapp
-from api.shared.infraestructure.controller import api
+from api.shared.infrastructure.controller import api
 
 
 def create_app():

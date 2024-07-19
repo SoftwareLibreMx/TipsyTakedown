@@ -3,7 +3,7 @@ import uuid
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.declarative import declarative_base
 
-from api.shared.infraestructure.utils import validate_dict, VKOptions, TrackTimeMixin, SoftDeleteMixin
+from api.shared.infrastructure.utils import validate_dict, VKOptions, TrackTimeMixin, SoftDeleteMixin
 
 Base = declarative_base()
 

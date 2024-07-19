@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 
-from api.shared.infraestructure.utils import get_db_engine
+from api.shared.infrastructure.utils import get_db_engine
 
 load_dotenv()
 
