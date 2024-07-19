@@ -1,24 +1,27 @@
+from shared.globals import minion_credentials
+from api.shared.domain import FlaskFile
+
 from ..infraestructure.repository import MinioS3Repository
-from ..domain.service import S3Service
 
 s3_repository = None
-s3_service = None
 
 
-def __init_classes() -> S3Service:
+def __init_classes() -> MinioS3Repository:
     s3_repository = globals().get('s3_repository')
-    s3_service = globals().get('s3_service')
 
     if s3_repository is None:
-        s3_repository = MinioS3Repository()
+        s3_repository = MinioS3Repository(
+            minion_credentials.get('endpoint'),
+            minion_credentials.get('access_key'),
+            minion_credentials.get('secret_key'),
+            minion_credentials.get('bucket_name'),
+            minion_credentials.get('secure')
+        )
 
-    if s3_service is None:
-        s3_service = S3Service(s3_repository)
-
-    return s3_service
+    return s3_repository
 
 
-def upload_file(path, file):
+def upload_file(path: str, file: FlaskFile):
     s3_service = __init_classes()
 
-    return s3_service.upload_file(path, file)
+    return s3_service.upload_flask_file(path, file)

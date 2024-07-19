@@ -11,6 +11,7 @@ CREATE TABLE Videos (
     CONSTRAINT fk_teacher_id FOREIGN KEY(teacher_id) REFERENCES users(id)
 );
 
+DROP TYPE IF EXISTS VideoStatus;
 CREATE Type VideoStatus AS ENUM (
     'PENDING',
     'ENCODING',
@@ -21,6 +22,7 @@ CREATE Type VideoStatus AS ENUM (
 CREATE TABLE video_encoding_queue (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     video_id UUID NOT NULL,
+    file_key text NOT NULL,
     status VideoStatus DEFAULT 'PENDING',
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now(),

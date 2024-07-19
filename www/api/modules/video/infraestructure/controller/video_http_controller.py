@@ -1,9 +1,8 @@
-import asyncio
 import json
 from flask import Blueprint, request
-from threading import Thread
 
-from api.shared.infraestructure.utils import api_response as Response, as_json_dumps
+from api.shared.infraestructure.utils import (
+    api_response as Response, as_json_dumps)
 
 from ... import application
 
@@ -23,8 +22,9 @@ def get_video_url(video_id):
 
 @video_api.route('/', methods=['POST'])
 def create_video():
-    request_data = request.get_json(
-    ) if request.headers['Content-Type'] == 'application/json' else request.form
+    request_data = (request.get_json()
+                    if request.headers['Content-Type'] == 'application/json'
+                    else request.form)
 
     errors, video = application.create_video(request_data)
 
@@ -32,10 +32,9 @@ def create_video():
         print(errors)
         return Response(json.dumps({"errors": errors}), status=400)
 
-    # Upload file async
     video_file = request.files.get('video_file', None)
-    Thread(target=lambda: application.add_video_file_to_encoding_queue(
-        video.id, video_file)).start()
+
+    application.add_video_file_to_encoding_queue_async(video.id, video_file)
 
     return Response(as_json_dumps(video), status=201)
 
