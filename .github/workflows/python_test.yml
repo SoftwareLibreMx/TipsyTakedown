@@ -36,7 +36,7 @@ jobs:
         flake8 ./www --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest
+        pytest www/
 
   sonarqube:
     needs: build
