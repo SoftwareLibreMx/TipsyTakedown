@@ -3,12 +3,10 @@ import uuid
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.declarative import declarative_base
 
-from api.shared.infrastructure.utils import validate_dict, VKOptions, TrackTimeMixin, SoftDeleteMixin
-
-Base = declarative_base()
+from api.shared.infrastructure.utils import validate_dict, VKOptions, TrackTimeMixin, SoftDeleteMixin, BaseModel
 
 
-class VideoModel(Base, TrackTimeMixin, SoftDeleteMixin):
+class VideoModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
     __tablename__ = 'videos'
 
     id: Mapped[str] = mapped_column(primary_key=True)

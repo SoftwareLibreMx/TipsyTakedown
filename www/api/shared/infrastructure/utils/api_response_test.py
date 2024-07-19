@@ -1,11 +1,8 @@
-import pytest
-
 from flask import Response
 
 from .api_response import api_response
 
 
-@pytest.mark.unit
 def test_api_response():
     response = api_response('{"message": "Hello, World!"}')
     assert isinstance(response, Response)

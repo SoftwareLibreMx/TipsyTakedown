@@ -1,10 +1,8 @@
-import pytest
 from unittest.mock import patch
 
 from api.shared.infrastructure.utils.db_connection import get_db_engine
 
 
-@pytest.mark.unit
 def test_db_connection():
     mock_create_engine = patch(
         'api.shared.infrastructure.utils.db_connection.create_engine').start()
