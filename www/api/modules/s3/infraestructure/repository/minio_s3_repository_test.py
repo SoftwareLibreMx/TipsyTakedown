@@ -3,7 +3,7 @@ from unittest import mock
 from unittest.mock import patch, Mock
 
 from api.shared.domain import FlaskFile
-from api.modules.s3.infraestructure.repository.minio_s3_repository import MinioS3Repository
+from .minio_s3_repository import MinioS3Repository, minio
 
 
 class MinioS3RepositoryTest(unittest.TestCase):
@@ -15,7 +15,10 @@ class MinioS3RepositoryTest(unittest.TestCase):
         self.bucket_name = 'test'
         self.secure = False
 
+    @patch.object(minio, 'Minio', Mock())
     def test_upload_flask_file(self):
+        mock_minio = minio.Minio
+
         mock_put_object = Mock()
         mock_put_object.return_value = 'test'
 
@@ -23,8 +26,6 @@ class MinioS3RepositoryTest(unittest.TestCase):
         mock_client.bucket_exists.return_value = True
         mock_client.put_object = mock_put_object
 
-        mock_minio = patch(
-            'api.modules.s3.infraestructure.repository.minio_s3_repository.Minio').start()
         mock_minio.return_value = mock_client
 
         self.minio_s3_repository = MinioS3Repository(

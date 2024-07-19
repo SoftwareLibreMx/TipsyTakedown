@@ -1,6 +1,6 @@
 import io
+import minio
 
-from minio import Minio
 from minio.error import S3Error
 
 from api.shared.domain import FlaskFile
@@ -10,7 +10,7 @@ class MinioS3Repository:
 
     def __init__(self, endpoint: str, access_key: str,
                  secret_key: str, bucket_name: str, secure: bool):
-        self.client = Minio(
+        self.client = minio.Minio(
             endpoint,
             access_key=access_key,
             secret_key=secret_key,
