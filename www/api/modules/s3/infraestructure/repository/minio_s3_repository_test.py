@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 from unittest.mock import patch, Mock
 
-from api.shared.domain import FlaskFile
+from api.libs.domain_entity import FlaskFile
 from .minio_s3_repository import MinioS3Repository, minio
 
 

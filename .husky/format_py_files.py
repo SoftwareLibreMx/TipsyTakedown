@@ -70,7 +70,10 @@ class WWW:
     def autopep8_file(self, file_path):
         """Runs autopep8 on the given file."""
         result = subprocess.run(
-            ['make', 'autopep8', f'path={file_path}'])
+            ['make', 'autopep8', f'path={file_path}'],
+            capture_output=True,
+            text=True
+        )
 
         if result.returncode != 0:
             raise Exception(f'Error while running autopep8 on {file_path}')
