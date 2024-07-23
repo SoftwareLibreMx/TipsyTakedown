@@ -1,5 +1,5 @@
 from shared.globals import minion_credentials
-from api.shared.domain import FlaskFile
+from api.libs.domain_entity import FlaskFile
 
 from ..infraestructure.repository import MinioS3Repository
 

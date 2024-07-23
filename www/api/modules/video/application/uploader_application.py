@@ -2,7 +2,7 @@ from threading import Thread
 from werkzeug.datastructures import FileStorage
 
 from shared.globals import db_engine
-from api.shared.domain import FlaskFile
+from api.libs.domain_entity import FlaskFile
 
 from ..domain.service import VideoUploaderService
 from ..infraestructure.repository import VideoEncodingQueuRepository

@@ -3,7 +3,7 @@ import minio
 
 from minio.error import S3Error
 
-from api.shared.domain import FlaskFile
+from api.libs.domain_entity import FlaskFile
 
 
 class MinioS3Repository:

@@ -1,4 +1,4 @@
-from api.shared.domain import FlaskFile
+from api.libs.domain_entity import FlaskFile
 
 from ...infraestructure.repository import VideoEncodingQueuRepository
 from ....s3 import upload_file

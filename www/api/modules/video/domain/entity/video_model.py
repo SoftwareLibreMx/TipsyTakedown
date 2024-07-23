@@ -1,9 +1,8 @@
 import uuid
 
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.ext.declarative import declarative_base
 
-from api.shared.infrastructure.utils import validate_dict, VKOptions, TrackTimeMixin, SoftDeleteMixin, BaseModel
+from api.libs.utils import validate_dict, VKOptions, TrackTimeMixin, SoftDeleteMixin, BaseModel
 
 
 class VideoModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):

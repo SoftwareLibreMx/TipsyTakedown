@@ -2,8 +2,7 @@ import uuid
 
 from sqlalchemy.orm import Mapped, mapped_column
 
-from api.shared.infrastructure.utils import (
-    TrackTimeMixin, SoftDeleteMixin, BaseModel)
+from api.libs.utils import TrackTimeMixin, SoftDeleteMixin, BaseModel
 
 
 class VideoEncodingQueueModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):

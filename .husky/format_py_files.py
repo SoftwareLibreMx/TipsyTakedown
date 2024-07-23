@@ -4,7 +4,10 @@ import subprocess
 def get_staged_files():
     """Returns a list of staged files in the current git repository."""
     result = subprocess.run(
-        ['git', 'diff', '--name-only', '--cached'], capture_output=True, text=True)
+        ['git', 'diff', '--name-only', '--cached'],
+        capture_output=True,
+        text=True
+    )
 
     if result.returncode != 0:
         raise Exception('Error while getting staged files.')
