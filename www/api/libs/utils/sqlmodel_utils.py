@@ -1,6 +1,7 @@
 import json
 
 from sqlalchemy import inspect, Column, DateTime
+from sqlalchemy.orm import declarative_base
 from datetime import datetime
 
 
@@ -15,6 +16,9 @@ def as_json_dumps(obj):
     obj_dict = as_dict(obj)
 
     return json.dumps(obj_dict, default=str)
+
+
+BaseModel = declarative_base()
 
 
 class TrackTimeMixin:

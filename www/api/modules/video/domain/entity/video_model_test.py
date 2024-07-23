@@ -1,9 +1,7 @@
-import pytest
 
 from .video_model import VideoModel
 
 
-@pytest.mark.unit
 def test_from_dict():
     mock_video_dict = {
         'teacher_id': '123',

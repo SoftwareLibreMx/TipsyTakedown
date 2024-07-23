@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy.orm import Session
 
-from ...domain.entity import VideoModel
+from ...domain.entity import VideoModel, VideoEncodingQueueModel
 
 
 class VideoRepository:
@@ -48,3 +48,23 @@ class VideoRepository:
             session.commit()
             session.refresh(video_db)
             return video_db
+
+
+class VideoEncodingQueuRepository:
+    def __init__(self, db_engine):
+        '''
+        TODO: if needed create independent file, currently is not necessary
+        '''
+        self.db_engine = db_engine
+
+    def create_encoding_queue(self, video_id: str,
+                              file_key: str) -> VideoEncodingQueueModel:
+        with Session(self.db_engine) as session:
+            video_encoding_queue = VideoEncodingQueueModel(
+                video_id=video_id, file_key=file_key
+            )
+
+            session.add(video_encoding_queue)
+            session.commit()
+            session.refresh(video_encoding_queue)
+            return video_encoding_queue

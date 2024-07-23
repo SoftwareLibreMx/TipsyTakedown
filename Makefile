@@ -12,4 +12,6 @@ autopep8:
 autopep8-all:
 	docker-compose exec www autopep8 --in-place --aggressive --recursive .
 add:
-	docker-compose exec www mmp install $(package)	
+	docker-compose exec www mmp install $(package)
+test:
+	docker-compose exec www pytest /www

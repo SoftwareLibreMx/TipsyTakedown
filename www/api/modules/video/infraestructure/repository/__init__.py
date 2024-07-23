@@ -1,1 +1,1 @@
-from .video_repository import VideoRepository
+from .video_repository import VideoRepository, VideoEncodingQueuRepository
