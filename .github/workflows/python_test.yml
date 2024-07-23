@@ -54,7 +54,8 @@ jobs:
           python -m pip install -r www/requirements.txt
       - name: 
         run: |
-          coverage run -m pytest
+          export PYTHONPATH=./www
+          coverage run -m pytest www/
           coverage xml
       - uses: sonarsource/sonarqube-scan-action@master
         env:
