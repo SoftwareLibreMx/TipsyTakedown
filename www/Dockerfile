@@ -2,6 +2,7 @@ FROM python:3.12
 
 # Set the working directory
 WORKDIR /www
+ENV PYTHONPATH /www
 
 # Copy requirements.txt
 COPY requirements.txt .
