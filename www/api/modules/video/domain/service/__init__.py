@@ -1,1 +1,1 @@
-from .video_uploader_service import VideoUploaderService
+from .video_uploader import VideoUploaderService

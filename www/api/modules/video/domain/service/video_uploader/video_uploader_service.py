@@ -1,7 +1,7 @@
 from api.libs.domain_entity import FlaskFile
 
-from ...infraestructure.repository import VideoEncodingQueuRepository
-from ....s3 import upload_file
+from api.modules.video.infraestructure.repository import VideoEncodingQueuRepository
+from api.modules.s3 import upload_file
 
 
 class VideoUploaderService:

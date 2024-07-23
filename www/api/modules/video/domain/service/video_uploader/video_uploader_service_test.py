@@ -17,7 +17,7 @@ class VideoUploaderServiceTest(unittest.TestCase):
         video_file.get_file_extension.return_value = 'mp4'
 
         mock_upload_file = patch(
-            'api.modules.video.domain.service.video_uploader_service.upload_file').start()
+            'api.modules.video.domain.service.video_uploader.video_uploader_service.upload_file').start()
 
         self.video_uploader_service.add_video_file_to_encoding_queue(
             video_id, video_file)
