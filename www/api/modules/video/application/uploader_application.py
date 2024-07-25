@@ -5,7 +5,7 @@ from shared.globals import db_engine
 from api.libs.domain_entity import FlaskFile
 
 from ..domain.service import VideoUploaderService
-from ..infraestructure.repository import VideoEncodingQueuRepository
+from ..infraestructure.repository import VideoEQRepository
 
 vu_service = None
 video_eq_repository = None
@@ -16,7 +16,7 @@ def __init_classes() -> VideoUploaderService:
     video_eq_repository = globals().get('video_eq_repository')
 
     if video_eq_repository is None:
-        video_eq_repository = VideoEncodingQueuRepository(db_engine)
+        video_eq_repository = VideoEQRepository(db_engine)
 
     if vu_service is None:
         vu_service = VideoUploaderService(

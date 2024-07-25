@@ -167,3 +167,5 @@ node_modules/
 .DS_Store
 
 pip_modules/
+
+www/tmp/

@@ -1,12 +1,12 @@
 from api.libs.domain_entity import FlaskFile
 
-from api.modules.video.infraestructure.repository import VideoEncodingQueuRepository
+from api.modules.video.infraestructure.repository import VideoEQRepository
 from api.modules.s3 import upload_file
 
 
 class VideoUploaderService:
     def __init__(self, key_prefix: str,
-                 video_eq_repository: VideoEncodingQueuRepository):
+                 video_eq_repository: VideoEQRepository):
         self.video_eq_repository = video_eq_repository
         self.prefix = key_prefix
 
