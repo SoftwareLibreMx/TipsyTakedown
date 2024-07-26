@@ -15,3 +15,9 @@ add:
 	docker-compose exec www mmp install $(package)
 test:
 	docker-compose exec www pytest /www
+start-encoding-docker:
+	docker-compose up -d
+	docker-compose exec www python3 -c "from api.modules.video.application.encoder_application import process_video_queue; process_video_queue()"
+start-encoding:
+	python3 -c "from www.api.modules.video.application.encoder_application import process_video_queue; process_video_queue()"
+

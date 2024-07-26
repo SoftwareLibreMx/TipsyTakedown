@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 
-from ...domain.entity import VideoEncodingQueueModel, VideoEncodeStatus
+from api.modules.video.domain.entity import (
+    VideoEncodingQueueModel, VideoEncodingQueueStatus, VideoEncodingQueueStatus
+)
 
 
 class VideoEQRepository:
@@ -22,10 +24,11 @@ class VideoEQRepository:
     def get_first_video_to_encode(self) -> VideoEncodingQueueModel:
         with Session(self.db_engine) as session:
             return session.query(VideoEncodingQueueModel).filter_by(
-                status='pending').first()
+                status=VideoEncodingQueueStatus.PENDING.value
+            ).first()
 
     def update_status(self, video_id: str,
-                      status: VideoEncodeStatus) -> VideoEncodingQueueModel:
+                      status: VideoEncodingQueueStatus) -> VideoEncodingQueueModel:
         with Session(self.db_engine) as session:
             video_eq = session.query(VideoEncodingQueueModel).filter_by(
                 id=video_id).first()

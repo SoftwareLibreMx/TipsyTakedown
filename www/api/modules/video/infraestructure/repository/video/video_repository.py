@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy.orm import Session
 
-from ...domain.entity import VideoModel
+from api.modules.video.domain.entity import VideoModel
 
 
 class VideoRepository:

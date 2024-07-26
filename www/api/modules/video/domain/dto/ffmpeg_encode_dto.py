@@ -5,3 +5,4 @@ from dataclasses import dataclass
 class FFMPEGEncodeDTO:
     file_path: str
     stdout: str
+    error: str or None

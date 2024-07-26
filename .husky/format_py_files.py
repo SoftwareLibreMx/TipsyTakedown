@@ -55,10 +55,12 @@ class WWW:
     def get_staged_files(self):
         """Returns a list of staged files in the current git repository."""
         result = subprocess.run(
-            ['git', 'diff', '--name-only', '--cached'],
+            ['git', 'diff', '--name-only', '--cached', '--diff-filter=ACM'],
             capture_output=True,
             text=True
         )
+
+        print(result.stdout)
 
         if result.returncode != 0:
             raise Exception('Error while getting staged files.')

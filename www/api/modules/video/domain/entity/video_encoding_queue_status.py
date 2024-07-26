@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class VideoEncodeStatus(Enum):
+class VideoEncodingQueueStatus(Enum):
     PENDING = 'PENDING'
     ENCODING = 'ENCODING'
     COMPLETED = 'COMPLETED'
