@@ -6,11 +6,11 @@ from api.modules.video.domain.service import VideoEncoderService
 
 
 class TestVideoEncoderService(unittest.TestCase):
-    veq_repository = Mock()
-    ffmpeg_service = Mock()
-    minio_repository = Mock()
-
     def setUp(self) -> None:
+        self.veq_repository = Mock()
+        self.ffmpeg_service = Mock()
+        self.minio_repository = Mock()
+
         self.video_encoder_service = VideoEncoderService(
             self.veq_repository, self.ffmpeg_service, self.minio_repository
         )

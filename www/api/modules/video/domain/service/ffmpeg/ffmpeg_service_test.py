@@ -5,9 +5,9 @@ from api.modules.video.domain.service.ffmpeg import FFMPEGService
 
 
 class TestFFmpegService(unittest.TestCase):
-    ffmpeg_repository = Mock()
-
     def setUp(self) -> None:
+        self.ffmpeg_repository = Mock()
+
         self.ffmpeg_service = FFMPEGService(self.ffmpeg_repository)
 
     def test_encode_error(self):
