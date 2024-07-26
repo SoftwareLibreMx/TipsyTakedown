@@ -3,7 +3,7 @@ from unittest import mock
 from unittest.mock import patch, Mock
 
 from api.libs.domain_entity import FlaskFile
-from .minio_s3_repository import MinioS3Repository, minio
+from .minio_repository import MinioRepository, minio
 
 
 class MinioS3RepositoryTest(unittest.TestCase):
@@ -28,7 +28,7 @@ class MinioS3RepositoryTest(unittest.TestCase):
 
         mock_minio.return_value = mock_client
 
-        self.minio_s3_repository = MinioS3Repository(
+        self.minio_s3_repository = MinioRepository(
             self.endpoint, self.access_key, self.secret_key, self.bucket_name, self.secure)
 
         object_key = 'test.txt'
