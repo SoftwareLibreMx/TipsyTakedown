@@ -10,7 +10,7 @@ class FFMPEGService:
 
     def encode(self, scale: str, file_name: str) -> FFMPEGEncodeDTO:
         output_f_name = f'{file_name}_output_{scale}.mp4'
-        file_output_path = f'{self.location_prefix}/{output_f_name}'
+        file_output_path = f'{self.local_prefix}/{output_f_name}'
 
         resp = self.ffmpeg_repository.encode(
             scale=scale,
@@ -19,12 +19,12 @@ class FFMPEGService:
         )
 
         error = None
-        lower_resp = resp.lower()
-        if 'error' in lower_resp:
-            error = lower_resp.split('error')[1]
+        lower_resp = resp.lower().split('error', 1)
+        if len(lower_resp) > 1:
+            error = lower_resp[1].strip()
 
         return FFMPEGEncodeDTO(
             file_path=file_output_path,
-            stdout=resp.stderr,
+            stdout=resp,
             error=error
         )

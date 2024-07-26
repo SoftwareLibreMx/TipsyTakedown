@@ -71,9 +71,10 @@ class VideoEncoderService:
                 video_to_encode.id, VideoEncodingQueueStatus.FAILED
             )
             print(errors)
+            return
 
         self.veq_repository.update_status(
-            video_to_encode.id, VideoEncodingQueueStatus.SUCCESS
+            video_to_encode.id, VideoEncodingQueueStatus.COMPLETED
         )
 
         self.minio_repository.remove_tmp(video_to_encode.file_key)
