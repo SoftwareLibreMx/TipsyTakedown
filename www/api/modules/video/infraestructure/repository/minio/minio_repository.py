@@ -1,3 +1,4 @@
+import os
 import io
 import minio
 
@@ -6,7 +7,8 @@ from minio.error import S3Error
 from api.libs.domain_entity import FlaskFile
 
 
-class MinioS3Repository:
+class MinioRepository:
+    local_prefix = './tmp'
 
     def __init__(self, endpoint: str, access_key: str,
                  secret_key: str, bucket_name: str, secure: bool):
@@ -38,4 +40,23 @@ class MinioS3Repository:
             print(exc)
             return exc
         except Exception as exc:
+            raise exc
+
+    def download_tmp(self, file_key: str) -> bool:
+        path = f'{self.local_prefix}/{file_key}'
+
+        try:
+            self.client.fget_object(self.bucket_name, file_key, path)
+            return True
+        except S3Error as exc:
+            print(exc)
+            return False
+
+    def remove_tmp(self, file_key: str) -> None:
+        path = f'{self.local_prefix}/{file_key}'
+
+        try:
+            os.remove(path)
+        except Exception as exc:
+            print(exc)
             raise exc

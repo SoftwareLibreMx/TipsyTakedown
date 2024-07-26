@@ -10,8 +10,10 @@ COPY requirements.txt .
 # Install dependencies
 RUN pip install -r requirements.txt
 
+# Instll ffmpeg
+RUN apt update && apt install -y ffmpeg
+
 # Change to the working directory
-RUN cd /www
 
 # Copy the current directory contents into the container at /www
 ENTRYPOINT ["gunicorn", "app:flask_app", "--config", "/www/gunicorn_config.py"]
