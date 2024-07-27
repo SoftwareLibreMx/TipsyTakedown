@@ -1,0 +1,31 @@
+{% from "components/inputs/input_text.html" import input_text %}
+{% extends "layout/base.html" %}
+
+{% block title %}
+<title>Create course</title>
+{% endblock %}
+
+{% block body %}
+<div class="mx-5 mt-2">
+    <div class="d-flex flex-row justify-content-between">
+        <h1>Create new course</h1>
+
+        <button type="submit" class="btn btn-primary mt-2">Save</button>
+    </div>
+
+    <form>
+        {{ input_text('Course name', 'courseName')}}
+        {{ input_text('Course description', 'courseDescription')}}
+        <div class="mt-3">
+            <h3>Materials</h3>
+            <button id="addMaterialBtn"
+                type="button"
+                class="btn btn-primary" >Video material +</button>
+            <div id="materials"></div>
+        </div>
+    </form>
+</div>
+
+<script src="/static/js/createCourse.js"></script>
+{% endblock %}
+
