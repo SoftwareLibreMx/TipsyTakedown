@@ -14,3 +14,8 @@ def show(video_id):
 
     return render_template('material/videoPlayer.html',
                            video_source=video_source)
+
+
+@video_router.route('/uploader')
+def upload_video():
+    return render_template('video/uploader/index.html')
