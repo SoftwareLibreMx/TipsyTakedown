@@ -5,6 +5,3 @@ window.onload = function() {
         body.setAttribute('data-bs-theme', 'dark');
     }
 };
-
-
-console.log('Hello, world!');

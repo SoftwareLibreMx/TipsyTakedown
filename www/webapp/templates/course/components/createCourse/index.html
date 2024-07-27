@@ -10,10 +10,12 @@
     <div class="d-flex flex-row justify-content-between">
         <h1>Create new course</h1>
 
-        <button type="submit" class="btn btn-primary mt-2">Save</button>
+        <button id="saveBtn" 
+            form="courseForm"
+            class="btn btn-primary mt-2">Save</button>
     </div>
 
-    <form>
+    <form hx-post="/api/course" id="courseForm">
         {{ input_text('Course name', 'courseName')}}
         {{ input_text('Course description', 'courseDescription')}}
         <div class="mt-3">
