@@ -42,6 +42,15 @@ class MinioRepository:
         except Exception as exc:
             raise exc
 
+    def upload_tmp(self, file_key: str) -> None:
+        file_path = f'{self.local_prefix}/{file_key}'
+
+        try:
+            self.client.fput_object(self.bucket_name, file_key, file_path)
+        except S3Error as exc:
+            print(exc)
+            raise exc
+
     def download_tmp(self, file_key: str) -> bool:
         path = f'{self.local_prefix}/{file_key}'
 
@@ -53,10 +62,10 @@ class MinioRepository:
             return False
 
     def remove_tmp(self, file_key: str) -> None:
-        path = f'{self.local_prefix}/{file_key}'
+        file_path = f'{self.local_prefix}/{file_key}'
 
         try:
-            os.remove(path)
+            os.remove(file_path)
         except Exception as exc:
             print(exc)
             raise exc
