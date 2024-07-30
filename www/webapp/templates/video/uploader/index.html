@@ -1,0 +1,43 @@
+{% from "components/inputs/input_text.html" import input_text %}
+{% from "components/loader/loader.html" import loader %}
+{% extends "layout/base.html" %}
+
+{% block title %}
+<title>Upload video</title>
+{% endblock %}
+
+{% block body %}
+<div class="mx-5 mt-2">
+    <div class="d-flex flex-row justify-content-between">
+        <h1>Upload video</h1>
+
+        <button id="saveBtn" 
+            class="btn btn-primary mt-2">
+            <div id="saveText">Save</div>
+            <div id="spinner" class="d-none">
+                {{ loader() }}
+            </div>
+        </button>
+    </div>
+    
+    <!-- TODO: Add csrf token to form -->
+    <form id="videoUploadForm" method="POST">
+        <div class="d-none">
+            <input type="text" name="teacher_id" value="b95e727e-569a-4005-97cf-eae06f2371cb">
+        </div>
+        {{ input_text('Title', 'name') }}
+        {{ input_text('Description', 'description') }}
+        {{ input_text('Video', 'video', None, 'file') }}
+    </form>
+
+    <div class="alert alert-danger mt-3 d-none" role="alert" id="errorAlert">
+        File not able to be uploaded
+    </div>
+</div>
+
+<script type="module">
+    import { initSaveButton } from '/static/js/video/uploader.js';
+
+    initSaveButton(document);
+</script>
+{% endblock %}

@@ -1,7 +1,0 @@
-{
-    "python.testing.pytestArgs": [
-        "www"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
-}

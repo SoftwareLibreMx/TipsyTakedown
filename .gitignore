@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+# app_errorhandler-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -169,3 +169,5 @@ node_modules/
 pip_modules/
 
 www/tmp/
+
+.vscode/
