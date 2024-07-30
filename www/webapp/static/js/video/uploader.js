@@ -1,5 +1,5 @@
-class SaveButton {
-    constructor() {
+export class SaveButton {
+    constructor(document) {
         this.button = document.getElementById('saveBtn');
         this.text = document.getElementById('saveText');
         this.spinner = document.getElementById('spinner');
@@ -11,11 +11,8 @@ class SaveButton {
     }
 }
 
-const saveButton = new SaveButton();
-const errorAlert = document.getElementById('errorAlert');
-
-saveButton.button.addEventListener('click', async () => {
-    saveButton.toggleLoading();
+export async function onClickSaveButton(document, saveBtn) {
+    saveBtn.toggleLoading();
 
     const form = document.getElementById('videoUploadForm');
     const formData = new FormData(form);
@@ -25,12 +22,21 @@ saveButton.button.addEventListener('click', async () => {
         body: formData,
     });
 
-    saveButton.toggleLoading();
+    saveBtn.toggleLoading();
 
     if (!response.ok) {
+        const errorAlert = document.getElementById('errorAlert');
         errorAlert.classList.remove('d-none');
         return;
     }
 
-    // window.location.href = `/video/`;
-});
+     // window.location.href = `/video/`;
+}
+
+export function initSaveButton(document) {
+    const saveButton = new SaveButton(document);
+
+    saveButton.button.addEventListener('click', async () => {
+        await onClickSaveButton(document, saveButton);
+    });
+}

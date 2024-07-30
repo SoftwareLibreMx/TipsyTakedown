@@ -35,5 +35,9 @@
     </div>
 </div>
 
-<script src="/static/js/video/uploader.js"></script>
+<script type="module">
+    import { initSaveButton } from '/static/js/video/uploader.js';
+
+    initSaveButton(document);
+</script>
 {% endblock %}
