@@ -11,11 +11,10 @@
         <h1>Create new course</h1>
 
         <button id="saveBtn" 
-            form="courseForm"
             class="btn btn-primary mt-2">Save</button>
     </div>
 
-    <form hx-post="/api/course" id="courseForm">
+    <form id="courseForm" method='POST'>
         {{ input_text('Course name', 'courseName')}}
         {{ input_text('Course description', 'courseDescription')}}
         <div class="mt-3">

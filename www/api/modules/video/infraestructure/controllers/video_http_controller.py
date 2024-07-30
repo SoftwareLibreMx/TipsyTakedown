@@ -31,7 +31,7 @@ def create_video():
         print(errors)
         return Response(json.dumps({"errors": errors}), status=400)
 
-    video_file = request.files.get('video_file', None)
+    video_file = request.files.get('video', None)
 
     application.add_video_file_to_encoding_queue_async(video.id, video_file)
 
