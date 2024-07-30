@@ -57,5 +57,6 @@ def add_video_file_to_encoding_queue_async(
         content=video_file_bytes
     )
 
+    print('here')
     Thread(target=lambda: vu_service.add_video_file_to_encoding_queue(
         video_id, flask_file)).start()

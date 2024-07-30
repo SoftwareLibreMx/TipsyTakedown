@@ -32,5 +32,5 @@ saveButton.button.addEventListener('click', async () => {
         return;
     }
 
-    window.location.href = `/video/`;
+    // window.location.href = `/video/`;
 });
