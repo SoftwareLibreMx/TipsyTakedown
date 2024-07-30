@@ -20,3 +20,5 @@ minion_credentials = {
     'bucket_name': os.getenv('MINIO_BUCKET_NAME', ''),
     'secure': os.getenv('MINIO_SECURE', False)
 }
+
+local_prefix = os.getenv('LOCAL_PREFIX', './tmp')

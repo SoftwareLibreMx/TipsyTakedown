@@ -26,6 +26,9 @@ class VideoEncoderService:
     def encode_fifo(self):
         video_to_encode = self.veq_repository.get_first_video_to_encode()
 
+        if video_to_encode is None:
+            print('No videos to encode')
+
         while video_to_encode is not None:
             print(f'Encoding video {video_to_encode.id}')
             self.encode_by_entity(video_to_encode)
@@ -46,6 +49,7 @@ class VideoEncoderService:
         )
 
         if not is_downloaded:
+            print(f'Error downloading {video_to_encode.file_key}')
             self.veq_repository.update_status(
                 video_to_encode.id, VideoEncodingQueueStatus.FAILED
             )
@@ -57,8 +61,10 @@ class VideoEncoderService:
 
         errors = []
         for encoding in self.encodings:
+            output_file_key = f'{video_to_encode.video_id}/{encoding}.mp4'
+
             ffmpeg_encode = self.ffmpeg_service.encode(
-                encoding, video_to_encode.file_key)
+                encoding, video_to_encode.file_key, output_file_key)
 
             if ffmpeg_encode.error is not None:
                 errors.append(ffmpeg_encode.error)

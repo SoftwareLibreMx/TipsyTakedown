@@ -23,6 +23,18 @@ class MinioRepository:
 
         self.bucket_name = bucket_name
 
+    def get_signed_url(self, object_key: str, expires: int) -> str:
+        try:
+            return self.client.presigned_get_object(
+                self.bucket_name,
+                object_key,
+                expires=expires)
+        except S3Error as exc:
+            print(exc)
+            return exc
+        except Exception as exc:
+            raise exc
+
     def upload_flask_file(self, object_key: str,
                           flask_file: FlaskFile) -> None:
         flask_file_stream = io.BytesIO(flask_file.content)
