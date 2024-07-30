@@ -8,14 +8,14 @@ from api.modules.video.infraestructure.repository import (
     VideoEQRepository, MinioRepository
 )
 
+ENCODINGS = [
+    '1080p',
+    '720p',
+    '480p',
+]
+
 
 class VideoEncoderService:
-    encodings = [
-        '1080p',
-        '720p',
-        '480p',
-    ]
-
     def __init__(self, veq_repository: VideoEQRepository,
                  ffmpeg_service: FFMPEGService,
                  minio_repository: MinioRepository):
@@ -60,7 +60,7 @@ class VideoEncoderService:
         )
 
         errors = []
-        for encoding in self.encodings:
+        for encoding in ENCODINGS:
             output_file_key = f'{video_to_encode.video_id}/{encoding}.mp4'
 
             ffmpeg_encode = self.ffmpeg_service.encode(

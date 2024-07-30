@@ -2,6 +2,8 @@
 from shared.globals import db_engine, minion_credentials
 
 from ..domain.service import MinioService, VideoService
+from ..domain.service.video_encoder import ENCODINGS
+
 from ..infraestructure.repository import MinioRepository, VideoRepository
 from ..domain.dto import VideoResponseDTO
 from ..domain.entity import VideoModel
@@ -35,7 +37,7 @@ def __init_classes() -> VideoService:
         )
 
     if MINIO_SERVICE is None:
-        MINIO_SERVICE = MinioService(MINIO_REPOSITORY)
+        MINIO_SERVICE = MinioService(MINIO_REPOSITORY, ENCODINGS)
 
     VIDEO_SERVICE = VideoService(VIDEO_REPOSITORY, MINIO_SERVICE)
 

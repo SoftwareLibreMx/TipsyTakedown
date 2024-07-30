@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect
 
 from api.modules.video.application import get_video_by_id
 
@@ -13,8 +13,13 @@ def upload_video():
 
 @video_router.route('/<video_id>')
 def show(video_id):
-    video = get_video_by_id(video_id)
+    errors, video = get_video_by_id(video_id)
+
+    if errors:
+        redirect('/error/404')
+
+    print(video)
 
     return render_template(f'{TEMPLATE_DIR}/videoPlayer/index.html',
                            video=video,
-                           video_src=video.path)
+                           video_src=video.urls[0])

@@ -1,6 +1,7 @@
 import os
 import io
 import minio
+import datetime
 
 from minio.error import S3Error
 
@@ -24,11 +25,13 @@ class MinioRepository:
         self.bucket_name = bucket_name
 
     def get_signed_url(self, object_key: str, expires: int) -> str:
+        expires_delta = datetime.timedelta(seconds=expires)
+
         try:
             return self.client.presigned_get_object(
                 self.bucket_name,
                 object_key,
-                expires=expires)
+                expires=expires_delta)
         except S3Error as exc:
             print(exc)
             return exc

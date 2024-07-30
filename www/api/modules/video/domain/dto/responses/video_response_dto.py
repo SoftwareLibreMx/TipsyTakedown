@@ -17,4 +17,5 @@ class VideoResponseDTO():
             id=video.id,
             teacher_id=video.teacher_id,
             name=video.name,
-            description=video.description)
+            description=video.description,
+            urls=None)

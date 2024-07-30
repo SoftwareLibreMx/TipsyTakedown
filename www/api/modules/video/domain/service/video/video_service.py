@@ -19,10 +19,11 @@ class VideoService:
         if not video:
             return ['Video not found'], None
 
+        video_urls = None
         if video.is_file_encoded:
             video_urls = self.minio_service.get_video_urls(video.id)
 
-        video_response = VideoResponseDTO.from_entity(video, video_urls)
+        video_response = VideoResponseDTO.from_entity(video)
         video_response.urls = video_urls or []
 
         return None, video_response
