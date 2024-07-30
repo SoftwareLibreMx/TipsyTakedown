@@ -15,8 +15,9 @@ def upload_video():
 def show(video_id):
     errors, video = get_video_by_id(video_id)
 
+    print(errors, video)
     if errors:
-        redirect('/error/404')
+        return redirect('/error/404')
 
     print(video)
 
