@@ -8,8 +8,6 @@
 
 {% block body %}
 <div class="mx-5">
-    <h1>{{ video.name }}</h1>
-    
     <div class="d-flex flex-grow flex-row">
         <div>
             {{ videoPlayer([video_src]) }}
@@ -18,7 +16,8 @@
             List of next lessons
         </div>
     </div>
-    <br>
+
+    <h1>{{ video.name }}</h1>
 </div>
 {% endblock %}
 
