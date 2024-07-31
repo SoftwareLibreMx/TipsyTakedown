@@ -21,6 +21,6 @@ def show(video_id):
 
     print(video)
 
-    return render_template(f'{TEMPLATE_DIR}/videoPlayer/index.html',
+    return render_template(f'{TEMPLATE_DIR}/index.html',
                            video=video,
                            video_src=video.urls[0])
