@@ -1,0 +1,23 @@
+{% from "components/videoPlayer/videoPlayer.html" import videoPlayer %}
+
+{% extends 'layout/base.html' %}
+
+{% block title %}
+    <title>Video Player</title>
+{% endblock %}
+
+{% block body %}
+<div class="mx-5">
+    <div class="d-flex flex-grow flex-row">
+        <div>
+            {{ videoPlayer([video_src]) }}
+        </div>
+        <div class="">
+            List of next lessons
+        </div>
+    </div>
+
+    <h1>{{ video.name }}</h1>
+</div>
+{% endblock %}
+

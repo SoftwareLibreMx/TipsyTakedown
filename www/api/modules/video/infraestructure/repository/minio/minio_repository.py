@@ -1,6 +1,7 @@
 import os
 import io
 import minio
+import datetime
 
 from minio.error import S3Error
 
@@ -23,6 +24,20 @@ class MinioRepository:
 
         self.bucket_name = bucket_name
 
+    def get_signed_url(self, object_key: str, expires: int) -> str:
+        expires_delta = datetime.timedelta(seconds=expires)
+
+        try:
+            return self.client.presigned_get_object(
+                self.bucket_name,
+                object_key,
+                expires=expires_delta)
+        except S3Error as exc:
+            print(exc)
+            return exc
+        except Exception as exc:
+            raise exc
+
     def upload_flask_file(self, object_key: str,
                           flask_file: FlaskFile) -> None:
         flask_file_stream = io.BytesIO(flask_file.content)
@@ -42,6 +57,15 @@ class MinioRepository:
         except Exception as exc:
             raise exc
 
+    def upload_tmp(self, file_key: str) -> None:
+        file_path = f'{self.local_prefix}/{file_key}'
+
+        try:
+            self.client.fput_object(self.bucket_name, file_key, file_path)
+        except S3Error as exc:
+            print(exc)
+            raise exc
+
     def download_tmp(self, file_key: str) -> bool:
         path = f'{self.local_prefix}/{file_key}'
 
@@ -53,10 +77,10 @@ class MinioRepository:
             return False
 
     def remove_tmp(self, file_key: str) -> None:
-        path = f'{self.local_prefix}/{file_key}'
+        file_path = f'{self.local_prefix}/{file_key}'
 
         try:
-            os.remove(path)
+            os.remove(file_path)
         except Exception as exc:
             print(exc)
             raise exc

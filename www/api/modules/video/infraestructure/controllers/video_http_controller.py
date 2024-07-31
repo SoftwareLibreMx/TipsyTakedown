@@ -10,11 +10,10 @@ video_api = Blueprint('video_api', __name__)
 
 @video_api.route('/<video_id>', methods=['GET'])
 def get_video_url(video_id):
-    video = application.get_video_by_id(video_id)
+    errors, video = application.get_video_by_id(video_id)
 
-    if not video:
-        return Response(json.dumps(
-            {"errors": ["Video not found"]}), status=404)
+    if not errors:
+        return Response(json.dumps({"errors": errors}), status=404)
 
     return Response(as_json_dumps(video), status=200)
 
@@ -52,7 +51,7 @@ def update_video(video_id):
 
 @video_api.route('/<video_id>', methods=['DELETE'])
 def delete_video(video_id):
-    errors = application.delete_video(video_id)
+    errors, _ = application.delete_video(video_id)
 
     if errors:
         return Response(json.dumps({"errors": errors}), status=400)

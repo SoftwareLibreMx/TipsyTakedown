@@ -7,7 +7,7 @@ from api.libs.domain_entity import FlaskFile
 from ..domain.service import VideoUploaderService
 from ..infraestructure.repository import VideoEQRepository, MinioRepository
 
-FILE_KEY_PREFIX = 'test_upload_video'
+FILE_KEY_PREFIX = 'not_encoded'
 
 VU_SERVICE = None
 VIDEO_EQ_REPOSITORY = None
@@ -57,6 +57,5 @@ def add_video_file_to_encoding_queue_async(
         content=video_file_bytes
     )
 
-    print('here')
     Thread(target=lambda: vu_service.add_video_file_to_encoding_queue(
         video_id, flask_file)).start()

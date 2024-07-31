@@ -1,21 +1,26 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect
 
+from api.modules.video.application import get_video_by_id
+
+TEMPLATE_DIR = 'video'
 video_router = Blueprint('video', __name__)
-
-
-def get_video_url(video_id):
-    # This is a placeholder function that would return the video URL
-    return 'https://www.youtube.com/watch?v=abc123'
-
-
-@video_router.route('/<int:video_id>')
-def show(video_id):
-    video_source = get_video_url(video_id)
-
-    return render_template('material/videoPlayer.html',
-                           video_source=video_source)
 
 
 @video_router.route('/uploader')
 def upload_video():
-    return render_template('video/uploader/index.html')
+    return render_template(f'{TEMPLATE_DIR}/uploader/index.html')
+
+
+@video_router.route('/<video_id>')
+def show(video_id):
+    errors, video = get_video_by_id(video_id)
+
+    print(errors, video)
+    if errors:
+        return redirect('/error/404')
+
+    print(video)
+
+    return render_template(f'{TEMPLATE_DIR}/index.html',
+                           video=video,
+                           video_src=video.urls[0])

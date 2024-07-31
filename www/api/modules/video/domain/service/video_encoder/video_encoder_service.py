@@ -1,5 +1,5 @@
 from api.modules.video.domain.entity import (
-    Encoding, VideoEncodingQueueStatus, VideoEncodingQueueModel
+    VideoEncodingQueueStatus, VideoEncodingQueueModel
 )
 
 from api.modules.video.domain.service.ffmpeg import FFMPEGService
@@ -8,14 +8,14 @@ from api.modules.video.infraestructure.repository import (
     VideoEQRepository, MinioRepository
 )
 
+ENCODINGS = [
+    '1080p',
+    '720p',
+    '480p',
+]
+
 
 class VideoEncoderService:
-    encodings = [
-        Encoding('1080p'),
-        Encoding('720p'),
-        Encoding('480p'),
-    ]
-
     def __init__(self, veq_repository: VideoEQRepository,
                  ffmpeg_service: FFMPEGService,
                  minio_repository: MinioRepository):
@@ -26,7 +26,11 @@ class VideoEncoderService:
     def encode_fifo(self):
         video_to_encode = self.veq_repository.get_first_video_to_encode()
 
+        if video_to_encode is None:
+            print('No videos to encode')
+
         while video_to_encode is not None:
+            print(f'Encoding video {video_to_encode.id}')
             self.encode_by_entity(video_to_encode)
 
             video_to_encode = self.veq_repository.get_first_video_to_encode()
@@ -45,6 +49,7 @@ class VideoEncoderService:
         )
 
         if not is_downloaded:
+            print(f'Error downloading {video_to_encode.file_key}')
             self.veq_repository.update_status(
                 video_to_encode.id, VideoEncodingQueueStatus.FAILED
             )
@@ -55,16 +60,21 @@ class VideoEncoderService:
         )
 
         errors = []
-        for encoding in self.encodings:
+        for encoding in ENCODINGS:
+            output_file_key = f'{video_to_encode.video_id}/{encoding}.mp4'
+
             ffmpeg_encode = self.ffmpeg_service.encode(
-                encoding, video_to_encode.file_key)
+                encoding, video_to_encode.file_key, output_file_key)
 
             if ffmpeg_encode.error is not None:
                 errors.append(ffmpeg_encode.error)
+                print(f'Error encoding {video_to_encode.id} to {encoding}')
                 continue
 
-            self.minio_repository.upload_tmp(ffmpeg_encode)
-            self.minio_repository.remove_tmp(ffmpeg_encode.file_path)
+            print(f'Uploading {ffmpeg_encode.file_key}')
+            self.minio_repository.upload_tmp(ffmpeg_encode.file_key)
+            self.minio_repository.remove_tmp(ffmpeg_encode.file_key)
+            print(f'Uploaded {ffmpeg_encode.file_key}')
 
         if errors:
             self.veq_repository.update_status(

@@ -1,0 +1,26 @@
+{% macro videoPlayer(sources) %}
+<video
+    id="my-video"
+    class="video-js"
+    controls
+    preload="auto"
+    width="1240"
+    height="664"
+    data-setup="{}"
+>
+    {%- for source in sources %}
+        <source src="{{source}}" type="video/mp4" />
+    {%- endfor %}
+
+    <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a
+        web browser that
+        <a href="https://videojs.com/html5-video-support/" target="_blank">
+            supports HTML5 video
+        </a>
+    </p>
+</video>
+
+<script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
+<link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
+{%- endmacro %}
