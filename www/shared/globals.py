@@ -21,4 +21,12 @@ minion_credentials = {
     'secure': os.getenv('MINIO_SECURE', False)
 }
 
+google_oauth_credentials = {
+    'client_id': os.getenv('GOOGLE_OAUTH_CLIENT_id', ''),
+    'client_secret': os.getenv('GOOGLE_OAUTH_CLIENT_SECRET', ''),
+    'redirect_uri': os.getenv('GOOGLE_OAUTH_REDIRECT_URI', '')
+}
+
 local_prefix = os.getenv('LOCAL_PREFIX', './tmp')
+
+SECRET_KEY = os.getenv('SECRET_KEY', 'Super Scret Key For Flask App')
