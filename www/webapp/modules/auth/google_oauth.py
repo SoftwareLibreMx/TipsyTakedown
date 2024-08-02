@@ -7,7 +7,7 @@ from google_auth_oauthlib.flow import Flow
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 from shared.globals import google_oauth_credentials
-
+from shared.jwt import generate_token
 google_oauth_router = Blueprint('google', __name__)
 
 AUTH_URL = 'https://accounts.google.com/o/oauth2/auth'
@@ -51,6 +51,7 @@ def callback():
 
     # Save the credentials to the session
     credentials = flow.credentials
-    session['credentials'] = credentials_to_dict(credentials)
-
-    return redirect(url_for(''))
+    session['credentials'] = credentials
+    token = generate_token(credentials.id_token['sub'])
+    # TODO DEFINE CLIENT CALLBACK ROUTE FOR REDIRECT AND SAVE TOKEN TO LOCAL STORAGE
+    return redirect(url_for('client_callback', token=token))

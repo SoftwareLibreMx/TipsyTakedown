@@ -22,7 +22,7 @@ minion_credentials = {
 }
 
 google_oauth_credentials = {
-    'client_id': os.getenv('GOOGLE_OAUTH_CLIENT_id', ''),
+    'client_id': os.getenv('GOOGLE_OAUTH_CLIENT_ID', ''),
     'client_secret': os.getenv('GOOGLE_OAUTH_CLIENT_SECRET', ''),
     'redirect_uri': os.getenv('GOOGLE_OAUTH_REDIRECT_URI', '')
 }
@@ -30,3 +30,5 @@ google_oauth_credentials = {
 local_prefix = os.getenv('LOCAL_PREFIX', './tmp')
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'Super Scret Key For Flask App')
+JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'Super Scret Key For JWT')
+JWT_SECRET_ISSUER = os.getenv('JWT_SECRET_ISSUER', 'Tipsy TakeDown')

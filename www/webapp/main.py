@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 
 from .modules.course import course_router
 from .modules.errors import error_router
@@ -18,3 +18,8 @@ webapp.register_blueprint(oauth_router, url_prefix='/auth')
 @webapp.route('/')
 def index():
     return render_template("index.html")
+
+@webapp.route('/client_callback')
+def client_callback():
+    token = request.args.get('token')
+    return render_template('client_callback.html', token=token)

@@ -1,0 +1,19 @@
+{% extends "layout/base.html" %}
+
+{% block title %}
+<title>TipsyTakedown - Client Callback</title>
+{% endblock %}
+
+{% block body %}
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (token) {
+        sessionStorage.setItem('token', token);
+    }
+
+    window.location.href = '/';
+</script>
+{% endblock %}
+
