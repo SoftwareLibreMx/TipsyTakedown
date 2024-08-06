@@ -5,6 +5,10 @@ from flask import (
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
 from google_auth_oauthlib.flow import InstalledAppFlow
+import os
+# Configurar oauthlib para permitir HTTP
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 
 from shared.globals import google_oauth_credentials
 from shared.jwt import generate_token
@@ -34,24 +38,37 @@ def login():
     return redirect(authorization_url)
 
 
+def credentials_to_dict(credentials):
+    return {
+        'token': credentials.token,
+        'refresh_token': credentials.refresh_token,
+        'token_uri': credentials.token_uri,
+        'client_id': credentials.client_id,
+        'client_secret': credentials.client_secret,
+        'scopes': credentials.scopes
+    }
+
 @google_oauth_router.route('/callback')
 def callback():
     # Verify the request state
     if request.args.get('state') != session['state']:
         raise Exception('Invalid state')
-
     # Create the OAuth flow object
     flow = InstalledAppFlow.from_client_secrets_file(
         CLIENT_SECRET_FILE, scopes=SCOPES, state=session['state'])
-    flow.redirect_uri = url_for('callback', _external=True)
+    flow.redirect_uri = url_for('web.oauth.google.callback', _external=True)
 
     # Exchange the authorization code for an access token
     authorization_response = request.url
+    print("authorization_response")
+    print(authorization_response)
     flow.fetch_token(authorization_response=authorization_response)
 
     # Save the credentials to the session
     credentials = flow.credentials
+    print(credentials_to_dict(credentials))
+    
     session['credentials'] = credentials
-    token = generate_token(credentials.id_token['sub'])
+    token = generate_token(credentials.id_token)
     # TODO DEFINE CLIENT CALLBACK ROUTE FOR REDIRECT AND SAVE TOKEN TO LOCAL STORAGE
-    return redirect(url_for('client_callback', token=token))
+    return redirect(url_for('/client_callback', token=token))
