@@ -10,7 +10,7 @@ class WWW:
 
     def _get_docker(self):
         result = subprocess.run(
-            ['docker-compose', 'ps'],
+            ['docker', 'compose', 'ps'],
             capture_output=True,
             text=True
         )
@@ -22,7 +22,7 @@ class WWW:
             self.stop_docker = True
             print('Starting container...')
             subprocess.run(
-                ['docker-compose', 'up', '-d', 'www'],
+                ['docker', 'compose', 'up', '-d', 'www'],
                 capture_output=True
             )
 
@@ -30,7 +30,7 @@ class WWW:
         if self.stop_docker:
             print('Stopping container...')
             subprocess.run(
-                ['docker-compose', 'stop'],
+                ['docker', 'compose', 'stop'],
                 capture_output=True
             )
             print('Container stopped.')
