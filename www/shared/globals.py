@@ -26,6 +26,14 @@ google_oauth_credentials = {
     'client_secret': os.getenv('GOOGLE_OAUTH_CLIENT_SECRET', ''),
     'redirect_uri': os.getenv('GOOGLE_OAUTH_REDIRECT_URI', '')
 }
+mercadopago_credentials = {
+    'hidde_user_email_salt': os.getenv(
+        'MP_HIDDE_USER_EMAIL_KEY',
+        '$2b$12$vOW3UMIQJqUVr1QVCYQiR.'
+    ).encode('utf-8'),
+    'fake_domain': os.getenv('MP_FAKE_DOMAIN', 'foo.com'),
+    'access_token': os.getenv('MP_ACCESS_TOKEN', ''),
+}
 
 local_prefix = os.getenv('LOCAL_PREFIX', './tmp')
 
