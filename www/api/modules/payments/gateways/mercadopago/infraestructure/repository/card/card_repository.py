@@ -1,6 +1,9 @@
 import mercadopago
+from typing import Optional
 
 from shared.globals import mercadopago_credentials
+
+from api.modules.payments.domain.entity import Card
 
 
 class CardRepository:
@@ -11,7 +14,12 @@ class CardRepository:
 
         self.sdk = mercadopago.SDK(access_token)
 
-    def get_user_by_email(self, user_email):
+    def __print_error(self, response: dict):
+        status = f"Status {response.get('status')}"
+        error = f"error {response.get('cause', {})}"
+        print(f"{status} {error}")
+
+    def get_user_by_email(self, user_email: str) -> Optional[dict]:
         response = self.sdk.customer().search(filters={
             "email": user_email
         }).get('response', {})
@@ -19,18 +27,18 @@ class CardRepository:
         for user in response.get('results', []):
             return user
 
-    def create_user(self, user_email):
+    def create_user(self, user_email: str) -> Optional[dict]:
         response = self.sdk.customer().create({
             "email": user_email
         }).get('response', {})
 
-        if response.get('status', 0) == 400:
-            print(f"Error {response.get('cause', {})}")
+        if response.get('error', None):
+            self.__print_error(response)
             return None
 
         return response
 
-    def create_card(self, user_id, card):
+    def create_card_token(self, user_id: str, card: Card) -> Optional[dict]:
         response = self.sdk.card_token().create({
             "card_number": card.card_number,
             "security_code": card.security_code,
@@ -38,17 +46,20 @@ class CardRepository:
             "expiration_year": card.expiration_year,
             "cardholder": {
                 "name": card.cardholder_name,
-                "identification": {
-                    "type": card.identification_type,
-                    "number": card.identification_number
-                }
             }
         }).get('response', None)
 
-        response = self.sdk.card().create(user_id, {
-            "token":  card.token,
-            "issuer_id": card.issuer_id,
-            "payment_method_id": card.payment_method_id
-        }).get('response', None)
+        if response.get('error', None):
+            self.__print_error(response)
+            return None
+
+        return response
+
+    def pay_subscription(self, data: dict) -> Optional[dict]:
+        response = self.sdk.payment().create(data).get('response', None)
+
+        if response.get('error', None):
+            self.__print_error(response)
+            return None
 
         return response

@@ -3,9 +3,9 @@ import bcrypt
 from shared.globals import mercadopago_credentials as mp_credentials
 
 from api.modules.payments.domain.dto import Subscription
+from api.modules.payments.domain.entity import Card
 
 from ...entity import User
-from ...dto import Card
 
 
 class CardService:
@@ -14,24 +14,39 @@ class CardService:
         self.mp_repository = mp_card_repository
         self.payment_audit_repo = payment_audit_repo
 
-    def pay_subscription(self, user: User,
-                         req_card: Card, subscription: Subscription):
+    def pay_subscription(
+        self,
+        user: User,
+        req_card: Card,
+        subscription: Subscription
+    ) -> tuple[list[str], dict]:
         encrypted_email = self.__get_encryptes_emaul(user.email)
 
         user = self.__get_or_create_user(encrypted_email)
-        payment_card = self.__get_or_create_card(user, req_card)
+        if not user:
+            return ["Error creating user"], None
+
+        card_token = self.mp_repository.create_card_token(
+            user.id, req_card)
+        if not card_token:
+            return ["Error creating card"], None
+
+        payment_method_id = self.__get_payment_method_id(
+            req_card.card_number)
+        if not payment_method_id:
+            return ["Card number not valid"], None
 
         payment_audit = self.payment_audit_repo.create_payment_audit(
             user.id,
-            payment_card.id,
+            card_token.get('last_four_digits'),
             subscription,
         )
 
         response = self.mp_repository.pay_subscription({
             "transaction_amount": subscription.transaction_amount,
-            "token": payment_card.card_token,
+            "token": card_token.get('id'),
             "description": "",
-            "payment_method_id": payment_card.payment_method_id,
+            "payment_method_id": payment_method_id,
             "installments": 1,
             "payer": {
                 "email": encrypted_email
@@ -41,7 +56,7 @@ class CardService:
         self.payment_audit_repo.update_payment_audit(
             payment_audit.id, response['status'])
 
-        return response
+        return None, response
 
     def __get_encryptes_emaul(self, user_email):
         fake_domain = mp_credentials['fake_domain']
@@ -63,11 +78,9 @@ class CardService:
         serialize_user.cards = serialize_card
         return serialize_user
 
-    def __get_or_create_card(self, user, req_card):
-        for mp_card in user.cards:
-            if mp_card.last_four_digits == req_card.last_four_digits:
-                return mp_card
-
-        card = self.mp_repository.create_card(user.id, req_card)
-
-        return Card.from_dict(card)
+    def __get_payment_method_id(self, card_number):
+        return {
+            '4': 'visa',
+            '2': 'master',
+            '5': 'master',
+        }.get(card_number[0], None)
