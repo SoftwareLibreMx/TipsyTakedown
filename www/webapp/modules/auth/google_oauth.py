@@ -15,10 +15,6 @@ os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
 
 google_oauth_router = Blueprint("google", __name__)
 
-AUTH_URL = "https://accounts.google.com/o/oauth2/auth"
-
-CLIENT_ID = google_oauth_credentials.get("client_id", "")
-CLIENT_SECRET = google_oauth_credentials.get("client_secret", "")
 CLIENT_SECRET_FILE = "client_secret.json"
 SCOPES = [
     "https://www.googleapis.com/auth/userinfo.profile",
@@ -38,6 +34,18 @@ def login():
     session["state"] = state
 
     return redirect(authorization_url)
+
+## Used by Google OAuth
+def credentials_to_dict(credentials):
+    return {
+        "token": credentials.token,
+        "refresh_token": credentials.refresh_token,
+        "token_uri": credentials.token_uri,
+        "client_id": credentials.client_id,
+        "client_secret": credentials.client_secret,
+        "scopes": credentials.scopes,
+        "id_token": credentials.id_token,
+    }
 
 def serialize_credentials(credentials):
     credentials_dict = credentials_to_dict(credentials)
