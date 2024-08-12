@@ -12,6 +12,11 @@ class UserCredentialRepository:
       return session.query(UserCredentialModel).filter_by(
         id=user_credential_id, deleted_at=None).first()
 
+  def get_user_credential_by_email(self, email: str) -> UserCredentialModel:
+    with Session(self.db_engine) as session:
+      return session.query(UserCredentialModel).filter_by(
+        email=email, deleted_at=None).first()
+    
   def create_user_credential(self, user_credential: UserCredentialModel) -> UserCredentialModel:
     with Session(self.db_engine) as session:
       session.add(user_credential)
@@ -30,8 +35,8 @@ class UserCredentialRepository:
           'email', user_credential_db.email)
       user_credential_db.sso_provider = user_cred_dict.get(
           'sso_provider', user_credential_db.sso_provider)
-      user_credential_db.open_id = user_cred_dict.get(
-          'open_id', user_credential_db.open_id)
+      user_credential_db.openid = user_cred_dict.get(
+          'openid', user_credential_db.openid)
       user_credential_db.password_hash = user_cred_dict.get(
           'password_hash', user_credential_db.password_hash)
       user_credential_db.password_salt = user_cred_dict.get(

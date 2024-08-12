@@ -1,4 +1,4 @@
-import shared.jwt as jwt
+import jwt
 import datetime
 from shared.globals import (
     JWT_SECRET_KEY, JWT_SECRET_ISSUER
@@ -8,7 +8,7 @@ def generate_token(user_id):
     payload = {
         'user_id': user_id,
         'iss': JWT_SECRET_ISSUER,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)
+        'exp': datetime.datetime.now() + datetime.timedelta(days=7)
     }
     token = jwt.encode(payload, JWT_SECRET_KEY, algorithm='HS256')
     return token

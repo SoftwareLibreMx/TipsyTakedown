@@ -1,6 +1,6 @@
 from flask import g, request, redirect, url_for, jsonify
 from api.libs.domain_entity import UserType
-from shared.jwt import verify_token
+from shared.tipsy_jwt import verify_token
 from functools import wraps
 
 
