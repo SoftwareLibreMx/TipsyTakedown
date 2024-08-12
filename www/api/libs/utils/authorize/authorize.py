@@ -8,8 +8,7 @@ def authorize(user_type_required: UserType):
 	def login_required(f):
 		@wraps(f)
 		def decorated_function(*args, **kwargs):
-			# authorization_token = request.headers.get('Authorization', None)
-			token = request.headers.get('Authorization').split()[1]
+			token = request.headers.get('Authorization', None)
 			verification_result = verify_token(token)
 			if verification_result == 'Token has expired':
 				return jsonify({'message': 'Token has expired'}), 401

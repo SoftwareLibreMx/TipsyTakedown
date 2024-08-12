@@ -7,13 +7,11 @@ class UserService:
 
   def get_user_by_id(self, user_id: str) -> UserModel:
     # Get user from the repository by id
-    user = self.user_repository.get_user_by_id(user_id)
-    return user
+    return self.user_repository.get_user_by_id(user_id)
 
   def get_user_by_email(self, email: str) -> UserModel:
     # Get user from the repository by email
-    user = self.user_repository.get_user_by_id(email)
-    return user
+    return self.user_repository.get_user_by_id(email)
 
   def create_user(self, user_dict: dict) -> UserModel:
 
@@ -28,10 +26,8 @@ class UserService:
 
   def update_user(self, user_id, updated_data):
     # Update user in the repository
-    user = self.user_repository.update_user(user_id, updated_data)
-
-    return user
+    return self.user_repository.update_user(user_id, updated_data)
 
   def delete_user(self, user_id):
     # Delete user from the repository
-    self.user_repository.delete_user(user_id)
+    return self.user_repository.delete_user(user_id)
