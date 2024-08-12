@@ -1,3 +1,5 @@
+from typing import Optional
+
 from ...entity import Card, PaymentAuditModel
 from ....gateways.mercadopago.application import (
     card_payment as meli_card_payment
@@ -20,18 +22,28 @@ class CardService:
             meli_card_payment
         ]
 
-    def __decrypt_card(self, card: Card) -> Card:
-        pass
+    # TODO: Implement encrypt and decrypt methods
+    def _decrypt_card(self, card: Card) -> Card:
+        return card
 
-    def __encrypt_card(self, card: Card) -> Card:
-        pass
+    def _encrypt_card(self, card: Card) -> Card:
+        return card
 
-    def pay(self, user: dict, card: Card,
-            amount: float, payment_audit: PaymentAuditModel):
-        card = self.__decrypt_card(card)
+    def pay(
+        self,
+        user: dict,
+        payment_amount: float,
+        payment_audit: PaymentAuditModel,
+        card: dict
+    ) -> tuple[list[str], dict]:
+        card = self.get_or_create(user.get('id', None), card)
+        self.payment_audit_repo.update(payment_audit.id, {
+            'card_id': card.get('id', None)
+        })
 
         for gateway in self.payment_gateways:
-            errors, response = gateway.pay(user, card, amount, payment_audit)
+            errors, response = gateway.pay(
+                user, card, payment_amount, payment_audit)
 
             if errors:
                 return errors, None
@@ -40,5 +52,26 @@ class CardService:
 
         return ["No payment gateway available"], None
 
-    def create(self, user_id: str, card: dict) -> Card:
-        pass
+    def create(self, user_id: str, card: dict) -> tuple[list[str], dict]:
+        card = self._encrypt_card(Card.from_dict(card))
+
+        return self.card_repository.create(user_id, card)
+
+    def get_by_last_four_digits(
+        self,
+        user_id: str,
+        last_four_digits: str
+    ) -> Optional[Card]:
+        return self.card_repository.get(user_id, last_four_digits)
+
+    def get_or_create(
+        self, user_id: str, card: dict
+    ) -> tuple[list[str], dict]:
+        card = self.get_by_last_four_digits(
+            user_id, card.get('last_four_digits', None)
+        )
+
+        if card:
+            return None, card
+
+        return self.create(user_id, card)

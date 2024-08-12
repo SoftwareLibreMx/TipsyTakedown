@@ -82,12 +82,13 @@ CREATE TABLE promo_codes (
 );
 
 -- SUBSCRIPTION tables
-DROP TYPE IF EXISTS PaymentInterval;
-CREATE Type PaymentInterval AS ENUM ('MONTHLY', 'ANUAL');
+DROP TYPE IF EXISTS PaymentCycle;
+CREATE Type PaymentCycle AS ENUM ('MONTHLY', 'ANUAL');
 
 CREATE TABLE subscription_types (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    payment_interval PaymentInterval NOT NULL,
+    payment_cycle PaymentCycle NOT NULL,
+    price DOUBLE precision NOT NULL,
     currency Currency NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT now(),

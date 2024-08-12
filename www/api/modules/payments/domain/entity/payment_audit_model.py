@@ -28,11 +28,11 @@ class PaymentAuditModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
         String(3), nullable=False, default='MXN')
     transaction_date: Mapped[str] = mapped_column(DateTime, nullable=False)
     status: Mapped[PaymentStatus] = mapped_column(
-        PaymentStatus, default=PaymentStatus.PENDING.value)
+        String, default=PaymentStatus.PENDING.value)
     reject_reason: Mapped[RejectionReason] = mapped_column(
-        RejectionReason, nullable=True)
+        String, nullable=True)
     payment_method: Mapped[PaymentMethod] = mapped_column(
-        PaymentMethod, nullable=False)
+        String, nullable=False)
     card_id: Mapped[str] = mapped_column(String(36), nullable=True)
 
     @staticmethod

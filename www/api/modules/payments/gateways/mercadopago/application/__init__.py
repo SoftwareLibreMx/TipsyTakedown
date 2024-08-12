@@ -1,1 +1,1 @@
-from .card_payment import pay as pay_card
+from .card_payment import card_payment

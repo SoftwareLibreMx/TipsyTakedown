@@ -29,9 +29,9 @@ class CardService:
 
         encrypted_email = self.__get_encryptes_emaul(req_user.email)
 
-        user = self.__get_or_create_user(encrypted_email)
-        if not user:
-            return ["Error creating user"], None
+        errors, user = self.__get_or_create_user(encrypted_email)
+        if errors:
+            return errors, None
 
         card_token = self.mp_repository.create_card_token(
             user.id, req_card)
@@ -73,7 +73,8 @@ class CardService:
 
         user = user if user else self.mp_repository.create_user(user_email)
 
-        return User.from_dict(user) if user else None
+        return User.from_dict(user) if user else (
+            ['Error creating user'], None)
 
     def __get_payment_method_id(self, card_number: str) -> Optional[str]:
         return {

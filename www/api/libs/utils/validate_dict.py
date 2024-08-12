@@ -1,3 +1,4 @@
+import inspect
 from dataclasses import dataclass
 from enum import Enum
 
@@ -11,6 +12,17 @@ class VKOptions:
     options: list = None
 
 
+def __is_invalid_type(vk_option, data):
+    valid_enum_value = (
+        inspect.isclass(vk_option.type) and
+        issubclass(vk_option.type, Enum)
+        and data[vk_option.key] not in vk_option.type
+    )
+    is_instance = data.get(vk_option.key, None) and isinstance(
+        data[vk_option.key], vk_option.type)
+    return not valid_enum_value and not is_instance
+
+
 def validate_dict(data: dict, vk_options: list[VKOptions]) -> list[str]:
     errors = []
 
@@ -22,12 +34,8 @@ def validate_dict(data: dict, vk_options: list[VKOptions]) -> list[str]:
         if vk_option.required and vk_option.key not in data:
             errors.append(f'{vk_option.key} is required')
 
-        valid_enum_value = (
-            issubclass(vk_option.type, Enum)
-            and data[vk_option.key] not in vk_option.type
-        )
-        is_instance = isinstance(data[vk_option.key], vk_option.type)
-        if vk_option.key in data and (not enum_value or not is_instance):
+        invalid_type = __is_invalid_type(vk_option, data)
+        if vk_option.key in data and invalid_type:
             errors.append(f'{vk_option.key} must be of type {vk_option.type}')
 
         if vk_option.options and data[vk_option.key] not in vk_option.options:

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from api.libs.utils import validate_dict, VKOptions
 
-from ...domainentity import (
+from ....domain.entity import (
     PaymentAuditModel, PaymentMethod,
     PaymentStatus, RejectionReason
 )
