@@ -1,9 +1,7 @@
 import json
 from flask import Blueprint, url_for, session, redirect, request
-from shared.globals import db_engine
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
-from shared.globals import google_oauth_credentials
 from shared.tipsy_jwt import generate_token
 from api.modules.auth import application as auth_application
 from api.modules.user import application as user_application
@@ -74,7 +72,6 @@ def get_user_info(credentials):
 
 @google_oauth_router.route("/callback")
 def callback():
-    print("request state")
     # Verify the request state
     if request.args.get("state") != session["state"]:
         raise Exception("Invalid state")

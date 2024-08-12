@@ -36,7 +36,7 @@ mercadopago_credentials = {
 }
 
 local_prefix = os.getenv("LOCAL_PREFIX", "./tmp")
-
+SECRET_KEY = os.getenv('SECRET_KEY', 'Super Scret Key For Flask App')
 jwt_credentials = { 
     "jwt_secret_key": os.getenv("JWT_SECRET_KEY", "Super Scret Key For JWT"),
     "jwt_secret_issuer": os.getenv("JWT_SECRET_ISSUER", "Tipsy TakeDown")
