@@ -2,8 +2,6 @@ import flask
 
 from webapp import webapp
 from api import api
-from shared.globals import SECRET_KEY
-
 
 def create_app():
     flask_app = flask.Flask(
@@ -14,10 +12,6 @@ def create_app():
     @flask_app.route('/health')
     def health():
         return 'OK'
-
-    flask_app.secret_key = SECRET_KEY
-    # TODO: Not sure if this is the best session type
-    flask_app.config['SESSION_TYPE'] = 'filesystem'
 
     flask_app.register_blueprint(webapp)
     flask_app.register_blueprint(api, url_prefix='/api/')
