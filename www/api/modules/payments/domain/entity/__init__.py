@@ -4,5 +4,6 @@ from .payment_audit_model import PaymentAuditModel
 from .payment_cycle import PaymentCycle
 from .payment_method import PaymentMethod
 from .payment_status import PaymentStatus
-from .promo import Promo
+from .promo_code_model import PromoCodeModel
 from .rejection_reason import RejectionReason
+from .subscription_type_model import SubscriptionTypeModel

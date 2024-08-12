@@ -36,7 +36,7 @@ class SubscriptionService:
         payment_method: PaymentMethod,
         card: Optional[dict] = None,
     ) -> tuple[Optional[list[str]], dict]:
-        subscription_type = self.st_repository.get_subscription(
+        subscription_type = self.st_repository.get(
             subscription_type_id)
 
         if not subscription_type:
@@ -96,7 +96,7 @@ class SubscriptionService:
 
     def _calculate_payment_amount(self, subscription_type, promo_code):
         promo = (
-            self.promo_repository.get_promo(promo_code)
+            self.promo_repository.get_by_code(promo_code)
             if promo_code
             else None
         )

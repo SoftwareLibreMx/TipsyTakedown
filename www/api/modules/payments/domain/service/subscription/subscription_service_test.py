@@ -59,7 +59,7 @@ class TestSubscriptionService:
             card_service=mock_credit_card_service,
         )
 
-        subscription_service.st_repository.get_subscription.return_value = st_resp
+        subscription_service.st_repository.get.return_value = st_resp
         mock_credit_card_service.pay.return_value = pay_resp
         subscription_service.payment_audit_repository.create.return_value = paudit_resp
         subscription_service.subscription_repository.create.return_value = 'subscription'
@@ -122,7 +122,7 @@ class TestSubscriptionService:
 
         subscription_type = Mock(price=price)
         promo = Mock(discount=discound)
-        subscription_service.promo_repository.get_promo.return_value = promo
+        subscription_service.promo_repository.get_by_code.return_value = promo
 
         assert subscription_service._calculate_payment_amount(
             subscription_type, promo_code) == expected
