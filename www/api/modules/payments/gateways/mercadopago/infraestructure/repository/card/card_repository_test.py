@@ -8,88 +8,15 @@ from .card_repository import CardRepository, mercadopago
 
 
 class TestCardRepository:
-    @pytest.mark.parametrize('user_email, response, expected_response', [
-        ['test@fake_domain.com', [], None],
-        [
-            'test@fake_domain.com',
-            [{'id': 1, 'email': 'test@fake_domain.com'}],
-            {'id': 1, 'email': 'test@fake_domain.com'}
-        ],
-    ])
-    @patch.object(mercadopago, 'SDK', Mock())
-    def test_get_user_by_email(self, user_email,
-                               response, expected_response):
-        # Mock
-        mock_customer = Mock()
-        mock_customer.search.return_value = {
-            'response': {
-                'results': response
-            }
-        }
-
-        mock_sdk = Mock()
-        mock_sdk.customer.return_value = mock_customer
-
-        mercadopago.SDK.return_value = mock_sdk
-
-        mercadopago_credentials['access_token'] = "something"
-        card_repository = CardRepository()
-
-        # Ack
-        user = card_repository.get_user_by_email(user_email)
-
-        # Assert
-        assert user == expected_response
-
-    @pytest.mark.parametrize('user_email, response, expected_response', [
-        [
-            'test@fake.domain.com',
-            {'id': 1, 'email': 'test@fake_domain.com'},
-            {'id': 1, 'email': 'test@fake_domain.com'}
-        ],
-        [
-            'test@fake_domain.com',
-            {
-                'message': 'invalid parameters ',
-                'error': 'bad_request',
-                'status': 400,
-                'cause': [
-                    {
-                        'code': '106',
-                        'description': 'the email format is invalid'
-                    }
-                ]
-            },
-            None
-        ],
-    ])
-    @patch.object(mercadopago, 'SDK', Mock())
-    def test_create_user(self, user_email, response, expected_response):
-        # mock
-        mock_customer = Mock()
-        mock_customer.create.return_value = {
-            'response': response
-        }
-
-        mock_sdk = Mock()
-        mock_sdk.customer.return_value = mock_customer
-
-        mercadopago.SDK.return_value = mock_sdk
-
-        mercadopago_credentials['access_token'] = "something"
-        card_repository = CardRepository()
-
-        # Ack
-        user = card_repository.create_user(user_email)
-
-        # Assert
-        assert user == expected_response
+    def test_missing_access_token(self):
+        mercadopago_credentials['access_token'] = None
+        with pytest.raises(Exception):
+            CardRepository()
 
     @pytest.mark.parametrize(
-        'user_id, card, token_resp, expected_response',
+        'card, token_resp, expected_response',
         [
             [
-                "1939212673-Cu1Nub09BDpQeF",
                 Card(
                     id=1,
                     card_number='5474 9254 3267 0366',
@@ -109,7 +36,6 @@ class TestCardRepository:
                 None
             ],
             [
-                "1939212673-Cu1Nub09BDpQeF",
                 Card(
                     id=1,
                     card_number='5474925432670366',
@@ -157,7 +83,7 @@ class TestCardRepository:
         ]
     )
     @patch.object(mercadopago, 'SDK', Mock())
-    def test_create_card(self, user_id, card, token_resp, expected_response):
+    def test_create_card_token(self, card, token_resp, expected_response):
         # Mock
         mock_card_token = Mock()
         mock_card_token.create.return_value = {
@@ -173,7 +99,7 @@ class TestCardRepository:
         card_repository = CardRepository()
 
         # Ack
-        card = card_repository.create_card_token(user_id, card)
+        card = card_repository.create_card_token(card)
 
         # Assert
         assert card == expected_response

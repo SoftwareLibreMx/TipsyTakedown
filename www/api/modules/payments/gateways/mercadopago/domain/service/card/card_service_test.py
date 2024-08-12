@@ -67,8 +67,6 @@ class CardServiceTest(unittest.TestCase):
 
         # Assert
         self.assertEqual(result, (None, payment_response))
-        mp_repository.get_user_by_email.assert_called_once_with(
-            encrypted_email)
         mp_repository.pay_subscription.assert_called_once_with({
             "transaction_amount": subscription.transaction_amount,
             "token": card_token['id'],
@@ -79,79 +77,7 @@ class CardServiceTest(unittest.TestCase):
                 "email": encrypted_email
             }
         })
-        mp_repository.create_card_token.assert_called_once_with(
-            user.id, req_card)
-
-        payment_audit_repo.create_payment_audit.assert_called_once_with(
-            user.id, req_card.card_number[-4:], subscription)
-        payment_audit_repo.update_payment_audit.assert_called_once_with(
-            payment_audit.id, payment_response['status'])
-
-    def test_pay_subscription_create_user(self):
-        # Setup
-        req_card = Card(
-            id=1,
-            card_number='5474925432670366',
-            security_code='123',
-            expiration_month=11,
-            expiration_year=2025,
-            cardholder_name='APRO',
-            last_four_digits='0366'
-        )
-        user = User(id='1', email='test@foo.com')
-        encrypted_email = self.__encrypt_email(user.email)
-        subscription = Subscription(transaction_amount=100.10)
-        payment_audit = PaymentAudit(
-            id='1',
-            payment_id='1',
-            user_id='1',
-            amount=100.10,
-            status='paid'
-        )
-        payment_response = {'status': 'approved'}
-        card_token = {
-            'id': '1234',
-            'last_four_digits': req_card.card_number[-4:]
-        }
-        payment_method_id = 'master'
-
-        # Mocks
-        mp_repository = Mock()
-
-        mp_repository.get_user_by_email.return_value = None
-        mp_repository.create_user.return_value = {
-            'id': user.id,
-            'email': user.email,
-        }
-        mp_repository.create_card_token.return_value = card_token
-        mp_repository.pay_subscription.return_value = payment_response
-
-        payment_audit_repo = Mock()
-        payment_audit_repo.create_payment_audit.return_value = payment_audit
-        payment_audit_repo.updater_payment_audit.return_value = payment_audit
-
-        mp_card_service = CardService(
-            mp_repository, payment_audit_repo)
-
-        # Act
-        result = mp_card_service.pay_subscription(
-            user, req_card, subscription)
-
-        # Assert
-        self.assertEqual(result, (None, payment_response))
-        mp_repository.get_user_by_email.assert_called_once_with(
-            encrypted_email)
-        mp_repository.create_user.assert_called_once_with(encrypted_email)
-        mp_repository.pay_subscription.assert_called_once_with({
-            "transaction_amount": subscription.transaction_amount,
-            "token": card_token['id'],
-            "description": "",
-            "payment_method_id": payment_method_id,
-            "installments": 1,
-            "payer": {
-                "email": encrypted_email
-            }
-        })
+        mp_repository.create_card_token.assert_called_once_with(req_card)
 
         payment_audit_repo.create_payment_audit.assert_called_once_with(
             user.id, req_card.card_number[-4:], subscription)
@@ -236,64 +162,7 @@ class CardServiceTest(unittest.TestCase):
 
         # Assert
         self.assertEqual(result, (['Error processing card'], None))
-        mp_repository.get_user_by_email.assert_called_once_with(
-            encrypted_email)
         mp_repository.pay_subscription.assert_not_called()
-        mp_repository.create_card_token.assert_called_once_with(
-            user.id, req_card)
+        mp_repository.create_card_token.assert_called_once_with(req_card)
         payment_audit_repo.create_payment_audit.assert_not_called()
         payment_audit_repo.update_payment_audit.assert_not_called()
-
-    def test_pay_subscription_invalid_user(self):
-        # Setup
-        req_card = Card(
-            id=1,
-            card_number='5474 9254 3267 0366',
-            security_code='123',
-            expiration_month=11,
-            expiration_year=2025,
-            cardholder_name='APRO',
-            last_four_digits='0366'
-        )
-        user = User(id='1', email='aklsdfj')
-        encrypted_email = self.__encrypt_email(user.email)
-        subscription = Subscription(transaction_amount=100.10)
-        payment_audit = PaymentAudit(
-            id='1',
-            payment_id='1',
-            user_id='1',
-            amount=100.10,
-            status='paid'
-        )
-        payment_response = {'status': 'approved'}
-        card_token = {
-            'id': '1234',
-            'last_four_digits': req_card.card_number[-4:]
-        }
-
-        # Mocks
-        mp_repository = Mock()
-
-        mp_repository.get_user_by_email.return_value = None
-        mp_repository.create_user.return_value = None
-        mp_repository.create_card_token.return_value = card_token
-        mp_repository.pay_subscription.return_value = payment_response
-
-        payment_audit_repo = Mock()
-        payment_audit_repo.create_payment_audit.return_value = payment_audit
-        payment_audit_repo.updater_payment_audit.return_value = payment_audit
-
-        mp_card_service = CardService(
-            mp_repository, payment_audit_repo)
-
-        # Act
-        result = mp_card_service.pay_subscription(user, req_card, subscription)
-
-        # Assert
-        self.assertEqual(result, (['Error creating user'], None))
-        mp_repository.get_user_by_email.assert_called_once_with(
-            encrypted_email)
-        mp_repository.create_user.assert_called_once_with(encrypted_email)
-        mp_repository.pay_subscription.assert_not_called()
-        mp_repository.create_card_token.assert_not_called()
-        payment_audit_repo.create_payment_audit.assert_not_called()
