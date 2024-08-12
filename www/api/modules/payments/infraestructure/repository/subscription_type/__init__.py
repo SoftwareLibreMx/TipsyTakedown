@@ -1,0 +1,1 @@
+from .subscription_type_repository import SubscriptionTypeRepository

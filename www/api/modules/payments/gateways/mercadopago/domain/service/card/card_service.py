@@ -27,14 +27,9 @@ class CardService:
         if not payment_method_id:
             return ["Card number not valid"], None
 
-        encrypted_email = self.__get_encryptes_emaul(req_user.email)
+        encrypted_email = self.__get_encryptes_email(req_user.email)
 
-        user = self.__get_or_create_user(encrypted_email)
-        if not user:
-            return ["Error creating user"], None
-
-        card_token = self.mp_repository.create_card_token(
-            user.id, req_card)
+        card_token = self.mp_repository.create_card_token(req_card)
         if not card_token:
             return ["Error processing card"], None
 
@@ -60,20 +55,13 @@ class CardService:
 
         return None, response
 
-    def __get_encryptes_emaul(self, user_email: str) -> str:
+    def __get_encryptes_email(self, user_email: str) -> str:
         fake_domain = mp_credentials.get('fake_domain', 'fake.com')
         encrypted_email = bcrypt.hashpw(
             user_email.encode('utf-8'),
             self.salt
         )
         return f'{encrypted_email.decode("utf-8")}@{fake_domain}'
-
-    def __get_or_create_user(self, user_email: str) -> Optional[User]:
-        user = self.mp_repository.get_user_by_email(user_email)
-
-        user = user if user else self.mp_repository.create_user(user_email)
-
-        return User.from_dict(user) if user else None
 
     def __get_payment_method_id(self, card_number: str) -> Optional[str]:
         return {

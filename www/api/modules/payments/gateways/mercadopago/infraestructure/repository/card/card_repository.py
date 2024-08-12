@@ -19,26 +19,7 @@ class CardRepository:
         error = f"error {response.get('cause', {})}"
         print(f"{status} {error}")
 
-    def get_user_by_email(self, user_email: str) -> Optional[dict]:
-        response = self.sdk.customer().search(filters={
-            "email": user_email
-        }).get('response', {})
-
-        for user in response.get('results', []):
-            return user
-
-    def create_user(self, user_email: str) -> Optional[dict]:
-        response = self.sdk.customer().create({
-            "email": user_email
-        }).get('response', {})
-
-        if response.get('error', None):
-            self.__print_error(response)
-            return None
-
-        return response
-
-    def create_card_token(self, user_id: str, card: Card) -> Optional[dict]:
+    def create_card_token(self, card: Card) -> Optional[dict]:
         response = self.sdk.card_token().create({
             "card_number": card.card_number,
             "security_code": card.security_code,
