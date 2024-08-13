@@ -1,1 +1,1 @@
-from .user_credential_repository import UserCredentialRepository
+from .user_credential import UserCredentialRepository

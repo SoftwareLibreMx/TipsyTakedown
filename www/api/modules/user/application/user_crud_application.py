@@ -7,17 +7,15 @@ from ..domain.entity import UserModel
 USER_REPOSITORY = None
 USER_SERVICE = None
 
-def __init_classes() -> UserService:
 
+def __init_classes() -> UserService:
     global USER_SERVICE, USER_REPOSITORY
 
-    if USER_SERVICE:
-        return USER_SERVICE
-    
-    if USER_REPOSITORY is None:
+    if not USER_REPOSITORY:
         USER_REPOSITORY = UserRepository(db_engine)
 
-    USER_SERVICE = UserService(USER_REPOSITORY)
+    if not USER_SERVICE:
+        USER_SERVICE = UserService(USER_REPOSITORY)
 
     return USER_SERVICE
 
@@ -26,6 +24,7 @@ def get_user_by_id(user_id) -> UserModel:
     user_service = __init_classes()
 
     return user_service.get_user_by_id(user_id)
+
 
 def get_user_by_email(email) -> UserModel:
     user_service = __init_classes()
