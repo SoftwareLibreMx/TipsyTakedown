@@ -171,3 +171,5 @@ pip_modules/
 www/tmp/
 
 .vscode/
+
+www/client_secret.json

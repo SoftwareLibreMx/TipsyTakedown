@@ -2,6 +2,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from api.modules.user.domain.entity import UserModel
+from api.modules.auth.domain.entity import UserCredentialModel
 
 
 class UserRepository:
@@ -14,13 +15,22 @@ class UserRepository:
                 session.query(UserModel).filter_by(id=user_id, deleted_at=None).first()
             )
 
+    def get_user_by_email(self, email: str) -> UserModel:
+        with Session(self.db_engine) as session:
+            return (
+                session.query(UserModel)
+                .join(UserCredentialModel)
+                .filter(UserCredentialModel.email == email, UserModel.deleted_at == None)
+                .first()
+            )
+
     def create_user(self, user: UserModel) -> UserModel:
         with Session(self.db_engine) as session:
             session.add(user)
             session.commit()
             session.refresh(user)
             return user
-
+    
     def update_user(self, user_id: str, user_dict: dict) -> UserModel:
         with Session(self.db_engine) as session:
             user_db = (

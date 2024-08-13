@@ -2,6 +2,7 @@ import flask
 
 from webapp import webapp
 from api import api
+from shared.globals import SECRET_KEY
 
 
 def create_app():
@@ -13,6 +14,10 @@ def create_app():
     @flask_app.route('/health')
     def health():
         return 'OK'
+
+    flask_app.secret_key = SECRET_KEY
+    # its for only validate state from providers callbacks
+    flask_app.config['SESSION_TYPE'] = 'filesystem'
 
     flask_app.register_blueprint(webapp)
     flask_app.register_blueprint(api, url_prefix='/api/')

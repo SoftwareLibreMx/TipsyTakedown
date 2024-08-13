@@ -1,47 +1,51 @@
 # here will be all the normal Crud applications
 from shared.globals import db_engine
+from ..domain.service.user_service import UserService
 from ..infraestructure.repository import UserRepository
 from ..domain.entity import UserModel
 
-user_repository = None
+USER_REPOSITORY = None
+USER_SERVICE = None
+
+def __init_classes() -> UserService:
+
+    global USER_SERVICE, USER_REPOSITORY
+
+    if USER_SERVICE:
+        return USER_SERVICE
+    
+    if USER_REPOSITORY is None:
+        USER_REPOSITORY = UserRepository(db_engine)
+
+    USER_SERVICE = UserService(USER_REPOSITORY)
+
+    return USER_SERVICE
 
 
-def __init_classes() -> UserRepository:
-    user_repository = globals().get('user_repository')
+def get_user_by_id(user_id) -> UserModel:
+    user_service = __init_classes()
 
-    if user_repository is None:
-        user_repository = UserRepository(db_engine)
+    return user_service.get_user_by_id(user_id)
 
-    return user_repository
+def get_user_by_email(email) -> UserModel:
+    user_service = __init_classes()
 
-
-def get_user_by_id(user_id):
-    user_repository = __init_classes()
-
-    return user_repository.get_user_by_id(user_id)
+    return user_service.get_user_by_email(email)
 
 
-def create_video(user_dict) -> tuple[list[str], UserModel]:
-    user_repository = __init_classes()
+def create_user(user_dict) -> tuple[list[str], UserModel]:
+    user_service = __init_classes()
 
-    errors, video = UserModel.from_dict(user_dict)
-
-    if errors:
-        return errors, None
-
-    return None, user_repository.create_user(video)
+    return user_service.create_user(user_dict)
 
 
-def update_video(user_id, user_dict) -> tuple[list[str], UserModel]:
-    user_repository = __init_classes()
+def update_user(user_id, user_dict) -> tuple[list[str], UserModel]:
+    user_service = __init_classes()
 
-    return None, user_repository.update_user(user_id, user_dict)
+    return user_service.update_user(user_id, user_dict)
 
 
-def delete_video(user_id) -> UserModel:
-    user_repository = __init_classes()
+def delete_user(user_id) -> UserModel:
+    user_service = __init_classes()
 
-    try:
-        user_repository.delete_user(user_id)
-    except Exception as e:
-        return [str(e)]
+    return user_service.delete_user(user_id)

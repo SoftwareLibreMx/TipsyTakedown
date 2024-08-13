@@ -1,49 +1,55 @@
 from shared.globals import db_engine
+from ..domain.service.user_credential_service import UserCredentialService
 from ..infraestructure.repository import UserCredentialRepository
 from ..domain.entity import UserCredentialModel
 
-user_credential_repository = None
+USER_CREDENTIAL_REPOSITORY = None
+USER_CREDENTIAL_SERVICE = None
 
+def __init_classes() -> UserCredentialService:
 
-def __init_classes() -> UserCredentialRepository:
+    global USER_CREDENTIAL_SERVICE, USER_CREDENTIAL_REPOSITORY
 
-    user_credential_repository = globals().get("user_credential_repository")
+    if USER_CREDENTIAL_SERVICE:
+        return USER_CREDENTIAL_SERVICE
+    
+    if USER_CREDENTIAL_REPOSITORY is None:
+        USER_CREDENTIAL_REPOSITORY = UserCredentialRepository(db_engine)
+    
+    USER_CREDENTIAL_SERVICE = UserCredentialService(USER_CREDENTIAL_REPOSITORY)
 
-    if user_credential_repository is None:
-        user_credential_repository = UserCredentialRepository(db_engine)
+    return USER_CREDENTIAL_SERVICE
 
-    return user_credential_repository
+def get_user_credential_by_id(user_cred_id) -> UserCredentialModel:
+    user_cred_service = __init_classes()
 
+    return user_cred_service.get_user_credential_by_id(user_cred_id)
 
-def get_user_credential_by_id(user_cred_id):
-    user_credential_repository = __init_classes()
+def get_user_credential_by_email(email) -> UserCredentialModel:
+    user_cred_service = __init_classes()
 
-    return user_credential_repository.get_user_credential_by_id
+    return user_cred_service.get_user_credential_by_email(email)
 
 
 def create_user_credential(user_cred_dict) -> tuple[list[str], UserCredentialModel]:
-    user_credential_repository = __init_classes()
+    user_cred_service = __init_classes()
 
-    errors, user_credential = UserCredentialModel.from_dict(user_cred_dict)
+    return user_cred_service.create_user_credential(user_cred_dict)
 
-    if errors:
-        return errors, None
+def create_user_credential_sso(user_cred_dict) -> tuple[list[str], UserCredentialModel]:
+    user_cred_service = __init_classes()
 
-    return None, user_credential_repository.create_user_credential(user_credential)
-
+    return user_cred_service.create_user_credential_sso(user_cred_dict)
 
 def update_user_credential(
     user_cred_id, user_cred_dict
 ) -> tuple[list[str], UserCredentialModel]:
-    user_credential_repository = __init_classes()
+    user_cred_service = __init_classes()
 
-    return None, user_credential_repository.update_user_credential(user_cred_dict)
+    return user_cred_service.update_user_credential(user_cred_dict)
 
 
 def delete_user_credential(user_cred_id) -> UserCredentialModel:
-    user_credential_repository = __init_classes()
+    user_cred_service = __init_classes()
 
-    try:
-        user_credential_repository.delete_user_credential(user_cred_id)
-    except Exception as e:
-        return [str(e)]
+    return user_cred_service.delete_user_credential(user_cred_id)

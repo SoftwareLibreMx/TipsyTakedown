@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head>
+    <title>Google OAuth Callback</title>
+</head>
+<body>
+    <h1>Google OAuth Callback</h1>
+    <p>Redirigiendo...</p>
+    <script>
+        // Redirigir automáticamente después de un breve retraso
+        setTimeout(function() {
+            window.location.href = "{{ url_for('web.index') }}";
+        }, 2000);
+    </script>
+</body>
+</html>
