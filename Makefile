@@ -3,6 +3,9 @@ start:
 start-log-web:
 	docker compose up -d
 	docker compose logs -f www
+rebuild:
+	docker compose up --build
+
 migrate:
 	docker compose up flyway
 ssh:
