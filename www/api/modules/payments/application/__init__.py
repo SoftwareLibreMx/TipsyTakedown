@@ -1,0 +1,1 @@
+from .subscription.subscription_application import pay_subscription

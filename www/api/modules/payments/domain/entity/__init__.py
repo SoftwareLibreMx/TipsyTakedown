@@ -6,4 +6,5 @@ from .payment_method import PaymentMethod
 from .payment_status import PaymentStatus
 from .promo_code_model import PromoCodeModel
 from .rejection_reason import RejectionReason
+from .subscription_model import SubscriptionModel
 from .subscription_type_model import SubscriptionTypeModel
