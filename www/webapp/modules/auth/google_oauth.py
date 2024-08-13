@@ -23,18 +23,22 @@ SCOPES = [
 @google_oauth_router.route("/")
 def login():
     # Create the OAuth flow object
-    flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, scopes=SCOPES)
+    flow = InstalledAppFlow.from_client_secrets_file(
+        CLIENT_SECRET_FILE, scopes=SCOPES)
     flow.redirect_uri = url_for("web.oauth.google.callback", _external=True)
     authorization_url, state = flow.authorization_url(
-        access_type="offline", prompt="select_account", include_granted_scopes='true'
+        access_type="offline",
+        prompt="select_account",
+        include_granted_scopes='true'
     )
     # Save the state so we can verify the request later
     session["state"] = state
 
     return redirect(authorization_url)
 
-## Used by Google OAuth
+
 def credentials_to_dict(credentials):
+    # Used by Google OAuth
     return {
         "token": credentials.token,
         "refresh_token": credentials.refresh_token,
@@ -45,6 +49,7 @@ def credentials_to_dict(credentials):
         "id_token": credentials.id_token,
     }
 
+
 def serialize_credentials(credentials):
     credentials_dict = credentials_to_dict(credentials)
     return json.dumps(credentials_dict)
@@ -52,7 +57,8 @@ def serialize_credentials(credentials):
 
 def get_user_info(credentials):
     service = build("people", "v1", credentials=credentials)
-    profile = service.people().get(resourceName="people/me", personFields="names,photos,emailAddresses").execute()
+    profile = service.people().get(resourceName="people/me",
+                                   personFields="names,photos,emailAddresses").execute()
 
     names = profile.get("names", [{}])[0]
     given_name = names.get("givenName", "No Given Name")
@@ -89,16 +95,18 @@ def callback():
     credentials = flow.credentials
     user_info = get_user_info(credentials)
 
-    user_credential = auth_application.get_user_credential_by_email(email=user_info["email"])
+    user_credential = auth_application.get_user_credential_by_email(
+        email=user_info["email"])
 
     if not user_credential:
         errors, new_user = user_application.create_user(user_info)
         print(errors)
         user_info["user_id"] = str(new_user.id)
         user_info["sso_provider"] = "GOOGLE"
-        errors, user_credential = auth_application.create_user_credential_sso(user_info)
+        errors, user_credential = auth_application.create_user_credential_sso(
+            user_info)
         print(errors)
-    
+
     session['user'] = user_info
     session["credentials"] = serialize_credentials(credentials)
     token = generate_token(str(user_credential.id))

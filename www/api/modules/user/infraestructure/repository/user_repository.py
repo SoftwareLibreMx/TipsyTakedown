@@ -12,15 +12,16 @@ class UserRepository:
     def get_user_by_id(self, user_id: str) -> UserModel:
         with Session(self.db_engine) as session:
             return (
-                session.query(UserModel).filter_by(id=user_id, deleted_at=None).first()
+                session.query(UserModel).filter_by(
+                    id=user_id, deleted_at=None).first()
             )
 
     def get_user_by_email(self, email: str) -> UserModel:
         with Session(self.db_engine) as session:
             return (
                 session.query(UserModel)
+                .filter_by(email=email, deleted_at=None)
                 .join(UserCredentialModel)
-                .filter(UserCredentialModel.email == email, UserModel.deleted_at == None)
                 .first()
             )
 
@@ -30,15 +31,19 @@ class UserRepository:
             session.commit()
             session.refresh(user)
             return user
-    
+
     def update_user(self, user_id: str, user_dict: dict) -> UserModel:
         with Session(self.db_engine) as session:
             user_db = (
-                session.query(UserModel).filter_by(id=user_id, deleted_at=None).first()
+                session
+                .query(UserModel)
+                .filter_by(id=user_id, deleted_at=None)
+                .first()
             )
 
             user_db.type = user_dict.get("type", user_db.type)
-            user_db.given_name = user_dict.get("given_name", user_db.given_name)
+            user_db.given_name = user_dict.get(
+                "given_name", user_db.given_name)
             user_db.surname = user_dict.get("surname", user_db.surname)
             user_db.avatar = user_dict.get("avatar", user_db.avatar)
             user_db.updated_at = datetime.now()
@@ -50,7 +55,10 @@ class UserRepository:
     def delete_user(self, user_id: str) -> UserModel:
         with Session(self.db_engine) as session:
             user_db = (
-                session.query(UserModel).filter_by(id=user_id, deleted_at=None).first()
+                session
+                .query(UserModel)
+                .filter_by(id=user_id, deleted_at=None)
+                .first()
             )
 
             if not user_db:
