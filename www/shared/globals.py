@@ -1,5 +1,7 @@
 import os
 
+from flask import url_for
+
 from dotenv import load_dotenv
 
 from .db_connection import get_db_engine
@@ -22,11 +24,22 @@ minion_credentials = {
     "secure": os.getenv("MINIO_SECURE", False),
 }
 
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = os.getenv(
+    "OAUTHLIB_INSECURE_TRANSPORT", "1")
+os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = os.getenv(
+    "OAUTHLIB_RELAX_TOKEN_SCOPE", "1")
+
 google_oauth_credentials = {
-    "client_id": os.getenv("GOOGLE_OAUTH_CLIENT_ID", ""),
-    "client_secret": os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", ""),
-    "redirect_uri": os.getenv("GOOGLE_OAUTH_REDIRECT_URI", ""),
+    "cs_file": os.getenv(
+        "GOOGLE_CLIEN_SECRET_NAME", "client_secret.json"),
+    "redirect_uri": (
+        lambda: url_for("web.oauth.google.callback", _external=True)),
+    "scopes": os.getenv(
+        "GOOGLE_SCOPES",
+        "https://www.googleapis.com/auth/userinfo.profile,https://www.googleapis.com/auth/userinfo.email"
+    ).split(",")
 }
+
 mercadopago_credentials = {
     "hidde_user_email_salt": os.getenv(
         "MP_HIDDE_USER_EMAIL_KEY", "$2b$12$vOW3UMIQJqUVr1QVCYQiR."
@@ -37,7 +50,7 @@ mercadopago_credentials = {
 
 local_prefix = os.getenv("LOCAL_PREFIX", "./tmp")
 SECRET_KEY = os.getenv('SECRET_KEY', 'Super Scret Key For Flask App')
-jwt_credentials = { 
+jwt_credentials = {
     "jwt_secret_key": os.getenv("JWT_SECRET_KEY", "Super Scret Key For JWT"),
     "jwt_secret_issuer": os.getenv("JWT_SECRET_ISSUER", "Tipsy TakeDown")
 }

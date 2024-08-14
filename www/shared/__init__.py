@@ -1,1 +1,1 @@
-from .tipsy_jwt import verify_token, generate_token
+from .tipsy_jwt import verify_token

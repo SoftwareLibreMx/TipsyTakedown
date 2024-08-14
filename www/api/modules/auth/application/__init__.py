@@ -1,3 +1,4 @@
+from . import google
 from .user_credential_application import (
     get_user_credential_by_id,
     get_user_credential_by_email,
