@@ -7,11 +7,64 @@
 {% block body %}
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
-            <h1>Login</h1>
-            <a href="{{ url_for('google.auth.login') }}">Login with Google</a>        
-        </div>
+        <h2>User Login</h2>
+        <form>
+            <div class="mb-3 col-4">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email">
+            </div>
+            <div class="mb-3 col-4">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter password">
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
     </div>
+    
+    <script>
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            submitForm();
+        });
+        function submitForm() {
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            
+            // Perform validation and other necessary checks here
+            
+            // Create an object to hold the form data
+            var formData = {
+                email: email,
+                password: password
+            };
+            
+            // Send the form data to the server using AJAX or fetch API
+            // Example using fetch API
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server
+                console.log(data);
+                // Redirect to another page or perform other actions based on the response
+            })
+            .catch(error => {
+                // Handle any errors that occur during the request
+                console.error('Error:', error);
+            });
+        }
+        
+        // Attach the submitForm function to the form's submit event
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            submitForm(); // Call the submitForm function
+        });
+    </script>
 </div>
 {% endblock %}
 
