@@ -52,6 +52,6 @@ def pay_subscription(
 ) -> tuple[list[str], SubscriptionModel]:
     card_service = __init_classes()
 
-    return card_service.pay_subscription(
+    return card_service.pay(
         user, subscription_type_id, payment_method, promo_code, card
     )

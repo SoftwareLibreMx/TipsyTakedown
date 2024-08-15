@@ -11,7 +11,7 @@ class UserCredentialService:
             user_credential_id
         )
 
-    def get_user_credential_by_email(self, email):
+    def get_by_email(self, email):
         return self.user_credential_repository.get_user_credential_by_email(
             email
         )

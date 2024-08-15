@@ -1,16 +1,27 @@
-<!doctype html>
-<html>
-<head>
-    <title>Google OAuth Callback</title>
-</head>
-<body>
-    <h1>Google OAuth Callback</h1>
-    <p>Redirigiendo...</p>
-    <script>
-        // Redirigir automáticamente después de un breve retraso
-        setTimeout(function() {
-            window.location.href = "{{ url_for('web.index') }}";
-        }, 2000);
-    </script>
-</body>
-</html>
+{% extends "layout/base.html" %}
+
+{% block title %}
+<title>TipsyTakedown - Client Callback</title>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Client Callback</h1>
+            <p>Redirecting...</p>
+        </div>
+    </div>
+</div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (token) {
+        sessionStorage.setItem('token', token);
+    }
+    setTimeout(() => {
+        window.location.href = '/';
+    }, 2000);
+</script>
+{% endblock %}
