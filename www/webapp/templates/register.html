@@ -1,0 +1,86 @@
+{% extends "layout/base.html" %}
+
+{% block title %}
+<title>TipsyTakedown - Register</title>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h2>User Registration</h2>
+<form>
+  <div class="mb-3 col-4">
+    <label for="given_name" class="form-label">Given Name</label>
+    <input type="text" class="form-control" id="given_name" name="given_name" required>
+  </div>
+  <div class="mb-3 col-4">
+    <label for="surname" class="form-label">Surname</label>
+    <input type="text" class="form-control" id="surname" name="surname" required>
+  </div>
+  <div class="mb-3 col-4">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" class="form-control" id="email" name="email" required>
+  </div>
+  <div class="mb-3 col-4">
+    <label for="password" class="form-label">Password</label>
+    <input type="password" class="form-control" id="password" name="password" required>
+  </div>
+  <div class="mb-3 col-4">
+    <label for="confirm_password" class="form-label">Confirm Password</label>
+    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Register</button>
+</form>
+<script>
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirm_password');
+
+  confirmPasswordInput.addEventListener('input', () => {
+    if (passwordInput.value !== confirmPasswordInput.value) {
+      confirmPasswordInput.setCustomValidity('Passwords do not match');
+    } else {
+      confirmPasswordInput.setCustomValidity('');
+    }
+  });
+  const form = document.querySelector('form');
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    // Get form values
+    const givenName = document.getElementById('given_name').value;
+    const surname = document.getElementById('surname').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    // Create an object with the form data
+    const formData = {
+      givenName,
+      surname,
+      email,
+      password
+    };
+
+    // Send the form data to the server
+    fetch('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response from the server
+      console.log(data);
+      // Redirect to a success page or display a success message
+    })
+    .catch(error => {
+      // Handle any errors that occur during the request
+      console.error(error);
+      // Display an error message to the user
+    });
+  });
+</script>
+</div>
+{% endblock %}
+
