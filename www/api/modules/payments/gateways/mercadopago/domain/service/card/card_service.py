@@ -1,4 +1,3 @@
-import bcrypt
 from typing import Optional
 
 from shared.globals import mercadopago_credentials as mp_credentials
@@ -6,13 +5,17 @@ from shared.globals import mercadopago_credentials as mp_credentials
 from api.modules.payments.domain.entity import CardModel, RejectionReason
 
 from ....infraestructure.repository import CardRepository
+from ..user import UserService
 from ...entity import User
 
 
 class CardService:
-    def __init__(self, mp_card_repository: CardRepository):
+    def __init__(self,
+                 user_service: UserService,
+                 mp_card_repository: CardRepository):
         self.salt = mp_credentials.get('hidde_user_email_salt', '')
 
+        self.user_service = user_service
         self.mp_repository = mp_card_repository
 
     def pay(
@@ -27,9 +30,13 @@ class CardService:
         if not payment_method_id:
             return ["Card number not valid"], None
 
-        encrypted_email = self.__get_encryptes_email(req_user.email)
+        error, user = self.user_service.get_or_create(req_user)
+
+        if error:
+            return error, None
 
         error, card_token = self.mp_repository.create_card_token(req_card)
+
         if error:
             return self._get_error_dict(error), None
 
@@ -40,7 +47,8 @@ class CardService:
             "payment_method_id": payment_method_id,
             "installments": 1,
             "payer": {
-                "email": encrypted_email
+                "id": user.id,
+                "email": user.email,
             }
         })
 
@@ -70,15 +78,6 @@ class CardService:
                 error.get('code'),
                 RejectionReason.UNKNOWN.value
             )
-
-    def __get_encryptes_email(self, user_email: str) -> str:
-        fake_domain = mp_credentials.get('fake_domain', 'fake.com')
-        encrypted_email = bcrypt.hashpw(
-            user_email.encode('utf-8'),
-            self.salt
-        )
-
-        return f'{encrypted_email.decode("utf-8")}@{fake_domain}'
 
     def __get_payment_method_id(self, card_number: str) -> Optional[str]:
         return {

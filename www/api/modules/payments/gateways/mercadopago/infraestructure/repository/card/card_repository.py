@@ -43,3 +43,32 @@ class CardRepository:
             return response, None
 
         return None, response
+
+    def get_user_by_email(self,
+                          email: str) -> tuple[Optional[dict], Optional[dict]]:
+        filters = {
+            'email': email
+        }
+
+        response = self.sdk.customer().search(filters).get('response', None)
+
+        if response.get('error', None):
+            return response, None
+
+        user = None
+
+        for user in response['results']:
+            return None, user
+
+        return None, user
+
+    def create_user(self,
+                    user: dict) -> tuple[Optional[dict], Optional[dict]]:
+        response = self.sdk.customer().create({
+            'email': user.get('email', None),
+        }).get('response', None)
+
+        if response.get('error', None):
+            return response, None
+
+        return None, response
