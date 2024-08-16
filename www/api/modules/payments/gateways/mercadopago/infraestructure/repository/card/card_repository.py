@@ -3,7 +3,7 @@ from typing import Optional
 
 from shared.globals import mercadopago_credentials
 
-from api.modules.payments.domain.entity import Card
+from api.modules.payments.domain.entity import CardModel
 
 
 class CardRepository:
@@ -14,33 +14,32 @@ class CardRepository:
 
         self.sdk = mercadopago.SDK(access_token)
 
-    def __print_error(self, response: dict):
-        status = f"Status {response.get('status')}"
-        error = f"error {response.get('cause', {})}"
-        print(f"{status} {error}")
+    def create_card_token(
+        self,
+        card: CardModel
+    ) -> tuple[Optional[dict], Optional[dict]]:
+        expiration_month, expiration_year = card.expiration_date.split('/')
 
-    def create_card_token(self, card: Card) -> Optional[dict]:
         response = self.sdk.card_token().create({
             "card_number": card.card_number,
-            "security_code": card.security_code,
-            "expiration_month": card.expiration_month,
-            "expiration_year": card.expiration_year,
+            "security_code": card.cvv,
+            "expiration_month": expiration_month,
+            "expiration_year": f'20{expiration_year}',
             "cardholder": {
-                "name": card.cardholder_name,
+                "name": card.card_holder_name,
             }
         }).get('response', None)
 
         if response.get('error', None):
-            self.__print_error(response)
-            return None
+            return response, None
 
-        return response
+        return None, response
 
-    def pay_subscription(self, data: dict) -> Optional[dict]:
+    def pay_subscription(self,
+                         data: dict) -> tuple[Optional[dict], Optional[dict]]:
         response = self.sdk.payment().create(data).get('response', None)
 
         if response.get('error', None):
-            self.__print_error(response)
-            return None
+            return response, None
 
-        return response
+        return None, response

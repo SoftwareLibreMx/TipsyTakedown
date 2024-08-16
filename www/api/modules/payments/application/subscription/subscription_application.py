@@ -3,7 +3,7 @@ from typing import Optional
 from shared.globals import db_engine
 
 from ...domain.entity import SubscriptionModel
-from ...domain.service import CardService
+from ...domain.service import CardService, SubscriptionService
 from ...infraestructure.repository import (
     CardRepository, PaymentAuditRepository, PromoRepository,
     SubscriptionRepository, SubscriptionTypeRepository
@@ -17,10 +17,13 @@ SUBSCRIPTION_TYPE_REPOSITORY = None
 CARD_REPOSITORY = None
 CARD_SERVICE = None
 
+SUBSCRIPTION_SERVICE = None
+
 
 def __init_classes() -> None:
     global PAYMENT_AUDIT_REPOSITORY, PROMO_REPOSITORY, SUBSCRIPTION_REPOSITORY
     global SUBSCRIPTION_TYPE_REPOSITORY, CARD_REPOSITORY, CARD_SERVICE
+    global SUBSCRIPTION_SERVICE
 
     if PAYMENT_AUDIT_REPOSITORY is None:
         PAYMENT_AUDIT_REPOSITORY = PaymentAuditRepository(db_engine)
@@ -40,7 +43,13 @@ def __init_classes() -> None:
     if CARD_SERVICE is None:
         CARD_SERVICE = CardService(CARD_REPOSITORY, PAYMENT_AUDIT_REPOSITORY)
 
-    return CARD_SERVICE
+    if SUBSCRIPTION_SERVICE is None:
+        SUBSCRIPTION_SERVICE = SubscriptionService(
+            CARD_SERVICE, PAYMENT_AUDIT_REPOSITORY, PROMO_REPOSITORY,
+            SUBSCRIPTION_REPOSITORY, SUBSCRIPTION_TYPE_REPOSITORY
+        )
+
+    return SUBSCRIPTION_SERVICE
 
 
 def pay_subscription(
@@ -48,10 +57,10 @@ def pay_subscription(
     subscription_type_id: str,
     payment_method: str,
     promo_code: Optional[str] = None,
-    card: Optional[dict] = None,
+    card: Optional[dict] = {},
 ) -> tuple[list[str], SubscriptionModel]:
-    card_service = __init_classes()
+    subscription_service = __init_classes()
 
-    return card_service.pay(
-        user, subscription_type_id, payment_method, promo_code, card
+    return subscription_service.pay(
+        user, subscription_type_id, promo_code, payment_method, card
     )

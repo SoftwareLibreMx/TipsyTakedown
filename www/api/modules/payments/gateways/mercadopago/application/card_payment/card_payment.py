@@ -1,6 +1,6 @@
 from typing import List
 
-from api.modules.payments.domain.entity import Card
+from api.modules.payments.domain.entity import CardModel
 
 from ...domain.entity import User
 from ...domain.service import CardService
@@ -24,8 +24,8 @@ def __init_classes() -> CardService:
 
 def pay(
     req_user: dict,
-    card: Card,
-    transaction_amount: float
+    card: CardModel,
+    transaction_amount: float,
 ) -> tuple[List[str], dict]:
     errors, user = User.from_dict(req_user)
 
@@ -34,4 +34,4 @@ def pay(
 
     card_service = __init_classes()
 
-    return card_service.pay_subscription(user, card, transaction_amount)
+    return card_service.pay(user, card, transaction_amount)

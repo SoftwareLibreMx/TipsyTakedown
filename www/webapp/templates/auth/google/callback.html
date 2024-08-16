@@ -14,8 +14,11 @@
     </div>
 </div>
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+    {% if token %}
+    const token = '{{ token }}';
+    {% else %}
+    const token = '{{ request.args.get('token') }}';
+    {% endif %}
 
     if (token) {
         sessionStorage.setItem('token', token);

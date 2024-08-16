@@ -1,7 +1,14 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from ...entity import PaymentCycle, PaymentMethod, PaymentStatus
+from ...entity import (
+    PaymentAuditModel,
+    PaymentCycle,
+    PaymentMethod,
+    PaymentStatus,
+    SubscriptionModel,
+    SubscriptionTypeModel
+)
 from ..card.card_service import CardService
 from ....infraestructure.repository import (
     PaymentAuditRepository, PromoRepository,
@@ -28,7 +35,7 @@ class SubscriptionService:
         self.st_repository = subscription_type_repository
 
     # TODO: this only takes into consideration new subscriptions
-    def pay_subscription(
+    def pay(
         self,
         user: dict,
         subscription_type_id: str,
@@ -42,24 +49,34 @@ class SubscriptionService:
         if not subscription_type:
             return ['Subscription type not found'], {}
 
-        payment_amount = self._calculate_payment_amount(
-            subscription_type, promo_code)
-
         payment_method_service = self._get_payment_method(payment_method)
 
         if not payment_method_service:
             return ['Payment method not found'], {}
 
-        payment_audit_log = self.payment_audit_repository.create({
-            'user_id': user['id'],
-            'payment_amount': payment_amount,
-            'currency': subscription_type.currency,
-            'transaction_date': datetime.now(),
-            'payment_method': payment_method,
-        })
+        payment_amount = self._calculate_payment_amount(
+            subscription_type, promo_code)
+
+        errors, payment_audit_log = self._create_audit_log(
+            user,
+            payment_amount,
+            subscription_type.currency,
+            payment_method
+        )
+
+        if errors:
+            return errors, {}
 
         error, response = payment_method_service.pay(
             user, payment_amount, payment_audit_log, card)
+
+        if error:
+            error['status'] = PaymentStatus.REJECTED.value
+            self.payment_audit_repository.update(payment_audit_log.id, error)
+            return error, {}
+
+        error, subscription = self._create_subscription(
+            user, subscription_type, payment_audit_log)
 
         if error:
             self.payment_audit_repository.update(payment_audit_log.id, {
@@ -67,16 +84,7 @@ class SubscriptionService:
                 'error': error,
                 'rejection_reason': error.rejection_reason
             })
-            return error, {}
-
-        subscription = self.subscription_repository.create({
-            'user_id': user['id'],
-            'subscription_type_id': subscription_type.id,
-            'payment_audit_id': payment_audit_log.id,
-            'start_date': datetime.now(),
-            'end_date': datetime.now() + self._get_datetime_interval(
-                subscription_type.payment_cycle),
-        })
+            return error, None
 
         self.payment_audit_repository.update(payment_audit_log.id, {
             'status': PaymentStatus.APPROVED.value,
@@ -106,8 +114,59 @@ class SubscriptionService:
 
         return subscription_type.price
 
+    def _create_audit_log(
+        self,
+        user: dict,
+        payment_amount: float,
+        currency: str,
+        payment_method: PaymentMethod
+    ) -> tuple[Optional[list[str]], PaymentAuditModel]:
+        error, payment_audit = PaymentAuditModel.from_dict({
+            'user_id': user.get('id'),
+            'payment_amount': payment_amount,
+            'currency': currency,
+            'transaction_date': datetime.now(),
+            'payment_method': payment_method,
+        })
+
+        if error:
+            return error, None
+
+        try:
+            payment_audit = self.payment_audit_repository.create(payment_audit)
+        except Exception as e:
+            return [str(e)], None
+
+        return None, payment_audit
+
     def _get_payment_method(self, method: PaymentMethod):
         return {
-            PaymentMethod.CREDIT_CARD: self.card_service,
-            PaymentMethod.DEBIT_CARD: self.card_service,
+            PaymentMethod.CREDIT_CARD.value: self.card_service,
+            PaymentMethod.DEBIT_CARD.value: self.card_service,
         }.get(method, None)
+
+    def _create_subscription(
+        self,
+        user: dict,
+        subscription_type: SubscriptionTypeModel,
+        payment_audit_log: PaymentAuditModel
+    ) -> tuple[Optional[list[str]], SubscriptionModel]:
+        error, subscription_model = SubscriptionModel.from_dict({
+            'user_id': user.get('id'),
+            'subscription_type_id': subscription_type.id,
+            'payment_audit_id': payment_audit_log.id,
+            'start_date': datetime.now(),
+            'end_date': datetime.now() + self._get_datetime_interval(
+                subscription_type.payment_cycle),
+        })
+
+        if error:
+            return error, None
+
+        try:
+            subscription = self.subscription_repository.create(
+                subscription_model)
+        except Exception as e:
+            return [str(e)], None
+
+        return None, subscription

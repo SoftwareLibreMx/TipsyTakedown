@@ -1,4 +1,5 @@
 from .card import Card
+from .card_model import CardModel
 from .payment_audit import PaymentAudit
 from .payment_audit_model import PaymentAuditModel
 from .payment_cycle import PaymentCycle
