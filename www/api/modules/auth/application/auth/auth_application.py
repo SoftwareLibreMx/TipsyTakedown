@@ -40,3 +40,8 @@ def sign_up(user_c_dict: dict) -> tuple[list[str], dict]:
     auth_service = __init_classes()
 
     return auth_service.sign_up(user_c_dict)
+
+def sign_in(email: str, password: str) -> tuple[list[str], dict]:
+    auth_service = __init_classes()
+
+    return auth_service.login(email, password)

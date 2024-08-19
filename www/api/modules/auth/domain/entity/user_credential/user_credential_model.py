@@ -37,7 +37,11 @@ class UserCredentialModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
             return errors, None
 
         return None, UserCredentialModel(
+<<<<<<< Updated upstream
             id=uuid.uuid4(),
+=======
+            id = uuid.uuid4(),
+>>>>>>> Stashed changes
             **data
         )
 
