@@ -22,10 +22,10 @@
     </div>
     
     <script>
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            submitForm();
-        });
+        // form.addEventListener('submit', (event) => {
+        //     event.preventDefault();
+        //     submitForm();
+        // });
         function submitForm() {
             var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
@@ -40,7 +40,7 @@
             
             // Send the form data to the server using AJAX or fetch API
             // Example using fetch API
-            fetch('/login', {
+            fetch('/api/auth/sign_in', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -49,12 +49,14 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Handle the response from the server
-                console.log(data);
-                // Redirect to another page or perform other actions based on the response
+                const token = data.token;
+                if (token) {
+                    sessionStorage.setItem('token', token);
+                    window.location.href = '/';
+                }
+        
             })
             .catch(error => {
-                // Handle any errors that occur during the request
                 console.error('Error:', error);
             });
         }
