@@ -48,22 +48,18 @@ class AuthService:
         return None, UserCDTO.from_uc(user, user_credential)
 
     def sign_in(self, email, password) -> tuple[list[str], UserCDTO]:
-        user_credential = self.user_credential_service.get_by_email(email)
+        userc = self.user_service.get_by_email(email)
 
-        if not user_credential:
-            return ['User not found'], None
+        if not userc:
+            return ['Not found'], None
 
-        if not self.__verify_password(
-                password,
-                user_credential.password_hash,
-                user_credential.password_salt,
-                json.loads(user_credential.password_hash_params)):
-            return ['Invalid password'], None
+        errors, credentials = self.user_credential_service.validate_password(
+            email, password)
 
-        user = self.user_service.get_by_id(user_credential.user_id)
+        if errors:
+            return errors, None
 
-        return None, UserCDTO.from_uc(user, user_credential)
-    
-    def __verify_password(self, password, password_hash, salt, hash_params) -> bool:
-        return password_hash == self.user_credential_service.__generate_hash(
-            password, salt, hash_params)
+        return None, {
+            'user': userc,
+            'token': self.generate_token(userc)
+        }

@@ -1,5 +1,6 @@
 import os
 import pyscrypt
+import json
 
 from typing import Any, Dict
 
@@ -42,7 +43,7 @@ class UserCredentialService:
                 hashing_config
             ),
             'password_salt': salt,
-            'password_hash_params': str(hashing_config)
+            'password_hash_params': json.dumps(hashing_config)
         })
 
         if errors:
@@ -64,6 +65,28 @@ class UserCredentialService:
             user_cred)
 
         return None, user_cred
+
+    def validate_password(self, email, password) -> tuple[list[str], str]:
+        salt, hash_params = self.user_credential_repository.get_cred_by_email(
+            email
+        )
+
+        if not salt:
+            return ['Not found'], None
+
+        password_hash = self.__generate_hash(
+            password,
+            bytes(salt),
+            json.loads(hash_params)
+        )
+
+        user_cred_id = self.user_credential_repository.validate_password(
+            email, password_hash)
+
+        if not user_cred_id:
+            return ['Invalid password'], None
+
+        return None, user_cred_id
 
     def update(self, user_cred_id, updated_data):
         return self.user_credential_repository.update(

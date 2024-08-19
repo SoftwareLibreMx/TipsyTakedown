@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from api.modules.auth.domain.entity import UserCredentialModel
@@ -71,3 +73,25 @@ class UserCredentialRepository:
             session.commit()
             session.refresh(user_credential_db)
             return user_credential_db
+
+    def get_cred_by_email(self, email: str) -> dict:
+        with Session(self.db_engine) as session:
+            return session.execute(text('''
+                SELECT
+                    password_salt,
+                    password_hash_params
+                FROM user_credentials
+                WHERE email = :email
+                AND deleted_at IS NULL
+            '''), {'email': email}).fetchone()
+
+    def validate_password(self, email: str, password_hash: str) -> bool:
+        with Session(self.db_engine) as session:
+            return session.execute(text('''
+                SELECT
+                    id
+                FROM user_credentials
+                WHERE email = :email
+                AND password_hash = :password_hash
+                AND deleted_at IS NULL
+            '''), {'email': email, 'password_hash': password_hash}).fetchone()
