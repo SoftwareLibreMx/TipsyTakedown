@@ -36,7 +36,10 @@ class UserCredentialModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
         if errors:
             return errors, None
 
-        return None, UserCredentialModel(**data)
+        return None, UserCredentialModel(
+            id=uuid.uuid4(),
+            **data
+        )
 
     @staticmethod
     def from_dict_sso_provider(data: dict) -> list:
