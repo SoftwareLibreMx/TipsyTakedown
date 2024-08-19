@@ -31,6 +31,7 @@ class UserCredentialModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
             user_id=data.get('user_id'),
             email=data.get('email'),
         )
+
     @staticmethod
     def from_dict_sso_provider(data: dict) -> list:
         errors = validate_dict(data, [
