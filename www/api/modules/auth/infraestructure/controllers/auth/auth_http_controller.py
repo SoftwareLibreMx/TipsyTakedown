@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, request
 
 from api.libs.utils import (
@@ -19,6 +21,6 @@ def sign_up():
     )
 
     if errors:
-        return Response(as_json_dumps({"errors": errors}), status=400)
+        return Response(json.dumps({"errors": errors}), status=400)
 
     return Response(as_json_dumps(user), status=201)

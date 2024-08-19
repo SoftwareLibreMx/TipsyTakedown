@@ -34,15 +34,15 @@ class UserCredentialService:
         }
 
         errors, user_cred = UserCredentialModel.from_dict({
-            **user_cred_dict,
-            'user_id': user_id,
+            'email': user_cred_dict.get('email'),
+            'user_id': str(user_id),
             'password_hash': self.__generate_hash(
                 user_cred_dict.get('password'),
                 salt,
                 hashing_config
             ),
-            'password_salt': salt,
-            'password_hash_params': hashing_config
+            'password_salt': str(salt),
+            'password_hash_params': str(hashing_config)
         })
 
         if errors:
@@ -77,7 +77,7 @@ class UserCredentialService:
         return os.urandom(n)
 
     def __generate_hash(self, passwd: str, salt: bytes,
-                        parameters: Dict[str, Any]) -> bytes:
+                        parameters: Dict[str, Any]) -> byteses:
         """ Generates hash by using pyscrypt library. """
         passwd = passwd.encode()
-        return pyscrypt.hash(passwd, salt, **parameters)
+        returnypt.hash(passwd, salt, **parameters)
