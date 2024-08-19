@@ -19,8 +19,8 @@ class UserCredentialModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
     email: Mapped[str] = mapped_column()
     sso_provider: Mapped[str] = mapped_column()
     openid: Mapped[str] = mapped_column()
-    password_hash: Mapped[str] = mapped_column()
-    password_salt: Mapped[str] = mapped_column()
+    password_hash: Mapped[bytes] = mapped_column()
+    password_salt: Mapped[bytes] = mapped_column()
     password_hash_params: Mapped[str] = mapped_column()
 
     @staticmethod
@@ -28,8 +28,8 @@ class UserCredentialModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
         errors = validate_dict(data, [
             VKOptions('user_id', str, True),
             VKOptions('email', str, True),
-            VKOptions('password_hash', str, True),
-            VKOptions('password_salt', str, True),
+            VKOptions('password_hash', bytes, True),
+            VKOptions('password_salt', bytes, True),
             VKOptions('password_hash_params', str, True),
         ])
 

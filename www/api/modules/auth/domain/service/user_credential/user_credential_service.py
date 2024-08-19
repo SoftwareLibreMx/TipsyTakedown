@@ -41,7 +41,7 @@ class UserCredentialService:
                 salt,
                 hashing_config
             ),
-            'password_salt': str(salt),
+            'password_salt': salt,
             'password_hash_params': str(hashing_config)
         })
 
@@ -77,7 +77,7 @@ class UserCredentialService:
         return os.urandom(n)
 
     def __generate_hash(self, passwd: str, salt: bytes,
-                        parameters: Dict[str, Any]) -> byteses:
+                        parameters: Dict[str, Any]) -> bytes:
         """ Generates hash by using pyscrypt library. """
         passwd = passwd.encode()
-        returnypt.hash(passwd, salt, **parameters)
+        return pyscrypt.hash(passwd, salt, **parameters)
