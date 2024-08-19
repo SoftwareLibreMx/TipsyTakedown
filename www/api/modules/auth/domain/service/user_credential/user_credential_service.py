@@ -3,6 +3,8 @@ import pyscrypt
 
 from typing import Any, Dict
 
+from shared.globals import password_hash_params
+
 from ...entity import UserCredentialModel
 from ....infraestructure.repository import UserCredentialRepository
 
@@ -23,22 +25,22 @@ class UserCredentialService:
 
     def create(
             self, user_id: str, user_cred_dict: dict) -> UserCredentialModel:
-        
-        password = user_cred_dict.get('password')
         salt = self.__generate_salt()
-        
         hashing_config = {
-            'N': api_constants.PASSWORD_HASH_N,
-            'r': api_constants.PASSWORD_HASH_R,
-            'p': api_constants.PASSWORD_HASH_P,
-            'dkLen': api_constants.PASSWORD_HASH_DKLEN
-
+            'N': password_hash_params.get('hash_n'),
+            'r': password_hash_params.get('hash_r'),
+            'p': password_hash_params.get('hash_p'),
+            'dkLen': password_hash_params.get('hash_dklen')
         }
-        hash = self.__generate_hash(password, salt, self.password_hashing_config)
+
         errors, user_cred = UserCredentialModel.from_dict({
             **user_cred_dict,
             'user_id': user_id,
-            'password_hash': hash,
+            'password_hash': self.__generate_hash(
+                user_cred_dict.get('password'),
+                salt,
+                hashing_config
+            ),
             'password_salt': salt,
             'password_hash_params': hashing_config
         })
@@ -72,9 +74,10 @@ class UserCredentialService:
             user_cred_id)
 
     def __generate_salt(self, n=32) -> bytes:
-            return os.urandom(n)
-    def __generate_hash(self, passwd: str, salt: bytes, parameters: Dict[str, Any]) -> bytes:
-            """ Generates hash by using pyscrypt library. """
-            passwd = passwd.encode()
-            return pyscrypt.hash(passwd, salt, **parameters)
-    
+        return os.urandom(n)
+
+    def __generate_hash(self, passwd: str, salt: bytes,
+                        parameters: Dict[str, Any]) -> bytes:
+        """ Generates hash by using pyscrypt library. """
+        passwd = passwd.encode()
+        return pyscrypt.hash(passwd, salt, **parameters)
