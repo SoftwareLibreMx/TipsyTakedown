@@ -20,7 +20,7 @@ class UserCredentialRepository:
             return session.query(UserCredentialModel).filter_by(
                 email=email, deleted_at=None).first()
 
-    def create_user_credential(
+    def create(
             self, user_credential: UserCredentialModel) -> UserCredentialModel:
         with Session(self.db_engine) as session:
             session.add(user_credential)

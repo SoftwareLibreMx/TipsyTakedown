@@ -13,11 +13,11 @@ UC_REPOSITORY = None
 UC_SERVICE = None
 USER_SERVICE = None
 
+
 def __init_classes() -> AuthService:
     global AUTH_SERVICE, USER_REPOSITORY, UC_SERVICE
     global UC_REPOSITORY, USER_SERVICE
 
-    
     if not USER_REPOSITORY:
         USER_REPOSITORY = UserRepository(db_engine)
 

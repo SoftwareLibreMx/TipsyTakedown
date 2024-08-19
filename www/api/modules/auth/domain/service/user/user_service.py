@@ -27,7 +27,7 @@ class UserService:
             user_credentials.user_id)
 
         return UserCDTO.from_uc(user, user_credentials)
-    
+
     def create(self, user_info: dict) -> tuple[Optional[str], UserModel]:
         error, user_model = UserModel.from_dict(user_info)
 

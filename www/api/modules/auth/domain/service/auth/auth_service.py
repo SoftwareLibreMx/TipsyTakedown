@@ -5,10 +5,13 @@ from shared.globals import jwt_credentials
 
 from ...dto import UserCDTO
 from ..user import UserService
-from ...user_credential import UserCredentialService
+from ..user_credential import UserCredentialService
+
 
 class AuthService:
-    def __init__(self, user_service: UserService, user_credential_service: UserCredentialService):
+    def __init__(self,
+                 user_service: UserService,
+                 user_credential_service: UserCredentialService):
         self.user_service = user_service
         self.user_credential_service = user_credential_service
 
@@ -32,13 +35,14 @@ class AuthService:
 
     def sign_up(self, user_c_dict) -> tuple[list[str], UserCDTO]:
         errors, user = self.user_service.create(user_c_dict)
-        
-        if errors:
-            return errors, None
-        
-        errors, user_credential = self.user_credential_service.create(user.id, user_c_dict)
 
         if errors:
             return errors, None
-        
+
+        errors, user_credential = self.user_credential_service.create(
+            user.id, user_c_dict)
+
+        if errors:
+            return errors, None
+
         return None, UserCDTO.from_uc(user, user_credential)
