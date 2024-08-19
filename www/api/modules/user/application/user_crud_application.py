@@ -23,28 +23,28 @@ def __init_classes() -> UserService:
 def get_user_by_id(user_id) -> UserModel:
     user_service = __init_classes()
 
-    return user_service.get_user_by_id(user_id)
+    return user_service.get_by_id(user_id)
 
 
 def get_user_by_email(email) -> UserModel:
     user_service = __init_classes()
 
-    return user_service.get_user_by_email(email)
+    return user_service.get_by_email(email)
 
 
 def create_user(user_dict) -> tuple[list[str], UserModel]:
     user_service = __init_classes()
 
-    return user_service.create_user(user_dict)
+    return user_service.create(user_dict)
 
 
 def update_user(user_id, user_dict) -> tuple[list[str], UserModel]:
     user_service = __init_classes()
 
-    return user_service.update_user(user_id, user_dict)
+    return user_service.update(user_id, user_dict)
 
 
 def delete_user(user_id) -> UserModel:
     user_service = __init_classes()
 
-    return user_service.delete_user(user_id)
+    return user_service.delete(user_id)

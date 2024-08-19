@@ -17,16 +17,14 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" placeholder="Enter password">
             </div>
+            <div class="alert alert-danger d-none" role="alert" id="errorMessage">Invalid email or password</div>
+
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
     </div>
     
     <script>
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            submitForm();
-        });
-        function submitForm() {
+        async function submitForm() {
             var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
             
@@ -40,26 +38,28 @@
             
             // Send the form data to the server using AJAX or fetch API
             // Example using fetch API
-            fetch('/login', {
+            const response = await fetch('/api/auth/sign_in', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response from the server
-                console.log(data);
-                // Redirect to another page or perform other actions based on the response
-            })
-            .catch(error => {
-                // Handle any errors that occur during the request
-                console.error('Error:', error);
             });
+
+            if (!response.ok) {
+                const errorMessage = document.getElementById('errorMessage');
+                errorMessage.classList.remove("d-none");
+                return;
+            }
+
+            const data = await response.json();
+            const token = data.token;
+            if (token) {
+                sessionStorage.setItem('token', token);
+                window.location.href = '/';
+            }
         }
         
-        // Attach the submitForm function to the form's submit event
         document.querySelector('form').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent the default form submission
             submitForm(); // Call the submitForm function

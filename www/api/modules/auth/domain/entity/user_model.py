@@ -16,7 +16,7 @@ from .user_type import UserType
 class UserModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
     __tablename__ = "users"
 
-    id: Mapped[str] = mapped_column(primary_key=True, default=uuid.uuid4())
+    id: Mapped[str] = mapped_column(primary_key=True)
     type: Mapped[UserType] = mapped_column(default=UserType.STUDENT.value)
     given_name: Mapped[str] = mapped_column()
     surname: Mapped[str] = mapped_column()
@@ -33,6 +33,7 @@ class UserModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
             return errors, None
 
         return None, UserModel(
+            id=uuid.uuid4(),
             given_name=data.get("given_name"),
             surname=data.get("surname"),
             avatar=data.get("avatar"),

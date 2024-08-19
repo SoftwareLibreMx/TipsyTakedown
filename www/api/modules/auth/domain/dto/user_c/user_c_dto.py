@@ -16,7 +16,7 @@ class UserCDTO:
     def from_uc(cls, user, user_credentials):
         return cls(
             id=user.id,
-            user_type=user.type,
+            user_type=user.type.value,
             email=user_credentials.email,
             given_name=user.given_name,
             surname=user.surname,
