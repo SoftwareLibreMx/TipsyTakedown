@@ -17,7 +17,7 @@ class UserCredentialService:
         )
 
     def create(
-            self, user_cred_dict: dict) -> UserCredentialModel:
+            self, user_id: str, user_cred_dict: dict) -> UserCredentialModel:
         errors, user_cred = UserCredentialModel.from_dict(user_cred_dict)
 
         if errors:

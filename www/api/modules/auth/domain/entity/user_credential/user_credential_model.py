@@ -2,7 +2,14 @@ import uuid
 
 from sqlalchemy.orm import Mapped, mapped_column
 
-from api.libs.utils import validate_dict, VKOptions, TrackTimeMixin, SoftDeleteMixin, BaseModel
+from api.libs.utils import (
+    validate_dict,
+    VKOptions,
+    TrackTimeMixin,
+    SoftDeleteMixin,
+    BaseModel
+)
+
 
 class UserCredentialModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
     __tablename__ = 'user_credentials'
@@ -21,16 +28,15 @@ class UserCredentialModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
         errors = validate_dict(data, [
             VKOptions('user_id', str, True),
             VKOptions('email', str, True),
+            VKOptions('password_hash', str, True),
+            VKOptions('password_salt', str, True),
+            VKOptions('password_hash_params', str, True),
         ])
 
         if errors:
             return errors, None
 
-        return None, UserCredentialModel(
-            id=uuid.uuid4(),
-            user_id=data.get('user_id'),
-            email=data.get('email'),
-        )
+        return None, UserCredentialModel(**data)
 
     @staticmethod
     def from_dict_sso_provider(data: dict) -> list:
