@@ -4,7 +4,7 @@ from flask import Blueprint, request
 
 from api.libs.utils import (
     api_response as Response,
-    as_json_dumps
+    dataclass_to_json_dumps
 )
 
 from ....application import auth as application
@@ -16,11 +16,11 @@ auth_api = Blueprint('auth_api', __name__)
 def sign_up():
     request_data = request.get_json()
 
-    errors, user = application.sign_up(
+    errors, userc = application.sign_up(
         request_data
     )
 
     if errors:
         return Response(json.dumps({"errors": errors}), status=400)
 
-    return Response(as_json_dumps(user), status=201)
+    return Response(dataclass_to_json_dumps(userc), status=201)
