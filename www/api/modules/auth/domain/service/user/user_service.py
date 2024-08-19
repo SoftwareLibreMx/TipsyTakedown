@@ -1,6 +1,6 @@
 from typing import Optional
 
-from ..user_credential_service import UserCredentialService
+from ..user_credential import UserCredentialService
 
 from ...dto import UserCDTO
 from ...entity import UserModel

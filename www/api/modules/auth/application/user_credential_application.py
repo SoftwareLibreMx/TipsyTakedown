@@ -1,5 +1,6 @@
 from shared.globals import db_engine
-from ..domain.service.user_credential_service import UserCredentialService
+
+from ..domain.service.user_credential import UserCredentialService
 from ..infraestructure.repository import UserCredentialRepository
 from ..domain.entity import UserCredentialModel
 
