@@ -47,21 +47,21 @@
     event.preventDefault();
 
     // Get form values
-    const givenName = document.getElementById('given_name').value;
+    const given_name = document.getElementById('given_name').value;
     const surname = document.getElementById('surname').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
     // Create an object with the form data
     const formData = {
-      givenName,
+      given_name,
       surname,
       email,
       password
     };
 
     // Send the form data to the server
-    fetch('/register', {
+    fetch('/api/auth/sign_up', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

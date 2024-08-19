@@ -1,27 +1,23 @@
 from shared.globals import db_engine
 
 from ...domain.service import (
-    AuthService, GoogleService, UserService, UserCredentialService
+    AuthService, UserService, UserCredentialService
 )
 from ...infraestructure.repository import (
     UserRepository, UserCredentialRepository
 )
 
 AUTH_SERVICE = None
-
 USER_REPOSITORY = None
 UC_REPOSITORY = None
 UC_SERVICE = None
 USER_SERVICE = None
 
-GOOGLE_SERVICE = None
 
-
-def __init_classes():
+def __init_classes() -> AuthService:
     global AUTH_SERVICE, USER_REPOSITORY, UC_SERVICE
-    global UC_REPOSITORY, USER_SERVICE, GOOGLE_SERVICE
+    global UC_REPOSITORY, USER_SERVICE
 
-    
     if not USER_REPOSITORY:
         USER_REPOSITORY = UserRepository(db_engine)
 
@@ -37,13 +33,16 @@ def __init_classes():
     if not AUTH_SERVICE:
         AUTH_SERVICE = AuthService(USER_SERVICE, UC_SERVICE)
 
-    if GOOGLE_SERVICE is None:
-        GOOGLE_SERVICE = GoogleService(AUTH_SERVICE, USER_SERVICE)
-
-    return GOOGLE_SERVICE
+    return AUTH_SERVICE
 
 
-def get_or_create_user_token(user_info: dict):
-    google_service = __init_classes()
+def sign_up(user_c_dict: dict) -> tuple[list[str], dict]:
+    auth_service = __init_classes()
 
-    return google_service.get_or_create_user_token(user_info)
+    return auth_service.sign_up(user_c_dict)
+
+
+def sign_in(email: str, password: str) -> tuple[list[str], dict]:
+    auth_service = __init_classes()
+
+    return auth_service.sign_in(email, password)
