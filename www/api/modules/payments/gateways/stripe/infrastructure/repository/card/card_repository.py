@@ -14,13 +14,13 @@ class CardRepository:
     ) -> tuple[Optional[dict], Optional[dict]]:
         try:
             card_token = self.stripe.Token.create(
-                    card={
-                        'number': card.card_number,
-                        'exp_month': card.expiration_month,
-                        'exp_year': card.expiration_year,
-                        'cvc': card.cvv
-                        }
-                    )
+                card={
+                    'number': card.card_number,
+                    'exp_month': card.expiration_month,
+                    'exp_year': card.expiration_year,
+                    'cvc': card.cvv
+                }
+            )
         except Exception as e:
             return {'error': str(e)}, None
 
