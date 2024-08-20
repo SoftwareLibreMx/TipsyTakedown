@@ -4,7 +4,7 @@ from api.modules.payments.domain.entity import CardModel
 
 from ...domain.entity import User
 from ...domain.service import CardService, UserService
-from ...infraestructure.repository import CardRepository, UserRepository
+from ...infrastructure.repository import CardRepository, UserRepository
 
 CARD_REPOSITORY = None
 USER_REPOSITORY = None

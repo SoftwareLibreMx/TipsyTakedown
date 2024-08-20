@@ -48,6 +48,10 @@ mercadopago_credentials = {
     "access_token": os.getenv("MP_ACCESS_TOKEN", ""),
 }
 
+stripe_credentials = {
+    "secret_key": os.getenv("STRIPE_SECRET_KEY", ""),
+}
+
 local_prefix = os.getenv("LOCAL_PREFIX", "./tmp")
 SECRET_KEY = os.getenv('SECRET_KEY', 'Super Scret Key For Flask App')
 

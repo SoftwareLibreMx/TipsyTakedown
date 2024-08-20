@@ -88,6 +88,7 @@ CREATE Type PaymentCycle AS ENUM ('MONTHLY', 'ANUAL');
 
 CREATE TABLE subscription_types (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    name text NOT NULL,
     payment_cycle PaymentCycle NOT NULL,
     price DOUBLE precision NOT NULL,
     currency Currency NOT NULL,

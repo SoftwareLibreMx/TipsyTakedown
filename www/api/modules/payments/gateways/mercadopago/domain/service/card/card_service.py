@@ -4,7 +4,7 @@ from shared.globals import mercadopago_credentials as mp_credentials
 
 from api.modules.payments.domain.entity import CardModel, RejectionReason
 
-from ....infraestructure.repository import CardRepository
+from ....infrastructure.repository import CardRepository
 from ..user import UserService
 from ...entity import User
 

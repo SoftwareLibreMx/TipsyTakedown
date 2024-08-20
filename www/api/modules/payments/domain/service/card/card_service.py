@@ -2,6 +2,7 @@ from ...entity import CardModel, PaymentAuditModel
 from ....gateways.mercadopago.application import (
     card_payment as meli_card_payment
 )
+from ....gateways.stripe.application import card_payment as stripe_card_payment
 from ....infraestructure.repository import (
     CardRepository, PaymentAuditRepository
 )
@@ -17,7 +18,8 @@ class CardService:
         self.payment_audit_repo = payment_audit_repo
 
         self.payment_gateways = [
-            meli_card_payment
+            meli_card_payment,
+            stripe_card_payment
         ]
 
     # TODO: Implement encrypt and decrypt methods
