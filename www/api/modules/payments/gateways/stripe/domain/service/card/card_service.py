@@ -19,7 +19,7 @@ class CardService:
 
         return self.card_repository.pay_subscription({
             "amount": subscription_type.transaction_amount * 100,
-            "currency": "mxn",
+            "currency": subscription_type.currency,
             "description": f"Initial payment for {req_user.email}",
             "source": card_token.get('id'),
         })

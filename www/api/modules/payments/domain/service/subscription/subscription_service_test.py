@@ -4,7 +4,7 @@ from datetime import timedelta
 from unittest.mock import Mock
 
 from .subscription_service import SubscriptionService
-from ...entity import PaymentCycle, PaymentMethod
+from ...entity import PaymentCycle, PaymentMethod, PaymentStatus
 
 mock_credit_card_service = Mock()
 
@@ -31,15 +31,15 @@ class TestSubscriptionService:
         [Mock(price=100, currency='MXN'), 'Invalid Method',
          None, None, (['Payment method not found'], {})],
         [
-            Mock(price=100, currency='MXN'),
-            PaymentMethod.CREDIT_CARD,
-            (FakePayError(rejection_reason='Not pass'), {}),
+            Mock(price=100.00, currency='MXN'),
+            PaymentMethod.CREDIT_CARD.value,
+            ({'error': True}, {}),
             Mock(id='valid'),
-            (FakePayError(rejection_reason='Not pass'), {})
+            ({'error': True, 'status': PaymentStatus.REJECTED.value}, {})
         ],
         [
             Mock(price=100, id='valid', payment_cycle=PaymentCycle.MONTHLY),
-            PaymentMethod.CREDIT_CARD,
+            PaymentMethod.CREDIT_CARD.value,
             (None, {}),
             FakePaymentAuditLog('valid'),
             (None, {
