@@ -31,7 +31,7 @@ class TestSubscriptionService:
         [Mock(price=100, currency='MXN'), 'Invalid Method',
          None, None, (['Payment method not found'], {})],
         [
-            Mock(price=100),
+            Mock(price=100, currency='MXN'),
             PaymentMethod.CREDIT_CARD,
             (FakePayError(rejection_reason='Not pass'), {}),
             Mock(id='valid'),
@@ -64,7 +64,7 @@ class TestSubscriptionService:
         subscription_service.payment_audit_repository.create.return_value = paudit_resp
         subscription_service.subscription_repository.create.return_value = 'subscription'
 
-        response = subscription_service.pay_subscription(
+        response = subscription_service.pay(
             user={'id': 'valid'},
             subscription_type_id='valid',
             promo_code=None,

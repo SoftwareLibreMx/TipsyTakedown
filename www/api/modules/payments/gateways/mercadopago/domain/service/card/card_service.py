@@ -18,6 +18,7 @@ class CardService:
         self.user_service = user_service
         self.mp_repository = mp_card_repository
 
+    # TODO: this is throwing 500 error
     def pay(
         self,
         req_user: User,
@@ -29,11 +30,6 @@ class CardService:
 
         if not payment_method_id:
             return ["Card number not valid"], None
-
-        error, user = self.user_service.get_or_create(req_user)
-
-        if error:
-            return error, None
 
         error, card_token = self.mp_repository.create_card_token(req_card)
 
@@ -47,8 +43,7 @@ class CardService:
             "payment_method_id": payment_method_id,
             "installments": 1,
             "payer": {
-                "id": user.id,
-                "email": user.email,
+                "email": self.user_service.encrypt_email(req_user.email)
             }
         })
 
@@ -78,6 +73,8 @@ class CardService:
                 error.get('code'),
                 RejectionReason.UNKNOWN.value
             )
+
+        return RejectionReason.UNKNOWN.value
 
     def __get_payment_method_id(self, card_number: str) -> Optional[str]:
         return {

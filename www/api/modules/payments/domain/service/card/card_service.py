@@ -1,3 +1,4 @@
+from ...dto import SubscriptionTypeDTO
 from ...entity import CardModel, PaymentAuditModel
 from ....gateways.mercadopago.application import (
     card_payment as meli_card_payment
@@ -32,7 +33,7 @@ class CardService:
     def pay(
         self,
         user: dict,
-        payment_amount: float,
+        subscription_type: SubscriptionTypeDTO,
         payment_audit: PaymentAuditModel,
         card: dict
     ) -> tuple[list[str], dict]:
@@ -57,7 +58,7 @@ class CardService:
 
         for gateway in self.payment_gateways:
             errors, response = gateway.pay(
-                user, card, payment_amount)
+                user, card, subscription_type)
 
             if errors:
                 return errors, None

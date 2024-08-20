@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
+from ...dto import SubscriptionTypeDTO
 from ...entity import (
     PaymentAuditModel,
     PaymentCycle,
@@ -54,12 +55,15 @@ class SubscriptionService:
         if not payment_method_service:
             return ['Payment method not found'], {}
 
-        payment_amount = self._calculate_payment_amount(
-            subscription_type, promo_code)
+        subscription_type = SubscriptionTypeDTO(
+            transaction_amount=self._calculate_payment_amount(
+                subscription_type, promo_code),
+            currency=subscription_type.currency,
+        )
 
         errors, payment_audit_log = self._create_audit_log(
             user,
-            payment_amount,
+            subscription_type.transaction_amount,
             subscription_type.currency,
             payment_method
         )
@@ -68,7 +72,7 @@ class SubscriptionService:
             return errors, {}
 
         error, response = payment_method_service.pay(
-            user, payment_amount, payment_audit_log, card)
+            user, subscription_type, payment_audit_log, card)
 
         if error:
             error['status'] = PaymentStatus.REJECTED.value

@@ -1,4 +1,5 @@
-from api.modules.payments.gateways.stripe.domain.card.card_model import CardModel
+from api.modules.payments.domain.dto import SubscriptionTypeDTO
+from api.modules.payments.domain.entity import CardModel
 
 from ...infrastructure.repository import CardRepository
 from ...domain.service import CardService
@@ -23,7 +24,7 @@ def __init_classes() -> CardService:
 def pay(
     user: dict,
     card: CardModel,
-    transaction_amount: float,
+    subscription_type: SubscriptionTypeDTO,
 ) -> tuple[list[str], dict]:
     card_service = __init_classes()
 

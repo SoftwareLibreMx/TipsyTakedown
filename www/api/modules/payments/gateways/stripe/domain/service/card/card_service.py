@@ -1,3 +1,4 @@
+from api.modules.payments.domain.dto import SubscriptionTypeDTO
 from api.modules.payments.domain.entity import CardModel
 
 
@@ -9,7 +10,7 @@ class CardService:
         self,
         req_user,
         req_card: CardModel,
-        transaction_amount: float
+        subscription_type: SubscriptionTypeDTO
     ) -> tuple[list[str], dict]:
         error, card_token = self.card_repository.generate_card_token(req_card)
 
@@ -17,7 +18,7 @@ class CardService:
             return error, None
 
         return self.card_repository.pay_subscription({
-            "amount": transaction_amount,
+            "amount": subscription_type.transaction_amount * 100,
             "currency": "mxn",
             "description": f"Initial payment for {req_user.email}",
             "source": card_token.get('id'),

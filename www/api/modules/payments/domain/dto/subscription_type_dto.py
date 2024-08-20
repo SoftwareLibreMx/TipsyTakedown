@@ -2,5 +2,6 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Subscription:
+class SubscriptionTypeDTO:
+    currency: str
     transaction_amount: float
