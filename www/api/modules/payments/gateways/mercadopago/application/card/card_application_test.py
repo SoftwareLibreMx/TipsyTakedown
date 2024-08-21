@@ -17,7 +17,7 @@ def test_init():
         'id': 'test',
         'name': 'John Doe',
         'email': 'test'
-    }, 1, 1)
+    }, 1, Mock())
 
     mock_card_repository.assert_called_once()
     mock_user_service.assert_called_once()
