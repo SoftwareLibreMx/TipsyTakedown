@@ -13,7 +13,7 @@ class User:
     def from_dict(user: dict) -> tuple[List[str], "User"]:
         errors = validate_dict(user, [
             VKOptions('id', str),
-            VKOptions('email', str),
+            VKOptions('email', str, True),
         ])
 
         if errors:

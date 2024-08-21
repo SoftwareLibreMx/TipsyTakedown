@@ -4,17 +4,17 @@ from datetime import timedelta
 from unittest.mock import Mock
 
 from .subscription_service import SubscriptionService
-from ...entity import PaymentCycle, PaymentMethod
+from ...entity import PaymentCycle, PaymentMethod, PaymentStatus
 
 mock_credit_card_service = Mock()
 
 
 @dataclass
-class FakePayError:
-    rejection_reason: str
+class FakePay:
+    id: str
 
     def __eq__(self, other):
-        return self.rejection_reason == other.rejection_reason
+        return self.id == other.id
 
 
 @dataclass
@@ -25,32 +25,89 @@ class FakePaymentAuditLog:
         return self.id == other.id
 
 
+@dataclass
+class FakeSubscription:
+    id: str = None
+    rejection_reason: str = None
+
+    def __eq__(self, other):
+        return self.rejection_reason == other.rejection_reason\
+            and self.id == other.id
+
+
 class TestSubscriptionService:
-    @pytest.mark.parametrize('st_resp, payment_method, pay_resp, paudit_resp, expected', [
-        [None, None, None, None, (['Subscription type not found'], {})],
-        [Mock(price=100, currency='MXN'), 'Invalid Method',
-         None, None, (['Payment method not found'], {})],
+    @pytest.mark.parametrize(
+        'st_resp, payment_method, create_audit_log, pay_resp, create_subscription, expected',
         [
-            Mock(price=100),
-            PaymentMethod.CREDIT_CARD,
-            (FakePayError(rejection_reason='Not pass'), {}),
-            Mock(id='valid'),
-            (FakePayError(rejection_reason='Not pass'), {})
-        ],
-        [
-            Mock(price=100, id='valid', payment_cycle=PaymentCycle.MONTHLY),
-            PaymentMethod.CREDIT_CARD,
-            (None, {}),
-            FakePaymentAuditLog('valid'),
-            (None, {
-                'subscription': 'subscription',
-                'payment_audit_log': FakePaymentAuditLog('valid'),
-                'payment_response': {}
-            })
-        ],
-    ])
+            [None, None, None, None, None,
+                (['Subscription type not found'], {})],
+            [
+                Mock(price=100, currency='MXN'),
+                'Invalid Method',
+                None,
+                None,
+                None,
+                (['Payment method not found'], {})
+            ],
+            [
+                Mock(price=100.00, currency='MXN'),
+                PaymentMethod.CREDIT_CARD.value,
+                ({'error': True}, {}),
+                None,
+                None,
+                ({'error': True}, {})
+            ],
+            [
+                Mock(
+                    price=100,
+                    id='valid',
+                    payment_cycle=PaymentCycle.MONTHLY
+                ),
+                PaymentMethod.CREDIT_CARD.value,
+                (None, Mock(id='valid')),
+                ({'eror': True}, None),
+                None,
+                ({'eror': True, 'status': 'REJECTED'}, {})
+            ],
+            [
+                Mock(
+                    price=100,
+                    id='valid',
+                    payment_cycle=PaymentCycle.MONTHLY
+                ),
+                PaymentMethod.CREDIT_CARD.value,
+                (None, Mock(id='valid')),
+                (None, Mock()),
+                (FakeSubscription(rejection_reason='test'), None),
+                (FakeSubscription(rejection_reason='test'), None)
+            ],
+            [
+                Mock(
+                    price=100,
+                    id='valid',
+                    payment_cycle=PaymentCycle.MONTHLY
+                ),
+                PaymentMethod.CREDIT_CARD.value,
+                (None, FakePaymentAuditLog(id='valid')),
+                (None, FakePay(id='valid')),
+                (None, FakeSubscription(id='valid')),
+                (None, {
+                    'subscription': FakeSubscription(id='valid'),
+                    'payment_audit_log': FakePaymentAuditLog(id='valid'),
+                    'payment_response': FakePay(id='valid'),
+                })
+            ],
+        ]
+    )
     def test_pay_subscription(
-            self, st_resp, payment_method, pay_resp, paudit_resp, expected):
+        self,
+        st_resp,
+        payment_method,
+        create_audit_log,
+        pay_resp,
+        create_subscription,
+        expected
+    ):
         subscription_service = SubscriptionService(
             payment_audit_repository=Mock(),
             subscription_type_repository=Mock(),
@@ -60,11 +117,17 @@ class TestSubscriptionService:
         )
 
         subscription_service.st_repository.get.return_value = st_resp
-        mock_credit_card_service.pay.return_value = pay_resp
-        subscription_service.payment_audit_repository.create.return_value = paudit_resp
-        subscription_service.subscription_repository.create.return_value = 'subscription'
+        subscription_service._create_audit_log = Mock(
+            return_value=create_audit_log)
 
-        response = subscription_service.pay_subscription(
+        for i in (create_audit_log or []):
+            subscription_service.payment_audit_repository.update.return_value = i
+
+        mock_credit_card_service.pay.return_value = pay_resp
+        subscription_service._create_subscription = Mock(
+            return_value=create_subscription)
+
+        response = subscription_service.pay(
             user={'id': 'valid'},
             subscription_type_id='valid',
             promo_code=None,
@@ -74,8 +137,8 @@ class TestSubscriptionService:
         assert response == expected
 
     @pytest.mark.parametrize('method, expected', [
-        [PaymentMethod.CREDIT_CARD, mock_credit_card_service],
-        [PaymentMethod.DEBIT_CARD, mock_credit_card_service],
+        [PaymentMethod.CREDIT_CARD.value, mock_credit_card_service],
+        [PaymentMethod.DEBIT_CARD.value, mock_credit_card_service],
         ['invalid', None],
     ])
     def test__get_payment_method(self, method, expected):

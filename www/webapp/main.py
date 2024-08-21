@@ -19,9 +19,11 @@ webapp.register_blueprint(oauth_router, url_prefix='/auth')
 def index():
     return render_template("index.html")
 
+
 @webapp.route('/register')
 def register():
     return render_template("register.html")
+
 
 @webapp.route('/login')
 def login():

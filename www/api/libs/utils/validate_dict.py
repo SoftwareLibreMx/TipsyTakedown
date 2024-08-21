@@ -16,10 +16,12 @@ def __is_invalid_type(vk_option, data):
     valid_enum_value = (
         inspect.isclass(vk_option.type) and
         issubclass(vk_option.type, Enum)
-        and data[vk_option.key] not in vk_option.type
+        and data[vk_option.key] in vk_option.type
     )
+
     is_instance = data.get(vk_option.key, None) and isinstance(
         data[vk_option.key], vk_option.type)
+
     return not valid_enum_value and not is_instance
 
 
@@ -35,7 +37,7 @@ def validate_dict(data: dict, vk_options: list[VKOptions]) -> list[str]:
             errors.append(f'{vk_option.key} is required')
 
         invalid_type = __is_invalid_type(vk_option, data)
-        if vk_option.key in data and invalid_type:
+        if vk_option.key in data and data[vk_option.key] and invalid_type:
             errors.append(f'{vk_option.key} must be of type {vk_option.type}')
 
         if vk_option.options and data[vk_option.key] not in vk_option.options:

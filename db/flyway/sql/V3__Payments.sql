@@ -2,12 +2,12 @@ CREATE TABLE cards (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID NOT NULL,
     card_number text NOT NULL,
-    expiration_date date NOT NULL,
+    expiration_date text NOT NULL,
     cvv text NOT NULL,
     card_holder_name text NOT NULL,
     zip_code text DEFAULT NULL,
     country text DEFAULT NULL,
-    lasts_four_digits text NOT NULL,
+    last_four_digits text NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now(),
@@ -38,7 +38,8 @@ CREATE Type RejectionReason AS ENUM (
     'INVALID_COUNTRY',
     'DISABLED_CARD',
     'BLACKLISTED_CARD',
-    'UNSUPPORTED_CARD'
+    'UNSUPPORTED_CARD',
+    'UNKNOWN'
 );
 
 DROP TYPE IF EXISTS PaymentMethod;
@@ -60,7 +61,7 @@ CREATE TABLE payment_audit_logs (
     status PaymentStatus NOT NULL,
     rejection_reason RejectionReason DEFAULT NULL,
     payment_method PaymentMethod NOT NULL,
-    card_id UUID NOT NULL,
+    card_id UUID DEFAULT NULL,
     error text DEFAULT NULL,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now(),
@@ -87,6 +88,7 @@ CREATE Type PaymentCycle AS ENUM ('MONTHLY', 'ANUAL');
 
 CREATE TABLE subscription_types (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    name text NOT NULL,
     payment_cycle PaymentCycle NOT NULL,
     price DOUBLE precision NOT NULL,
     currency Currency NOT NULL,
@@ -100,7 +102,7 @@ CREATE TABLE subscriptions (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID NOT NULL,
     subscription_type_id UUID NOT NULL,
-    payments_log_id UUID NOT NULL,
+    payment_log_id UUID NOT NULL,
     promo_code_id UUID DEFAULT NULL,
     start_date date NOT NULL,
     end_date date NOT NULL,

@@ -12,12 +12,12 @@ def authorize(user_type_required: UserType = None):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             token = request.headers.get('Authorization', None)
-            errors, user = verify_token(token)
+            errors, payload = verify_token(token)
 
             if errors:
                 abort(401, errors)
 
-            return f(user, *args, **kwargs)
+            return f(payload.get('user', {}), *args, **kwargs)
 
         return decorated_function
 

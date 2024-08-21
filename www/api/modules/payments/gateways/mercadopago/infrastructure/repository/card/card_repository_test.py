@@ -3,7 +3,6 @@ from unittest.mock import patch, Mock
 
 from shared.globals import mercadopago_credentials
 
-from api.modules.payments.domain.entity import Card
 from .card_repository import CardRepository, mercadopago
 
 
@@ -17,14 +16,11 @@ class TestCardRepository:
         'card, token_resp, expected_response',
         [
             [
-                Card(
+                Mock(
                     id=1,
-                    card_number='5474 9254 3267 0366',
-                    security_code='123',
-                    expiration_month=11,
-                    expiration_year=2025,
-                    cardholder_name='APRO',
-                    last_four_digits='0366'
+                    card_number='5474925432670366',
+                    cvv='123',
+                    expiration_date='11/25',
                 ),
                 {
                     'message': 'invalid card_number',
@@ -33,17 +29,27 @@ class TestCardRepository:
                     'cause': [
                         {'description': 'invalid card_number', 'code': 'E202'}]
                 },
-                None
+                (
+                    {
+                        'message': 'invalid card_number',
+                        'status': 400,
+                        'error': 'bad_request',
+                        'cause': [
+                            {
+                                'description': 'invalid card_number',
+                                'code': 'E202'
+                            }
+                        ]
+                    },
+                    None
+                )
             ],
             [
-                Card(
+                Mock(
                     id=1,
                     card_number='5474925432670366',
-                    security_code='123',
-                    expiration_month=11,
-                    expiration_year=2025,
-                    cardholder_name='APRO',
-                    last_four_digits='0366'
+                    cvv='123',
+                    expiration_date='11/25',
                 ),
                 {
                     'id': '557304207b529e7e79426ce92d14953e',
@@ -62,7 +68,7 @@ class TestCardRepository:
                     'card_number_length': 16,
                     'security_code_length': 3
                 },
-                {
+                (None, {
                     'id': '557304207b529e7e79426ce92d14953e',
                     'first_six_digits': '547492',
                     'expiration_month': 11,
@@ -78,7 +84,7 @@ class TestCardRepository:
                     'require_esc': False,
                     'card_number_length': 16,
                     'security_code_length': 3
-                },
+                }),
             ]
         ]
     )
@@ -127,7 +133,20 @@ class TestCardRepository:
                     }
                 ]
             },
-            None
+            (
+                {
+                    'message': 'invalid parameters ',
+                    'error': 'bad_request',
+                    'status': 400,
+                    'cause': [
+                        {
+                            'code': '106',
+                            'description': 'the email format is invalid'
+                        }
+                    ]
+                },
+                None
+            )
         ],
         [
             {
@@ -150,16 +169,19 @@ class TestCardRepository:
                     'email': 'test@fake_domain.com'
                 }
             },
-            {
-                'id': 1,
-                'status': 'approved',
-                'status_detail': 'accredited',
-                'payment_type': 'credit_card',
-                'operation_type': 'regular_payment',
-                'payer': {
-                    'email': 'test@fake_domain.com'
+            (
+                None,
+                {
+                    'id': 1,
+                    'status': 'approved',
+                    'status_detail': 'accredited',
+                    'payment_type': 'credit_card',
+                    'operation_type': 'regular_payment',
+                    'payer': {
+                        'email': 'test@fake_domain.com'
+                    }
                 }
-            }
+            )
         ],
     ])
     @patch.object(mercadopago, 'SDK', Mock())

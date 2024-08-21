@@ -21,7 +21,6 @@ def __init_classes():
     global AUTH_SERVICE, USER_REPOSITORY, UC_SERVICE
     global UC_REPOSITORY, USER_SERVICE, GOOGLE_SERVICE
 
-    
     if not USER_REPOSITORY:
         USER_REPOSITORY = UserRepository(db_engine)
 
