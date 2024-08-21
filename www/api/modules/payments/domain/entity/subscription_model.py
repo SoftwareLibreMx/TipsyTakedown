@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from typing import Optional
 
@@ -43,4 +44,7 @@ class SubscriptionModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
         if errors:
             return errors, None
 
-        return None, SubscriptionModel(**data)
+        return None, SubscriptionModel(
+            id=data.get('id', uuid.uuid4()),
+            **data
+        )

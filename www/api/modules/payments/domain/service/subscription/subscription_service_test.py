@@ -119,6 +119,10 @@ class TestSubscriptionService:
         subscription_service.st_repository.get.return_value = st_resp
         subscription_service._create_audit_log = Mock(
             return_value=create_audit_log)
+
+        for i in (create_audit_log or []):
+            subscription_service.payment_audit_repository.update.return_value = i
+
         mock_credit_card_service.pay.return_value = pay_resp
         subscription_service._create_subscription = Mock(
             return_value=create_subscription)

@@ -2,11 +2,7 @@ import json
 
 from flask import Blueprint, request
 
-from api.libs.utils import (
-    api_response as Response,
-    as_json_dumps,
-    authorize
-)
+from api.libs.utils import api_response as Response, as_dict, authorize
 
 from .... import application
 
@@ -29,4 +25,8 @@ def subscribe(user: dict):
     if errors:
         return Response(json.dumps({"errors": errors}), status=400)
 
-    return Response(as_json_dumps(subscription), status=201)
+    return Response(json.dumps({
+        'subscription': as_dict(subscription.get('subscription')),
+        'payment_audit_log': as_dict(subscription.get('payment_audit_log')),
+        'payment_response': subscription.get('payment_response', {}),
+    }, default=str), status=201)

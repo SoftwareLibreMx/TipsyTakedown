@@ -43,5 +43,5 @@ class PaymentAuditRepository:
                 'card_id', payment_audit.card_id)
 
             session.commit()
-            # session.refresh(payment_audit)
+            session.refresh(payment_audit)
             return payment_audit

@@ -102,7 +102,7 @@ CREATE TABLE subscriptions (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID NOT NULL,
     subscription_type_id UUID NOT NULL,
-    payments_log_id UUID NOT NULL,
+    payment_log_id UUID NOT NULL,
     promo_code_id UUID DEFAULT NULL,
     start_date date NOT NULL,
     end_date date NOT NULL,

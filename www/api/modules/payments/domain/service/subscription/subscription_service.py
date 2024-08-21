@@ -56,9 +56,11 @@ class SubscriptionService:
             return ['Payment method not found'], {}
 
         subscription_type = SubscriptionTypeDTO(
+            id=subscription_type.id,
             transaction_amount=self._calculate_payment_amount(
                 subscription_type, promo_code),
             currency=subscription_type.currency,
+            payment_cycle=subscription_type.payment_cycle
         )
 
         errors, payment_audit_log = self._create_audit_log(
@@ -79,20 +81,29 @@ class SubscriptionService:
             self.payment_audit_repository.update(payment_audit_log.id, error)
             return error, {}
 
+        payment_audit_log = self.payment_audit_repository.update(
+            payment_audit_log.id,
+            {
+                'status': PaymentStatus.APPROVED.value,
+            }
+        )
+
         error, subscription = self._create_subscription(
             user, subscription_type, payment_audit_log)
 
         if error:
+            print(error)
             self.payment_audit_repository.update(payment_audit_log.id, {
-                'status': PaymentStatus.REJECTED.value,
                 'error': error,
-                'rejection_reason': error.rejection_reason
             })
             return error, None
 
-        self.payment_audit_repository.update(payment_audit_log.id, {
-            'status': PaymentStatus.APPROVED.value,
-        })
+        payment_audit_log = self.payment_audit_repository.update(
+            payment_audit_log.id,
+            {
+                'status': PaymentStatus.APPROVED.value,
+            }
+        )
 
         return None, {
             'subscription': subscription,
@@ -157,8 +168,8 @@ class SubscriptionService:
     ) -> tuple[Optional[list[str]], SubscriptionModel]:
         error, subscription_model = SubscriptionModel.from_dict({
             'user_id': user.get('id'),
-            'subscription_type_id': subscription_type.id,
-            'payment_audit_id': payment_audit_log.id,
+            'subscription_type_id': str(subscription_type.id),
+            'payment_log_id': str(payment_audit_log.id),
             'start_date': datetime.now(),
             'end_date': datetime.now() + self._get_datetime_interval(
                 subscription_type.payment_cycle),
