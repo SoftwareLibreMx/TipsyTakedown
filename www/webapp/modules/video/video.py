@@ -6,20 +6,12 @@ TEMPLATE_DIR = 'video'
 video_router = Blueprint('video', __name__)
 
 
-@video_router.route('/uploader')
-def upload_video():
-    return render_template(f'{TEMPLATE_DIR}/uploader/index.html')
-
-
 @video_router.route('/<video_id>')
 def show(video_id):
     errors, video = get_video_by_id(video_id)
 
-    print(errors, video)
     if errors:
         return redirect('/error/404')
-
-    print(video)
 
     return render_template(f'{TEMPLATE_DIR}/index.html',
                            video=video,

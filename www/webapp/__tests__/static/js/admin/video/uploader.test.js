@@ -6,7 +6,7 @@ jest.spyOn(global, 'fetch').mockImplementation(mockFetch);
 let mockFormData = jest.fn();
 jest.spyOn(global, 'FormData').mockImplementation(mockFormData);
 
-import { SaveButton, onClickSaveButton, initSaveButton } from '@static/js/video/uploader';
+import { SaveButton, onClickSaveButton, initSaveButton } from '@static/js/admin/video/uploader';
 
 describe('uploader', () => {
     let document = {
@@ -42,7 +42,7 @@ describe('uploader', () => {
             const saveButton = new SaveButton(document);
 
             saveButton.toggleLoading();
-           
+
             expect(saveText.classList.toggle).toHaveBeenCalledWith('d-none');
             expect(spinner.classList.toggle).toHaveBeenCalledWith('d-none');
         });
@@ -113,7 +113,7 @@ describe('uploader', () => {
             const getElementByIdResponse = {
                 addEventListener: jest.fn(),
             };
-            
+
             document.getElementById.mockReturnValue(getElementByIdResponse);
 
             initSaveButton(document);
