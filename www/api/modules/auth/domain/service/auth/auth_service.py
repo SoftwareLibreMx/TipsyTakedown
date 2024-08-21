@@ -1,6 +1,5 @@
 import jwt
 import datetime
-import json
 from shared.globals import jwt_credentials
 
 from ...dto import UserCDTO
@@ -34,6 +33,11 @@ class AuthService:
         return jwt.encode(payload, jwt_secret_key, algorithm='HS256')
 
     def sign_up(self, user_c_dict) -> tuple[list[str], UserCDTO]:
+        userc = self.user_service.get_by_email(user_c_dict['email'])
+
+        if userc:
+            return ['Email already exists'], None
+
         errors, user = self.user_service.create(user_c_dict)
 
         if errors:
