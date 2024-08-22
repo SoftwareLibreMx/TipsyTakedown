@@ -26,3 +26,7 @@ def register():
 @webapp.route('/login')
 def login():
     return render_template("login.html")
+
+@webapp.route('/pricing')
+def pricing():
+    return render_template("pricing.html")

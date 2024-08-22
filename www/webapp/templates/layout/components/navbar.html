@@ -12,18 +12,15 @@
 
         <div class="" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Login
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/login">Sign In</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/auth/google"">Sign In with Google</a></li>
-                    </ul>
+                <li>
+                    <!-- TODO: only if teacher or higher -->
+                    <a class="nav-link" href="/video/uploader">Upload video</a>
                 </li>
-                <li class="nav-item">
-                    <a class="btn btn-primary m-2 my-sm-0" href="/register">Register</a>
+                <li>
+                    <a class="nav-link btn-primary" href="/login">Sign Up</a>
+                </li>
+                <li>
+                    <a class="nav-link btn-secondary" href="/signout">Sign Out</a>
                 </li>
             </ul>
         </div>
