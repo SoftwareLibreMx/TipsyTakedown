@@ -78,6 +78,7 @@ class WWW:
         )
 
         if result.returncode != 0:
+            print(result.stdout)
             raise Exception(f'Error while running autopep8 on {file_path}')
 
     def git_add_file(self, file_path):

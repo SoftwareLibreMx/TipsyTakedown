@@ -21,6 +21,12 @@ class GoogleService:
             if errors:
                 return errors, None
 
+        if user.sso_provider != SSOProvider.GOOGLE.value:
+            return (
+                "User already exists with another Login Provider provider",
+                None
+            )
+
         return None, {
             "user": user,
             "token": self.auth_service.generate_token(user)
