@@ -12,7 +12,7 @@ CREATE TABLE Materials (
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now(),
     deleted_at TIMESTAMP DEFAULT NULL,
-    CONSTRAINT fk_teacher_id FOREIGN KEY(teacher_id) REFERENCES users(id)
+    CONSTRAINT fk_teacher_id FOREIGN KEY(teacher_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Lessons (
@@ -39,3 +39,6 @@ CREATE TABLE courses (
 );
 
 DROP TABLE IF EXISTS Videos;
+
+ALTER TABLE video_encoding_queue DROP CONSTRAINT fk_video_id;
+ALTER TABLE video_encoding_queue ADD CONSTRAINT fk_material_id FOREIGN KEY(video_id) REFERENCES materials(id);

@@ -2,17 +2,24 @@ import uuid
 
 from sqlalchemy.orm import Mapped, mapped_column
 
-from api.libs.utils import validate_dict, VKOptions, TrackTimeMixin, SoftDeleteMixin, BaseModel
+from api.libs.utils import (
+    validate_dict,
+    VKOptions,
+    TrackTimeMixin,
+    SoftDeleteMixin,
+    BaseModel
+)
 
 
 class VideoModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
     __tablename__ = 'materials'
 
     id: Mapped[str] = mapped_column(primary_key=True)
+    material_type: Mapped[str] = mapped_column(default='VIDEO')
     teacher_id: Mapped[str] = mapped_column()
     name: Mapped[str] = mapped_column()
     description: Mapped[str] = mapped_column()
-    path: Mapped[str] = mapped_column()
+    file_path: Mapped[str] = mapped_column()
     is_file_encoded: Mapped[bool] = mapped_column()
 
     @staticmethod
