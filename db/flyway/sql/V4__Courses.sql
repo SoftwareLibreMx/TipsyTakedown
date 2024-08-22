@@ -39,3 +39,6 @@ CREATE TABLE courses (
 );
 
 DROP TABLE IF EXISTS Videos;
+
+ALTER TABLE video_encoding_queue DROP CONSTRAINT fk_video_id;
+ALTER TABLE video_encoding_queue ADD CONSTRAINT fk_material_id FOREIGN KEY(video_id) REFERENCES materials(id);

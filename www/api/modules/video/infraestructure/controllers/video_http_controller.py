@@ -1,7 +1,11 @@
 import json
 from flask import Blueprint, request
 
-from api.libs.utils import api_response as Response, as_json_dumps
+from api.libs.utils import (
+    api_response as Response,
+    as_json_dumps,
+    dataclass_to_json_dumps
+)
 
 from ... import application
 
@@ -34,7 +38,7 @@ def create_video():
 
     application.add_video_file_to_encoding_queue_async(video.id, video_file)
 
-    return Response(as_json_dumps(video), status=201)
+    return Response(dataclass_to_json_dumps(video), status=201)
 
 
 @video_api.route('/<video_id>', methods=['PATCH'])

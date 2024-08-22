@@ -36,6 +36,7 @@ CREATE TABLE user_credentials (
 	updated_at timestamp NOT NULL DEFAULT now(),
 	deleted_at timestamp DEFAULT NULL,
 	CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
+    CONSTRAINT unique_email UNIQUE(email),
     CONSTRAINT check_authentication_methods CHECK ( 
         ((password_hash IS NOT NULL AND password_salt IS NOT NULL AND password_hash_params IS NOT NULL) 
         OR (sso_provider IS NOT NULL AND openid IS NOT NULL)) 
