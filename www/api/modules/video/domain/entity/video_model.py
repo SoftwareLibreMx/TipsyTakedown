@@ -6,7 +6,7 @@ from api.libs.utils import validate_dict, VKOptions, TrackTimeMixin, SoftDeleteM
 
 
 class VideoModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
-    __tablename__ = 'videos'
+    __tablename__ = 'materials'
 
     id: Mapped[str] = mapped_column(primary_key=True)
     teacher_id: Mapped[str] = mapped_column()
