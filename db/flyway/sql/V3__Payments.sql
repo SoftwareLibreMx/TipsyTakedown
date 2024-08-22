@@ -112,6 +112,6 @@ CREATE TABLE subscriptions (
     deleted_at TIMESTAMP DEFAULT NULL,
     CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES users(id),
     CONSTRAINT fk_subscription_type_id FOREIGN KEY(subscription_type_id) REFERENCES subscription_types(id),
-    CONSTRAINT fk_payments_log_id FOREIGN KEY(payments_log_id) REFERENCES payment_audit_logs(id),
+    CONSTRAINT fk_payments_log_id FOREIGN KEY(payment_log_id) REFERENCES payment_audit_logs(id),
     CONSTRAINT fk_promo_code_id FOREIGN KEY(promo_code_id) REFERENCES promo_codes(id)
 );
