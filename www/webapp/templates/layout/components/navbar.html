@@ -13,11 +13,7 @@
         <div class="" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li>
-                    <!-- TODO: only if teacher or higher -->
-                    <a class="nav-link" href="/video/uploader">Upload video</a>
-                </li>
-                <li>
-                    <a class="btn btn-primary mx-2" id="sign-up" href="/signup">Sign Up</a>
+                    <a class="btn btn-primary mx-2" id="sign-up" href="/signup_signin">Sign in/ Sign up</a>
                 </li>
                 <li>
                     <a class="btn btn-secondary d-none" id="sign-out" href="/signout">Sign Out</a>
@@ -26,4 +22,5 @@
         </div>
     </nav>
 </div>
+<script src="/static/js/session_validation.js"></script>
 {%- endmacro %}
