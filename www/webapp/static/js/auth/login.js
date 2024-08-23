@@ -1,5 +1,10 @@
-let existUser = false;
-let checkedEmail = false;
+const submitActionsEnum = Object.freeze({
+  'CHECK_EMAIL': 0,
+  'LOGIN': 1,
+  'REGISTER': 2
+})
+
+// Fist action is to check the email
 const btnSubmit = document.getElementById("btn-submit");
 const signUpForm = document.getElementsByClassName("sign-up-form");
 const signInForm = document.getElementsByClassName("sign-in-form");
@@ -8,13 +13,21 @@ const errorMessage = document.getElementById("errorMessage");
 const emailInput = document.getElementById('email');
 let initialEmail = emailInput.value;
 
+function setSubmitBtnSpinner() {
+  btnSubmit.innerHTML = `
+    <div class="spinner-border" role="status">
+    </div>
+  `;
+}
+
 async function checkMail() {
   const email = document.getElementById("email").value;
 
   const formData = {
     email: email,
   };
-
+    
+  setSubmitBtnSpinner();
   const response = await fetch("/api/auth/check_email", {
     method: "POST",
     headers: {
@@ -24,32 +37,36 @@ async function checkMail() {
   });
 
   if (!response.ok) {
+    //TODO: find a way to remove this loop
     for (let i = 0; i < signUpForm.length; i++) {
       signUpForm[i].classList.remove("d-none");
       requiredSignUpInputs();
     }
-    checkedEmail = true;
+    
+    btnSubmit.setAttribute("action", submitActionsEnum.REGISTER);
     btnSubmit.innerText = "Sign Up";
     mainTitle.innerText = "Please fill the sign up form";
     initialEmail = emailInput.value;
     return;
   }
-  body = await response.json();
+
+  const body = await response.json();
+
   if (body.sso_provider) {
     errorMessage.innerText = "You are already registered with " + body.sso_provider;
     errorMessage.classList.remove("d-none");
     initialEmail = emailInput.value;
-    checkedEmail = true;
-    existUser = true;
+    btnSubmit.setAttribute("action", submitActionsEnum.CHECK_EMAIL);
     return;
   }
-
+    
+  //TODO: find a way to remove this loop
   for (let i = 0; i < signInForm.length; i++) {
     signInForm[i].classList.remove("d-none");
     requiredSignInInput();
   }
-  checkedEmail = true;
-  existUser = true;
+    
+  btnSubmit.setAttribute("action", submitActionsEnum.LOGIN);
   initialEmail = emailInput.value;
   btnSubmit.innerText = "Sign In";
   mainTitle.innerText = "Please enter your password";
@@ -65,6 +82,7 @@ async function loginForm() {
     password: password,
   };
 
+  setSubmitBtnSpinner();
   const response = await fetch("/api/auth/sign_in", {
     method: "POST",
     headers: {
@@ -80,11 +98,9 @@ async function loginForm() {
   }
 
   const data = await response.json();
-  const token = data.token;
-  if (token) {
-    sessionStorage.setItem("token", token);
-    window.location.href = "/";
-  }
+
+  sessionStorage.setItem("token", data?.token);
+  window.location.href = "/";
 }
 
 async function registerForm() {
@@ -99,7 +115,8 @@ async function registerForm() {
     given_name: given_name,
     surname: surname,
   };
-
+  
+  setSubmitBtnSpinner();
   const response = await fetch("/api/auth/sign_up", {
     method: "POST",
     headers: {
@@ -118,28 +135,26 @@ async function registerForm() {
 
 emailInput.addEventListener('input', function() {
   const currentEmail = emailInput.value;
+  const btnSubmitAction = btnSubmit.getAttribute("action");
 
-  if (currentEmail !== initialEmail && checkedEmail) {
+  if (currentEmail !== initialEmail && btnSubmitAction !== submitActionsEnum.CHECK_EMAIL) {
     resetForm();
   }
 });
 
+
 document.querySelector("form").addEventListener("submit", function (event) {
   event.preventDefault(); // Prevent the default form submission
   errorMessage.classList.add("d-none");
-  switch (true) {
-    case !checkedEmail:
-      checkMail();
-      break;
-    case existUser && checkedEmail:
-      loginForm();
-      break;
-    case !existUser && checkedEmail:
-      registerForm();
-      break;
-    default:
-      break;
+
+  const action = btnSubmit.getAttribute("action");
+  const actionFunctions = {
+    [submitActionsEnum.CHECK_EMAIL]: checkMail,
+    [submitActionsEnum.LOGIN]: loginForm,
+    [submitActionsEnum.REGISTER]: registerForm
   }
+
+  actionFunctions[action]();
 });
 
 function requiredSignUpInputs(active = true) {
@@ -177,8 +192,7 @@ function resetForm() {
   }
   resetRequiredInputs();
   errorMessage.classList.add("d-none");
-  existUser = false;
-  checkedEmail = false;
+  btnSubmit.setAttribute("action", submitActionsEnum.CHECK_EMAIL);
   btnSubmit.innerText = "Next";
   mainTitle.innerText = "Please fill the form";
 }

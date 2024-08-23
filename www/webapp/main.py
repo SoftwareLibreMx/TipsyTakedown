@@ -21,7 +21,3 @@ def index():
 @webapp.route('/register')
 def register():
     return render_template("register.html")
-
-@webapp.route('/signup_signin')
-def signup():
-    return render_template("auth/login.html")
