@@ -5,6 +5,8 @@ const signUpForm = document.getElementsByClassName("sign-up-form");
 const signInForm = document.getElementsByClassName("sign-in-form");
 const mainTitle = document.getElementById("main-title");
 const errorMessage = document.getElementById("errorMessage");
+const emailInput = document.getElementById('email');
+let initialEmail = emailInput.value;
 
 async function checkMail() {
   const email = document.getElementById("email").value;
@@ -29,6 +31,16 @@ async function checkMail() {
     checkedEmail = true;
     btnSubmit.innerText = "Sign Up";
     mainTitle.innerText = "Please fill the sign up form";
+    initialEmail = emailInput.value;
+    return;
+  }
+  body = await response.json();
+  if (body.sso_provider) {
+    errorMessage.innerText = "You are already registered with " + body.sso_provider;
+    errorMessage.classList.remove("d-none");
+    initialEmail = emailInput.value;
+    checkedEmail = true;
+    existUser = true;
     return;
   }
 
@@ -38,6 +50,7 @@ async function checkMail() {
   }
   checkedEmail = true;
   existUser = true;
+  initialEmail = emailInput.value;
   btnSubmit.innerText = "Sign In";
   mainTitle.innerText = "Please enter your password";
 }
@@ -46,7 +59,6 @@ async function loginForm() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  errorMessage.classList.add("d-none");
   
   const formData = {
     email: email,
@@ -81,8 +93,6 @@ async function registerForm() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  errorMessage.classList.add("d-none");
-
   const formData = {
     email: email,
     password: password,
@@ -106,8 +116,17 @@ async function registerForm() {
   loginForm();
 }
 
+emailInput.addEventListener('input', function() {
+  const currentEmail = emailInput.value;
+
+  if (currentEmail !== initialEmail && checkedEmail) {
+    resetForm();
+  }
+});
+
 document.querySelector("form").addEventListener("submit", function (event) {
   event.preventDefault(); // Prevent the default form submission
+  errorMessage.classList.add("d-none");
   switch (true) {
     case !checkedEmail:
       checkMail();
@@ -123,14 +142,43 @@ document.querySelector("form").addEventListener("submit", function (event) {
   }
 });
 
-function requiredSignUpInputs(){
-  document.getElementById("password").setAttribute("required", "true");
-  document
-    .getElementById("confirm_password")
-    .setAttribute("required", "true");
-  document.getElementById("given_name").setAttribute("required", "true");
-  document.getElementById("surname").setAttribute("required", "true");
+function requiredSignUpInputs(active = true) {
+  if (active) {
+    document.getElementById("password").setAttribute("required", "true");
+    document.getElementById("confirm_password").setAttribute("required", "true");
+    document.getElementById("given_name").setAttribute("required", "true");
+    document.getElementById("surname").setAttribute("required", "true");
+  } else {
+    document.getElementById("password").removeAttribute("required");
+    document.getElementById("confirm_password").removeAttribute("required");
+    document.getElementById("given_name").removeAttribute("required");
+    document.getElementById("surname").removeAttribute("required");
+  }
 }
-function requiredSignInInput() {
-  document.getElementById("password").setAttribute("required", "true");
+
+function requiredSignInInput(active = true) {
+  if (active) {
+    document.getElementById("password").setAttribute("required", "true");
+  }else{
+    document.getElementById("password").removeAttribute("required");
+  }
+}
+function resetRequiredInputs() {
+  requiredSignUpInputs(false);
+  requiredSignInInput(false);
+}
+
+function resetForm() {
+  for (let i = 0; i < signUpForm.length; i++) {
+    signUpForm[i].classList.add("d-none");
+  }
+  for (let i = 0; i < signInForm.length; i++) {
+    signInForm[i].classList.add("d-none");
+  }
+  resetRequiredInputs();
+  errorMessage.classList.add("d-none");
+  existUser = false;
+  checkedEmail = false;
+  btnSubmit.innerText = "Next";
+  mainTitle.innerText = "Please fill the form";
 }
