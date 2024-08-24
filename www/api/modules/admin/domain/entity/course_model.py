@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import String, Boolean, ARRAY
+from sqlalchemy import String, Boolean, ARRAY, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from api.libs.utils import (
@@ -18,7 +18,7 @@ class CourseModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
     id: Mapped[str] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     teacher_id: Mapped[str] = mapped_column(String(36), nullable=False)
-    lessons: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False)
+    lessons: Mapped[list[str]] = mapped_column(ARRAY(UUID), nullable=False)
     thumbnail: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str] = mapped_column(String(255), nullable=False)
     long_description: Mapped[str] = mapped_column(String(255), nullable=False)
