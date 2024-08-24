@@ -1,3 +1,4 @@
+from .course import CourseService
 from .material import MaterialService
 from .ffmpeg import FFMPEGService
 from .minio import MinioService

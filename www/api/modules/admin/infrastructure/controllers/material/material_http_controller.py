@@ -16,7 +16,7 @@ material_api = Blueprint('material_api', __name__)
 def get_material_by_id(material_id):
     errors, material = application.material.get_by_id(material_id)
 
-    if not errors:
+    if errors:
         return Response(json.dumps({"errors": errors}), status=404)
 
     return Response(as_json_dumps(material), status=200)
