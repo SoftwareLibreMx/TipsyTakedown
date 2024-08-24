@@ -1,0 +1,26 @@
+{% extends "layout/base.html" %}
+
+{% block title %}
+<title> Admin </title>
+{% endblock %}
+
+{% block body %}
+<div class="mx-5 mt-2 content">
+    <div class="d-flex justify-content-between">
+        <h1>Courses List</h1>
+        <div class="d-flex align-items-center">
+            <a class="btn btn-primary" href="/admin/courses/new">New Course</a>
+        </div>
+    </div>
+    
+    <div class="h-full">
+        {% if not courses %}
+        <div class="d-flex justify-content-center align-items-center h-full">
+            <h3>No courses, Please create one</h3>
+        </div>
+        {% else %}
+        list of courses
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -3,8 +3,9 @@ from flask import Blueprint, request
 
 from api.libs.domain_entity import UserType
 from api.libs.utils import (
-    authorize, api_response as Response, as_json_dumps
+    api_response as Response, as_json_dumps
 )
+# from shared.utils.authorizer import authorizer
 
 from .... import application
 
@@ -12,7 +13,7 @@ admin_course_api = Blueprint('admin_course_api', __name__)
 
 
 @admin_course_api.route('', methods=['POST'])
-@authorize([UserType.ADMIN, UserType.TEACHER])
+# @authorizer([UserType.ADMIN, UserType.TEACHER])
 def create_course(user):
     errors, course = application.course.create(user, request.get_json())
 

@@ -1,9 +1,0 @@
-from ....infrastructure.repository import CourseRepository
-
-
-class CourseService:
-    def __init__(self, course_repo: CourseRepository):
-        self.course_repo = course_repo
-
-    def create(self, req_course: dict):
-        course

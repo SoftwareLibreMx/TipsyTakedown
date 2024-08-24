@@ -1,14 +1,32 @@
-from typing import Union
+import jwt
+from typing import Union, Optional
 from functools import wraps
 
 from flask import request
 
 from api.libs.utils import abort
 from api.libs.domain_entity import UserType
-from shared.tipsy_jwt import verify_token
 
 
-def authorize(
+def verify_token(token) -> tuple[Optional[str], Optional[str]]:
+    from shared.globals import jwt_credentials
+
+    secret_key = jwt_credentials.get('jwt_secret_key', '')
+
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+    except jwt.ExpiredSignatureError:
+        return 'Token has expired', None
+    except jwt.InvalidTokenError:
+        return 'Invalid token', None
+
+    if payload.get('iss', '') != jwt_credentials.get('jwt_issuer'):
+        return 'Invalid token', None
+
+    return None, payload
+
+
+def authorizer(
     user_type_required: Union[UserType, list[UserType]] = []
 ):
     if user_type_required and not isinstance(user_type_required, list):
