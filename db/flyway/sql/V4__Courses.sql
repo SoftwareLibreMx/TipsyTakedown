@@ -28,13 +28,17 @@ CREATE TABLE Lessons (
 CREATE TABLE courses (
 	id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
 	name Text NOT NULL,
+    teacher_id UUID NOT NULL,
 	lessons uuid[] NOT NULL,
+    description Text DEFAULT NULL,
+    long_description Text DEFAULT NULL,
 	thumbnail Text NOT NULL,
 	teaser_material_id UUID DEFAULT NULL,
 	is_active BOOLEAN DEFAULT TRUE,
 	created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now(),
     deleted_at TIMESTAMP DEFAULT NULL,
+    CONSTRAINT fk_teacher_id FOREIGN KEY(teacher_id) REFERENCES users(id),
     CONSTRAINT fk_teaser_material_id FOREIGN KEY(teaser_material_id) REFERENCES Material(id)
 );
 

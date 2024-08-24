@@ -1,7 +1,10 @@
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import text
 from sqlalchemy.orm import Session
+
+from api.libs.utils import process_filters
 
 from api.modules.auth.domain.entity import UserCredentialModel
 
@@ -17,10 +20,19 @@ class UserCredentialRepository:
             return session.query(UserCredentialModel).filter_by(
                 id=user_credential_id, deleted_at=None).first()
 
-    def get_user_credential_by_email(self, email: str) -> UserCredentialModel:
+    def get_user_credential_by_email(
+        self,
+        email: str,
+        filters: Optional[dict] = None
+    ) -> UserCredentialModel:
         with Session(self.db_engine) as session:
-            return session.query(UserCredentialModel).filter_by(
-                email=email, deleted_at=None).first()
+            query = session.query(UserCredentialModel).filter_by(
+                email=email, deleted_at=None)
+
+            if filters:
+                query = process_filters(UserCredentialModel, query, filters)
+
+            return query.first()
 
     def create(
             self, user_credential: UserCredentialModel) -> UserCredentialModel:

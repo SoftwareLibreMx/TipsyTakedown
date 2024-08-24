@@ -75,3 +75,21 @@ class AuthService:
             return ['Not found'], None
 
         return None, userc
+
+    def check_user_type(self, user, user_types):
+        userc = self.user_service.get_by_email(user.get('email'), filters={
+            'items': [
+                {
+                    'field': 'type',
+                    'operator': 'in',
+                    'value': user_types
+                }
+            ]
+        })
+
+        print(userc)
+
+        if not userc:
+            return ['Error not found'], None
+
+        return None, userc

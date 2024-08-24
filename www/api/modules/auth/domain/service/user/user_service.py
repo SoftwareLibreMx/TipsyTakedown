@@ -17,14 +17,21 @@ class UserService:
         self.user_repository = user_repository
         self.uc_service = uc_service
 
-    def get_by_email(self, email) -> Optional[UserCDTO]:
-        user_credentials = self.uc_service.get_by_email(email)
+    def get_by_email(
+            self,
+            email: str,
+            filters: Optional[dict] = None
+    ) -> Optional[UserCDTO]:
+        user_credentials = self.uc_service.get_by_email(email, filters)
 
         if not user_credentials:
             return None
 
         user = self.user_repository.get_by_id(
-            user_credentials.user_id)
+            user_credentials.user_id, filters)
+
+        if not user:
+            return None
 
         return UserCDTO.from_uc(user, user_credentials)
 
