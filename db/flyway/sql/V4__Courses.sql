@@ -12,7 +12,7 @@ CREATE TABLE Materials (
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now(),
     deleted_at TIMESTAMP DEFAULT NULL,
-    CONSTRAINT fk_teacher_id FOREIGN KEY(teacher_id) REFERENCES users(id)
+    CONSTRAINT fk_teacher_id FOREIGN KEY(teacher_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Lessons (

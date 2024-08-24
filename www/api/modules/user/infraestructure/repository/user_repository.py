@@ -1,12 +1,13 @@
 from datetime import datetime
 from sqlalchemy.orm import Session
+from sqlalchemy.engine import Engine
 
 from api.modules.user.domain.entity import UserModel
 from api.modules.auth.domain.entity import UserCredentialModel
 
 
 class UserRepository:
-    def __init__(self, db_engine):
+    def __init__(self, db_engine: Engine):
         self.db_engine = db_engine
 
     def get_user_by_id(self, user_id: str) -> UserModel:

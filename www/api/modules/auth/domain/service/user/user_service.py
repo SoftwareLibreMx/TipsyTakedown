@@ -50,7 +50,7 @@ class UserService:
         if error:
             return error, None
 
-        error, user_cred = self.uc_service.create_user_credential_sso({
+        error, user_cred = self.uc_service.create_sso({
             "user_id": str(user.id),
             "sso_provider": sso_provider,
             "email": user_info.get("email", ""),
