@@ -43,3 +43,15 @@ def sign_in():
         'token': userc_token.get('token'),
         'user': asdict(userc_token.get('user'))
     }, default=str), status=200)
+
+@auth_api.route('check_email', methods=['POST'])
+def check_email():
+    request_data = request.get_json()
+    errors, userc = application.check_email(
+        request_data.get('email')
+    )
+
+    if errors:
+        return Response(json.dumps({"errors": errors}), status=400)
+
+    return Response(dataclass_to_json_dumps(userc), status=200)

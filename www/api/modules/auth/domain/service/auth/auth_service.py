@@ -67,3 +67,11 @@ class AuthService:
             'user': userc,
             'token': self.generate_token(userc)
         }
+
+    def check_email(self, email) -> tuple[list[str], UserCDTO]:
+        userc = self.user_service.get_by_email(email)
+
+        if not userc:
+            return ['Not found'], None
+
+        return None, userc
