@@ -9,7 +9,7 @@
     <div class="d-flex justify-content-between">
         <h1>Courses List</h1>
         <div class="d-flex align-items-center">
-            <a class="btn btn-primary" href="/admin/courses/new">New Course</a>
+            <a class="btn btn-primary" href="/admin/course/new">New Course</a>
         </div>
     </div>
     
@@ -19,14 +19,39 @@
             <h3>No courses, Please create one</h3>
         </div>
 
-        <div id="courses"></div>
+        <div id="courses">
+        </div>
     </div>
 </div>
 <script src="/static/js/utils/authorizer.js"></script>
 <script src="/static/js/admin/index.js"></script>
 <script>
     authorizer([UserTypes.ADMIN, UserTypes.TEACHER]);
+    
+    async function updateCourses() {
+        const courses = await fetchCourses();
 
-    updateCourseTable();
+        if (courses.length === 0) return;
+
+        document.getElementById('coursesPlaceholder').classList.add('d-none');
+        
+        const coursesDeiv = document.getElementById('courses');
+        courses.forEach(course => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.innerHTML = `
+                <h5 class="card-header">${course.name}</h5>
+                <div class="card-body">
+                    <h5 class="card-title">${course.description}</h5>
+                    <p class="card-text">${course.teacher}</p>
+
+                    <a href="/admin/courses/${course.id}" class="btn btn-primary">Edit</a>
+                </div>
+            `;
+            coursesDeiv.appendChild(card);
+        });
+    }
+
+    updateCourses();
 </script>
 {% endblock %}

@@ -37,15 +37,3 @@ async function fetchCourses() {
     return courses || [];
 }
 
-async function updateCourseTable() {
-    const courses = await fetchCourses();
- 
-    if (courses.length === 0) {
-        return;
-    }
-
-    document.getElementById('coursesPlaceholder').classList.add('d-none');
-    
-    document.getElementById('courses').innerText = courses;
-}
-

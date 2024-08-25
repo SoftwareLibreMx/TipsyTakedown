@@ -22,10 +22,4 @@ def __init_classes() -> CourseService:
 def get_all(filters: dict, pagination: dict):
     course_service = __init_classes()
 
-    courses_model = course_service.get_all(filters, pagination)
-
-    json_resp = []
-    for course in courses_model:
-        json_resp.append(course.__dict__)
-
-    return None, json_resp
+    return course_service.get_all(filters, pagination)
