@@ -36,4 +36,3 @@ async function fetchCourses() {
 
     return courses || [];
 }
-
