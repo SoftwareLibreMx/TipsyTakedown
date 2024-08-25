@@ -1,9 +1,9 @@
 import uuid
 
-from sqlalchemy import String, Boolean, ARRAY, UUID
+from sqlalchemy import ARRAY, Boolean, String, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
-from api.libs.utils import (
+from ...utils import (
     BaseModel,
     TrackTimeMixin,
     SoftDeleteMixin,

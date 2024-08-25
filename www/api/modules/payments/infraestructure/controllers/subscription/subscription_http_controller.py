@@ -2,8 +2,7 @@ import json
 
 from flask import Blueprint, request
 
-from api.libs.utils import api_response as Response, as_dict
-from shared.utils.authorizer import authorizer
+from api.libs.utils import api_response as Response, as_dict, api_authorizer
 
 from .... import application
 
@@ -11,7 +10,7 @@ subscription_api = Blueprint('subscription_api', __name__)
 
 
 @subscription_api.route('', methods=['POST'])
-# @authorizer()
+@api_authorizer()
 def subscribe(user: dict):
     request_data = request.get_json()
 

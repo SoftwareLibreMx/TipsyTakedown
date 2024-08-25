@@ -1,7 +1,7 @@
 from api.libs.domain_entity import UserType
+from api.libs.domain.entity import CourseModel
 
-from ...entity import CourseModel
-from ....infrastructure.repository import CourseRepository
+from api.modules.admin.infrastructure.repository import CourseRepository
 
 
 class CourseService:

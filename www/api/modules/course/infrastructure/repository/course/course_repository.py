@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.engine import Engine
 
-from ....domian.entity import CourseModel
+from api.libs.domain.entity import CourseModel
 
 
 class CourseRepository:
