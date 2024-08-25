@@ -5,10 +5,10 @@ from werkzeug.datastructures import FileStorage
 from shared.globals import db_engine, minion_credentials
 
 from api.libs.domain_entity import FlaskFile
-from api.modules.video.domain.service import (
+from api.modules.admin.domain.service import (
     FFMPEGService, VideoEncoderService, VideoUploaderService
 )
-from api.modules.video.infraestructure.repository import (
+from api.modules.admin.infrastructure.repository import (
     VideoEQRepository, MinioRepository, FFMPEGRepository
 )
 

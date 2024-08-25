@@ -1,10 +1,9 @@
 import os
 
 from flask import url_for
-
 from dotenv import load_dotenv
 
-from .db_connection import get_db_engine
+from .utils.db import get_db_engine
 
 load_dotenv()
 

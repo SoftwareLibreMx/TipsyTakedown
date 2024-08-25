@@ -47,7 +47,16 @@ def sign_in(email: str, password: str) -> tuple[list[str], dict]:
 
     return auth_service.sign_in(email, password)
 
+
 def check_email(email: str) -> tuple[list[str], dict]:
     auth_service = __init_classes()
 
     return auth_service.check_email(email)
+
+
+def check_user_type(
+    user: dict, user_type_required: list
+) -> tuple[list[str], dict]:
+    auth_service = __init_classes()
+
+    return auth_service.check_user_type(user, user_type_required)
