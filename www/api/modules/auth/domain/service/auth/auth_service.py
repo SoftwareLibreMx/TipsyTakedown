@@ -87,8 +87,6 @@ class AuthService:
             ]
         })
 
-        print(userc)
-
         if not userc:
             return ['Error not found'], None
 
