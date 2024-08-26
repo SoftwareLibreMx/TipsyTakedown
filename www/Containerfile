@@ -1,0 +1,7 @@
+From quay.io/centos/centos:stream9-minimal
+
+RUN dnf install yum -y
+
+RUN yum -y update && yum -y install gcc openssl-devel bzip2-devel libffi-devel zlib-devel wget make && yum clean all
+
+RUN cd /opt && wget --no-check-certificate https://www.python.org/ftp/python/3.14.0/Python-3.14.0a0.tgz && tar xzf Python-3.14.0a0.tgz && cd Python-3.14*/ && ./configure --enable-optimizations && make altinstall && rm -rf /opt/Python* 
