@@ -53,6 +53,10 @@ stripe_credentials = {
 
 local_prefix = os.getenv("LOCAL_PREFIX", "./tmp")
 SECRET_KEY = os.getenv('SECRET_KEY', 'Super Scret Key For Flask App')
+LANGUAGES = {
+    'en': 'English',
+    'es': 'Spanish'
+}
 
 jwt_credentials = {
     "jwt_secret_key": os.getenv("JWT_SECRET_KEY", "Super Scret Key For JWT"),
