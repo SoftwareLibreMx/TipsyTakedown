@@ -1,0 +1,35 @@
+{
+  "home":{
+    "hello_world": "Hello, World!",
+    "sign_up": "Sign in / Sign up",
+    "sign_out": "Sign Out",
+    "profile": "Profile"
+  },
+  "login":{
+    "main_title": "Please fill the form",
+    "title": "Login",
+    "email": "Email address",
+    "ph_email": "Enter Email",
+    "password": "Password",
+    "ph_password": "Enter Password",
+    "confirm_password": "Confirm Password",
+    "ph_confirm_password": "Confirm your password",
+    "given_name": "Given Name",
+    "surname": "Surname",
+    "next_button": "Next",
+    "sign_up": "Sign up",
+    "login_button": "Sign In",
+    "login_title": "Please enter your password",
+    "sign_up_title": "Please fill the sign up form",
+    "google_sign_in": "Sign in with Google",
+    "error": {
+      "invalid_email": "Invalid email or password",
+      "user_exists": "Already taken the user",
+      "sso_exists": "You are already registered with "
+    }
+  },
+  "auth":{
+    "callback_title": "Client Callback",
+    "callback_message": "Redirecting..."
+  }
+}

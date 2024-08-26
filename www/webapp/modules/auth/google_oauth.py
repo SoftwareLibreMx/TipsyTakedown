@@ -5,7 +5,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 from api.modules.auth.application import google as auth_application
-
+from ...libs.utils.language import get_translations
 from shared.globals import google_oauth_credentials
 from shared.utils import abort
 
@@ -88,5 +88,6 @@ def callback():
 
     return render_template(
         f"{TEMPLATE_DIR}/callback.html",
+        translations=get_translations(),
         token=userc.get("token")
     )

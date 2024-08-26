@@ -2,7 +2,7 @@
 {% from "layout/components/footer.html" import footer %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ session.get('lang', 'en') }}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,7 @@
         <script src="/static/js/utils/getUser.js"></script>
     </head>
     <body data-bs-theme="light" id="body" >
-        {{ navbar() }}
+        {{ navbar(translations) }}
 
         {% block body %}{% endblock %}
 

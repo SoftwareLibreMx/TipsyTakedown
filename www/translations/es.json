@@ -1,0 +1,35 @@
+{
+  "home": {
+    "hello_world": "¡Hola, Mundo!",
+    "sign_up": "Iniciar sesión / Registrarse",
+    "sign_out": "Cerrar sesión",
+    "profile": "Perfil"
+  },
+  "login":{
+    "main_title": "Por favor completa el formulario",
+    "title": "Login",
+    "email": "Correo electrónico",
+    "ph_email": "Escriba un correo",
+    "password": "Contraseña",
+    "ph_password": "Escriba una contraseña",
+    "confirm_password": "Confirmar Contraseña",
+    "ph_confirm_password": "Confirma su contraseña",
+    "given_name": "Nombre",
+    "surname": "Apellido",
+    "next_button": "Siguiente",
+    "sign_up": "Registrarse",
+    "login_button": "Iniciar sesión",
+    "login_title": "Por favor ingresa tu contraseña",
+    "sign_up_title": "Por favor completa el formulario de registro",
+    "google_sign_in": "Iniciar sesión con Google",
+    "error": {
+      "invalid_email": "Correo o contraseña inválidos",
+      "user_exists": "El usuario ya existe",
+      "sso_exists": "Ya estás registrado con "
+    }
+  },
+  "auth":{
+    "callback_title": "Respuesta del Cliente",
+    "callback_message": "Redirigiendo..."
+  }
+}
