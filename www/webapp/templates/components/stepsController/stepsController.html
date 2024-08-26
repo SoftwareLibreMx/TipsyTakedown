@@ -1,0 +1,44 @@
+{% macro steps_controller(current_step, step_ids) %}
+<div class="d-flex justify-content-between" style="width: 100%;">
+    <button class="btn btn-primary" id="prevStep" disabled>
+        <i class="fas fa-arrow-left"></i> Previous Step
+    </button>
+
+    <button class="btn btn-primary" id="nextStep">
+        Next Step <i class="fas fa-arrow-right"></i>
+    </button>
+</div>
+
+<script>
+    const prevStep = document.getElementById('prevStep');
+    const nextStep = document.getElementById('nextStep');
+    let currentStep = parseInt("{{current_step}}");
+    
+    const steps = "{{step_ids}}".split(',').map(step => {
+        step = step.trim();
+        return document.getElementById(step)
+    });
+    
+    steps[currentStep].classList.remove('d-none');
+
+    prevStep.addEventListener('click', () => {
+        steps[currentStep].classList.add('d-none');
+        steps[currentStep - 1].classList.remove('d-none');
+        currentStep--;
+        nextStep.disabled = false;
+        if (currentStep === 0) {
+            prevStep.disabled = true;
+        }
+    });
+
+    nextStep.addEventListener('click', () => {
+        steps[currentStep].classList.add('d-none');
+        steps[currentStep + 1].classList.remove('d-none');
+        currentStep++;
+        prevStep.disabled = false;
+        if (currentStep === steps.length - 1) {
+            nextStep.disabled = true;
+        }
+    });
+</script>
+{%endmacro%}

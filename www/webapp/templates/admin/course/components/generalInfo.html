@@ -1,0 +1,39 @@
+{% from "components/inputs/input_text.html" import input, input_text %}
+{% macro general_info(step_number) %}
+<form class="d-flex flex-column justify-content-center">
+    <div class="mb-4">
+        <h3>Step {{step_number}}: Course General Info</h3>
+    </div>
+
+    {{ input('title', 'Course Title') }}
+    <div class="thumbnail mb-2">
+        <div class="thumbnail-container">
+            <img id="loadedThumbnail" 
+            class="d-none" 
+            src="" alt="Course Image">
+            <svg 
+                id="thumbnailPlaceholder"
+                class="bd-placeholder-img card-img-top" 
+                width="100%" 
+                height="180" 
+                xmlns="http://www.w3.org/2000/svg" 
+                role="img" 
+                aria-label="Placeholder: Image cap" 
+                preserveAspectRatio="xMidYMid slice" 
+                focusable="false">
+                <title>Placeholder</title>
+                <rect width="100%" height="100%" fill="#868e96"></rect>
+                <text x="50%" y="50%" fill="#dee2e6" dy=".3em">
+                Image cap
+                </text>
+            </svg>
+        </div>
+
+        <div class="d-none">
+            {{ input_text('Video', 'video', None, 'file') }}
+        </div>
+    </div>
+    {{ input('description', 'Enter short description') }}
+    {{ input('long_description', 'Enter long description') }}
+</form>
+{% endmacro %}

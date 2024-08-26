@@ -1,0 +1,37 @@
+{% from "components/inputs/input_text.html" import input_text, input %}
+{% from "components/loader/loader.html" import loader %}
+{% macro create_material(step_number)%}
+<div class="">
+    <div>
+        <h3>Step {{step_number}}: Create Material</h3>
+
+        <p>You can create new materials if needed but you can also assign existing materials<p>
+    </div>
+
+    <!-- TODO: Add csrf token to form -->
+    <form id="videoUploadForm" method="POST">
+        <div class="d-none">
+            <input type="text" name="teacher_id" value="85303a43-05df-44a7-92fa-dbae214ff345">
+        </div>
+        {{ input_text('Title', 'name') }}
+        {{ input_text('Description', 'description') }}
+        {{ input_text('Video/PDF', 'video', None, 'file') }}
+        <a class="btn btn-primary mt-4">
+            Save Material
+        </a>
+    </form>
+
+
+    <div id="errorAlert"
+        class="alert alert-danger mt-3 d-none" 
+        role="alert">
+        File not able to be uploaded
+    </div>
+</div>
+
+<script type="module">
+    import { initSaveButton } from '/static/js/admin/video/uploader.js';
+
+    initSaveButton(document);
+</script>
+{% endmacro %}
