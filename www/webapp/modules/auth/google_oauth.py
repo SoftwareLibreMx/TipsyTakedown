@@ -88,6 +88,6 @@ def callback():
 
     return render_template(
         f"{TEMPLATE_DIR}/callback.html",
-        translations=get_translations(),
+        translations=get_translations('auth'),
         token=userc.get("token")
     )

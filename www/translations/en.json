@@ -1,6 +1,5 @@
 {
-  "home":{
-    "hello_world": "Hello, World!",
+  "navbar":{
     "sign_up": "Sign in / Sign up",
     "sign_out": "Sign Out",
     "profile": "Profile"
