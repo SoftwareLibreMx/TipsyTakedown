@@ -15,7 +15,9 @@ def load_translations(lang):
 
 def get_translations(page=None):
     global TRANSLATIONS, LANG
-    lang = session.get('lang', LANG)
+    if session.get('lang') is None:
+        session['lang'] = LANG
+    lang = session.get('lang')
     if TRANSLATIONS is None or lang != LANG:
         TRANSLATIONS = load_translations(lang)
     if page:

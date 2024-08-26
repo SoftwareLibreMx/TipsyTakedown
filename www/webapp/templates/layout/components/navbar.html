@@ -16,8 +16,11 @@
                     <a class="btn btn-primary mx-2" id="sign-up" href="/auth/login">{{ translations['navbar']['sign_up']}}</a>
                 </li>
                 <li>
-                    <a href="/change_language/en">English</a>
-                    <a href="/change_language/es">Español</a>
+                    {% if session['lang'] == 'en' %}
+                        <a href="/change_language/es">Español</a>
+                    {% else %}
+                        <a href="/change_language/en">English</a>
+                    {% endif %}
                 </li>
                 <li class="nav-item dropdown d-none" id="sign-out">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

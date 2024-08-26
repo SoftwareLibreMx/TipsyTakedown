@@ -14,7 +14,8 @@ def index():
 
 @admin_router.route('/course/new')
 def course():
-    return render_template(f'{TEMPLATE_DIR}/course/create.html')
+    return render_template(f'{TEMPLATE_DIR}/course/create.html',
+                           translations=get_translations())
 
 
 @admin_router.route('/video/uploader')
