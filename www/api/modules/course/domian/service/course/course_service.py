@@ -1,4 +1,7 @@
+from typing import Optional
+
 from api.libs.domain_entity import Pagination
+from api.libs.utils import as_dict
 
 
 class CourseService:
@@ -8,6 +11,12 @@ class CourseService:
     def get_all(
         self,
         filters: dict,
-        pagination=Pagination(page=1, per_page=20)
+        pagination: Optional[dict] = {'page': 1, 'per_page': 10}
     ):
-        return self.course_repository.get_all(filters, pagination)
+        pagination = Pagination(**pagination)
+
+        courses = self.course_repository.get_all(filters, pagination)
+
+        courses = list(map(as_dict, courses))
+
+        return None, courses

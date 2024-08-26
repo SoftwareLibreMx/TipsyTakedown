@@ -11,3 +11,4 @@ function authorizer(userTypes) {
         window.location.href = '/';
     }
 }
+

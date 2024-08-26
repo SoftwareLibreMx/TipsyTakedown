@@ -1,0 +1,49 @@
+{% from "components/loader/loader.html" import loader %}
+{% from "admin/course/components/createMaterial.html" import create_material %}
+{% from "admin/course/components/createLesson/createLesson.html" import create_lesson %}
+{% from "admin/course/components/generalInfo.html" import general_info %}
+{% from "components/stepsController/stepsController.html" import steps_controller %}
+{% extends "layout/base.html" %}
+
+{% block title %}
+<title> Admin </title>
+<link rel="stylesheet" href="/static/css/admin/course/create.css">
+{% endblock %}
+
+{% block body %}
+<div class="d-flex flex-column mx-5 mt-2 content">
+    <div class="d-flex justify-content-between">
+        <h1>Add Course</h1>
+        
+        <div class="d-flex align-items-center">
+            <button id="saveBtn"
+                class="btn btn-primary">
+                <div id="saveText">Save</div>
+                <div id="spinner" class="d-none">
+                    {{ loader() }}
+                </div>
+            </button>
+        </div>
+    </div>
+    
+    <div id="steps" class="mt-4">
+        <div id="createMaterial" class="d-none">
+            {{ create_material(1) }}
+        </div>
+        <div id="createLesson" class="d-none h-full">
+            {{ create_lesson(2) }}
+        </div>
+        <div id="generalInfo" class="d-none">
+            {{ general_info(3) }}
+        </div>
+    </div>
+
+    <div id="stepsController" class="d-flex h-full align-items-end w-full">
+        {{ steps_controller(0, "createMaterial, createLesson, generalInfo") }}
+    </div>
+</div>
+<script src="/static/js/utils/authorizer.js"></script>
+<script>
+    authorizer([UserTypes.ADMIN, UserTypes.TEACHER]);
+</script>
+{% endblock %}

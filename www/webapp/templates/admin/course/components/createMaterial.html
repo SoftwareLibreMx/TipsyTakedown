@@ -1,0 +1,69 @@
+{% from "components/inputs/input_text.html" import input_text, input %}
+{% from "components/loader/loader.html" import loader %}
+{% macro create_material(step_number)%}
+<div>
+    <div>
+        <h3>Step {{step_number}}: Create Material</h3>
+
+        <p>You can create new materials if needed but you can also assign existing materials<p>
+    </div>
+    
+    <div>
+        <!-- TODO: Add csrf token to form -->
+        <form id="videoUploadForm" method="POST">
+            <div class="d-none">
+                <input type="text" name="teacher_id" id="teacher_id">
+                <input type="text" name="material_type" id="material_type">
+            </div>
+
+            {{ input_text('Title', 'name') }}
+            {{ input_text('Description', 'description') }}
+            {{ input_text('Video/PDF', 'file', None, 'file') }}
+
+        </form>
+
+        <button class="btn btn-primary mt-4" id="saveMaterialBtn">
+            Save Material
+        </button>
+    </div>
+
+    <div id="materials-container" 
+        class="mt-2 d-flex flex-wrap" 
+        style="flex: 1 1 auto; height: 14rem; overflow-y: auto;">
+    </div>
+
+    <div id="errorAlert"
+        class="alert alert-danger mt-3 d-none" 
+        role="alert">
+        File not able to be uploaded
+    </div>
+</div>
+
+<script type="module">
+    import { initSaveButton } from '/static/js/admin/video/uploader.js';
+    const { user } = globalThis.user;
+
+    const materialTemplate = (material) => (`
+        <div class="card mb-3 mx-2" style="min-width: 50%">
+            <div class="card-header d-flex justify-content-between">
+                <h5 class="d-flex align-self-center">${material.material_type}</h5>
+                <div class="d-flex align-self-center">
+                    <div id="loader" class="d-flex">
+                        {{ loader() }}
+                    </div>
+                    <a id="delete-btn" class="btn btn-danger d-none">Delete</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">${material.name}</h5>
+                <p class="card-text">${material.description}</p>
+                <a href="#" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
+    `);
+
+    document.getElementById('teacher_id').value = user.id;
+    
+    initSaveButton(document, materialTemplate);
+</script>
+{% endmacro %}

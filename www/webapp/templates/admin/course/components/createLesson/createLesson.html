@@ -1,0 +1,18 @@
+{% macro create_lesson(step_number) %}
+<div class="h-full">
+    <div>
+        <h3>Step {{step_number}}: Create Lesson</h3>
+
+        <p>You can create new lesson if needed but you can also assign existing lessons<p>
+    </div>
+    
+    <div class="d-flex justify-content-center mb-2">
+        <a id="addLesson" class="btn btn-secondary mx-1">New Lesson</a>
+        <a id="selectLesson" class="btn btn-success mx-1">Select Existing Lesson</a>
+    </div>
+    
+    <div id="lessonPlaceHolder" class="d-flex justify-content-center mt-5 d-none">
+        No lessons
+    </div>
+</div>
+{% endmacro %}

@@ -9,10 +9,10 @@ from api.libs.utils import (
 
 from .... import application
 
-material_api = Blueprint('material_api', __name__)
+admin_material_api = Blueprint('admin_material_api', __name__)
 
 
-@material_api.route('/<material_id>', methods=['GET'])
+@admin_material_api.route('/<material_id>', methods=['GET'])
 def get_material_by_id(material_id):
     errors, material = application.material.get_by_id(material_id)
 
@@ -22,7 +22,7 @@ def get_material_by_id(material_id):
     return Response(as_json_dumps(material), status=200)
 
 
-@material_api.route('/', methods=['POST'])
+@admin_material_api.route('/', methods=['POST'])
 def create_material():
     request_data = (request.get_json()
                     if request.headers['Content-Type'] == 'application/json'
@@ -43,7 +43,7 @@ def create_material():
     return Response(dataclass_to_json_dumps(material), status=201)
 
 
-@material_api.route('/<material_id>', methods=['PATCH'])
+@admin_material_api.route('/<material_id>', methods=['PATCH'])
 def update_material(material_id):
     request_data = request.get_json()
 
@@ -55,7 +55,7 @@ def update_material(material_id):
     return Response(as_json_dumps(material), status=200)
 
 
-@material_api.route('/<material_id>', methods=['DELETE'])
+@admin_material_api.route('/<material_id>', methods=['DELETE'])
 def delete_material(material_id):
     errors, _ = application.material.delete(material_id)
 
