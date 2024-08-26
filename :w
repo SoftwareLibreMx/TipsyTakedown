@@ -28,11 +28,11 @@ class Material {
             });
 
             if (!response.ok) {
-                this.saveBtn.setAlert('Failed to delete');
+                saveBtn.setAlert('Failed to delete');
                 return;
             }
 
-            this.saveBtn.removeMaterial(this);
+            saveBtn.removeMaterial(this);
         });
     }
 }
@@ -137,10 +137,6 @@ export async function onClickSaveButton(document, saveBtn) {
         saveBtn.removeMaterial(material);
         return;
     }
-
-    const materialJson = await response.json();
-
-    material.material.id = materialJson.id;
 
 }
 
