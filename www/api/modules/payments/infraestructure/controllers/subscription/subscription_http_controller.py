@@ -4,7 +4,7 @@ from flask import Blueprint, request
 
 from api.libs.utils import api_response as Response, as_dict, api_authorizer
 
-from .... import application
+from ....application.subscription import pay_subscription
 
 subscription_api = Blueprint('subscription_api', __name__)
 
@@ -14,7 +14,7 @@ subscription_api = Blueprint('subscription_api', __name__)
 def subscribe(user: dict):
     request_data = request.get_json()
 
-    errors, subscription = application.pay_subscription(
+    errors, subscription = pay_subscription(
         user,
         request_data.get('subscription_type_id'),
         request_data.get('payment_method'),

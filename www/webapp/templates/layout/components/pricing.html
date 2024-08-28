@@ -1,0 +1,24 @@
+{% macro pricing(subscription_types) %}
+<main class="mx-auto my-3 d-flex justify-content-center">
+  <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+    {% for subscription_type in subscription_types %}
+    <div class="flex-column card mb-4 rounded-3 shadow-sm">
+      <div class="d-flex align-content-centered flex-wrap">
+        <div class="card-header flex-fill mb-2">
+          <h4 class="my-0 ">{{ subscription_type.name }}</h4>
+        </div>
+        <div class="card-body">
+            <h1 class="card-title pricing-card-title py-3">
+              ${{ "{:.2f}".format(subscription_type.price) }} 
+              {{ subscription_type.currency }}
+          </h1>
+          
+          <button type="button" class="w-100 btn btn-lg btn-primary">Subscribe NOW!</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+
+{%- endmacro %}
