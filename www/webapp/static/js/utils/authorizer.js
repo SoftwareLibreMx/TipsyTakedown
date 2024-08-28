@@ -5,9 +5,9 @@ UserTypes = Object.freeze({
 });
 
 function authorizer(userTypes) {
-    const { user } = globalThis.user;
+    const { user } = globalThis.user || {};
     
-    if (!userTypes.includes(user.user_type)) {
+    if (!userTypes.includes(user?.user_type)) {
         window.location.href = '/';
     }
 }

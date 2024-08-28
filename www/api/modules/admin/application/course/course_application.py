@@ -3,8 +3,8 @@ from shared.globals import db_engine
 from ...infrastructure.repository import CourseRepository
 from ...domain.service import CourseService
 
-COURSE_REPOSITORY = CourseRepository(db_engine)
-COURSE_SERVICE = CourseService(COURSE_REPOSITORY)
+COURSE_REPOSITORY = None
+COURSE_SERVICE = None
 
 
 def __init_classes() -> CourseService:
