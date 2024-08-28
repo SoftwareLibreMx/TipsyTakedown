@@ -1,4 +1,5 @@
 {% from 'admin/course/components/createLesson/components/SelectLessonModal.html' import select_lesson_modal %}
+{% from 'admin/course/components/createLesson/components/SelectMaterialModal.html' import select_material_modal %}
 {% macro create_lesson(step_number) %}
 <div class="h-full">
     <div>
@@ -16,10 +17,77 @@
         </button>
     </div>
 
-    <div id="lessonPlaceHolder" class="d-flex justify-content-center mt-5 d-none">
-        No lessons
-    </div>
+    <form id="lessonForm" class="d-flex justify-content-center mt-5">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Lesson Name</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody id="lessonsContainer">
+            </tbody>
+        </table>
+    </form>
 
-    {{ select_lesson_modal() }}
+    {{ select_lesson_modal('selectLessonModal') }}
+    {{ select_material_modal('selectMaterialModal') }}
 </div>
+<script>
+    const lessons = [];
+    const newLesson = document.querySelector("#addLesson");
+    const lessonsContainer = document.querySelector("#lessonsContainer");
+
+    const newLessonTemplate = (index) => {
+        const lessonTr = document.createElement("tr");
+        lessonTr.innerHTML = `
+            <th scope="row">${index}</th>
+            <td>
+                <input type="text" class="" placeholder="Lesson Name">
+            </td>
+            <td>
+                <button class="btn btn-danger">Remove</button>
+                <button class="btn btn-primary">Reorder</button>
+            </td>
+        `;
+
+        const materialTr = document.createElement("tr");
+        materialTr.innerHTML = `
+            <td colspan="3">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Material Name</th>
+                            <th scope="col">
+                                <button class="btn btn-secondary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#selectMaterialModal">Add Material</button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="materialsContainer">
+                        <tr>
+                            <th scope="row"></th>
+                            <td>No materials added yet.</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        `;
+
+        return [lessonTr, materialTr];
+    };
+
+    newLesson.addEventListener("click", () => {
+        const [lessonTr, materialTr] = newLessonTemplate(lessons.length + 1)
+
+        lessons.push([lessonTr, materialTr]);
+
+        lessonsContainer.appendChild(lessonTr);
+        lessonsContainer.appendChild(materialTr);
+    });
+</script>
 {% endmacro %}

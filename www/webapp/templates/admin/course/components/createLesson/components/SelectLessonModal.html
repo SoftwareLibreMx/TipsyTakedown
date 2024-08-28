@@ -1,71 +1,29 @@
-{% macro select_lesson_modal() %}
-<div class="modal" id="selectLessonModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Select Lesson</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input class="form-control" list="lessons" id="searchLessonByName"
-                    placeholder="Type to search a lesson...">
-                <datalist id="lessons">
-                </datalist>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Add Lesson</button>
-            </div>
-        </div>
-    </div>
-</div>
+{% from 'components/QuerySelectorModal/QuerySelectorModal.html' import query_selector_modal %}
+{% macro select_lesson_modal(modal_id) %}
+{{ query_selector_modal(
+modal_id,
+"Select Lesson",
+"Type to search a lesson...",
+"Add Lesson"
+) }}
 <script type="module">
-    class QueryLessons {
-        previewsReponse = [];
-        previewsQuery = "";
+    import {QuerySelector} from "/static/js/components/querySelectorModal.js";
 
-        constructor() {
-            this.searchBar = document.querySelector("#searchLessonByName");
-            this.datalist = document.querySelector("#lessons");
+    async function getLessonList(query) {
+        const response = await fetch(`/api/admin/lesson?query=${query}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${sessionStorage.getItem("token")}`,
+            },
+        });
+        const lessons = await response.json();
 
-            this.searchBar.addEventListener("input", (e) => this.updateLessons(e.target.value));
-        }
-
-        async getLessonList(query) {
-            const response = await fetch(`/api/admin/lesson?query=${query}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `${sessionStorage.getItem("token")}`,
-                },
-            });
-            const lessons = await response.json();
-
-            return lessons;
-        }
-
-        async updateLessons(query) {
-            const emptyPreviousQuery = (
-                query.startsWith(this.previousQuery)
-                && this.previousResponse.length === 0
-            );
-            if (query.length < 3 || emptyPreviousQuery) {
-                return;
-            }
-
-            const lessons = await this.getLessonList(query);
-
-            this.previousResponse = lessons;
-            this.previousQuery = query;
-
-            this.datalist.innerHTML = "";
-            lessons.forEach(lesson => {
-                const option = document.createElement("option");
-                option.value = lesson.name;
-                this.datalist.appendChild(option);
-            });
-        }
+        return lessons;
     }
 
-    new QueryLessons();
+    const lessonSelector = new QuerySelector(
+        getLessonList, "{{modal_id}}"
+    );
 </script>
 {% endmacro %}

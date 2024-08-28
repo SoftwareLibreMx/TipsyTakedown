@@ -1,0 +1,23 @@
+{% macro query_selector_modal(modal_id, title, placeholder=None, action_text=None) %}
+<div class="modal" id="{{modal_id}}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{title}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" list="lessons" id="searchInput"
+                    placeholder="{{placeholder if placeholder else 'Search item...'}}">
+                <datalist id="datalist">
+                </datalist>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">
+                    {{action_text if action_text else 'Save'}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
