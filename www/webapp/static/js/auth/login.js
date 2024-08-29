@@ -44,8 +44,8 @@ async function checkMail() {
     }
     
     btnSubmit.setAttribute("action", submitActionsEnum.REGISTER);
-    btnSubmit.innerText = "Sign Up";
-    mainTitle.innerText = "Please fill the sign up form";
+    btnSubmit.innerText = translations.sign_up;
+    mainTitle.innerText = translations.sign_up_title;
     initialEmail = emailInput.value;
     return;
   }
@@ -53,7 +53,7 @@ async function checkMail() {
   const body = await response.json();
 
   if (body.sso_provider) {
-    errorMessage.innerText = "You are already registered with " + body.sso_provider;
+    errorMessage.innerText = translations.error.sso_exists + body.sso_provider;
     errorMessage.classList.remove("d-none");
     initialEmail = emailInput.value;
     btnSubmit.setAttribute("action", submitActionsEnum.CHECK_EMAIL);
@@ -68,8 +68,8 @@ async function checkMail() {
     
   btnSubmit.setAttribute("action", submitActionsEnum.LOGIN);
   initialEmail = emailInput.value;
-  btnSubmit.innerText = "Sign In";
-  mainTitle.innerText = "Please enter your password";
+  btnSubmit.innerText = translations.login_button;
+  mainTitle.innerText = translations.login_title;
 }
 
 async function loginForm() {
@@ -92,7 +92,7 @@ async function loginForm() {
   });
 
   if (!response.ok) {
-    errorMessage.innerText = "Invalid email or password";
+    errorMessage.innerText = translations.error.invalid_email;
     errorMessage.classList.remove("d-none");
     return;
   }
@@ -126,7 +126,7 @@ async function registerForm() {
   });
 
   if (!response.ok) {
-    errorMessage.innerText = "Already taken the user";
+    errorMessage.innerText = translations.error.user_exists;
     errorMessage.classList.remove("d-none");
     return;
   }
@@ -193,6 +193,6 @@ function resetForm() {
   resetRequiredInputs();
   errorMessage.classList.add("d-none");
   btnSubmit.setAttribute("action", submitActionsEnum.CHECK_EMAIL);
-  btnSubmit.innerText = "Next";
-  mainTitle.innerText = "Please fill the form";
+  btnSubmit.innerText = translations.next_button;
+  mainTitle.innerText = translations.main_title;
 }

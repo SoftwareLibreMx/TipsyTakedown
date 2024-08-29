@@ -104,6 +104,7 @@
 
         const body = await response.json();
 
+        creatingCourse = false;
         if (!response.ok) {
             nextStepButton.innerHTML = "Next Step";
 
