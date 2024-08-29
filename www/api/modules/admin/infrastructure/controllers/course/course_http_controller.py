@@ -15,7 +15,24 @@ admin_course_api = Blueprint('admin_course_api', __name__)
 @admin_course_api.route('', methods=['POST'])
 @api_authorizer([UserType.ADMIN, UserType.TEACHER])
 def create_course(user):
-    errors, course = application.course.create(user, request.get_json())
+    request_data = (
+        request.form.to_dict()
+        if request.content_type != 'application/json' else
+        request.get_json()
+    )
+
+    thumbnail_file = request.files.get('thumbnail', None)
+    if not request_data.get('thumbnail', None) and not thumbnail_file:
+        return Response(
+            json.dumps({"errors": ["Thumbnail is required"]}),
+            status=400
+        )
+
+    errors, course = application.course.create(user, request_data)
+
+    application.course.add_thumbnail_to_course_async(
+        course.id, thumbnail_file
+    )
 
     if errors:
         return Response(json.dumps({"errors": errors}), status=400)

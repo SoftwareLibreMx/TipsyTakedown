@@ -6,7 +6,7 @@
     </div>
 
 
-    {{ input('title', 'Course Title') }}
+    {{ input('name', 'Course Title') }}
 
     <div id="thumbnailButton" class="thumbnail mb-2">
         <div class="thumbnail-container">
@@ -34,7 +34,12 @@
         {{ input_text('Thumbnail', 'thumbnail', None, 'file') }}
     </div>
 </form>
-<script>
+<script type="module">
+    import {spinnerTemplate} from '/static/js/components/spinner.js';
+    let creatingCourse = false;
+    const stepsElement = document.querySelector("#{{ global_step }}");
+    const courseId = document.querySelector("#id");
+
     class ThumnailController {
         constructor() {
             this.thumbnailButton = document.querySelector("#thumbnailButton");
@@ -65,29 +70,62 @@
         }
     }
 
-    async function beforeNextStep(nextStepButton) {
-        nextStepButton.innerHTML = "Saving Course...";
+    function digestErrorsAndAlert(body) {
+        const {errors} = body;
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        if (!Array.isArray(errors)) {
+            alert('An error occurred. Please try again later.');
+            return;
+        }
+
+        let missingFields = '';
+        errors.forEach(error => {
+            missingFields += `* ${error.split(' ')[0]} \n`;
+        });
+
+        alert(`Missing fields: \n${missingFields}`);
+    }
+
+    async function saveCourse() {
+        if (creatingCourse || courseId.value) {
+            return;
+        }
+
+        const nextStepButton = document.querySelector("#nextStep"); // query here because it's not available in the global scope
+        nextStepButton.innerHTML = spinnerTemplate('');
+
+        const response = await fetch('/api/admin/course', {
+            method: 'POST',
+            headers: {
+                'Authorization': `${sessionStorage.getItem('token')}`
+            },
+            body: new FormData(document.querySelector('form'))
+        });
+
+        const body = await response.json();
+
+        creatingCourse = false;
+        if (!response.ok) {
+            nextStepButton.innerHTML = "Next Step";
+
+            digestErrorsAndAlert(body);
+
+            return body;
+        }
 
         nextStepButton.innerHTML = "Next Step";
+        courseId.value = body.id;
+    }
 
-        return 'Errror here'
+    function addSaveBeforeNextStep() {
+        const stepsController = globalThis.stepsController;
+
+        stepsController.runBeforeNextStep(saveCourse);
+        stepsController.initialize();
     }
 
     new ThumnailController();
 
-    const stepsElement = document.querySelector("#{{ global_step }}");
-
-    stepsElement.addEventListener("stepsControllerLoaded", (e) => {
-        const stepsController = globalThis.stepsController;
-        const nextStepButton = document.querySelector("#nextStep");
-
-        stepsController.runBeforeNextStep(async (e) => {
-            return await beforeNextStep(nextStepButton);
-        });
-
-        stepsController.initialize();
-    });
+    stepsElement.addEventListener("stepsControllerLoaded", addSaveBeforeNextStep);
 </script>
 {% endmacro %}

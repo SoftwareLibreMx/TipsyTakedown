@@ -17,3 +17,6 @@ class MinioService:
             ))
 
         return sign_urls
+
+    def upload_flask_file(self, file_key: str, file):
+        self.minio_repository.upload_flask_file(file_key, file)

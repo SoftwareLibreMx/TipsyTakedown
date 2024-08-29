@@ -32,7 +32,7 @@ CREATE TABLE courses (
 	lessons uuid[] NOT NULL,
     description Text DEFAULT NULL,
     long_description Text DEFAULT NULL,
-	thumbnail Text NOT NULL,
+	thumbnail Text DEFAULT NULL,
 	teaser_material_id UUID DEFAULT NULL,
 	is_active BOOLEAN DEFAULT TRUE,
 	created_at TIMESTAMP DEFAULT now(),

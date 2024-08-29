@@ -14,3 +14,28 @@ class CourseRepository:
             session.commit()
             session.refresh(course)
             return course
+
+    def get_by_id(self, course_id: str):
+        with Session(self.db_engine) as session:
+            return session.query(CourseModel).get(course_id)
+
+    def update(self, course_id: str, course: dict):
+        with Session(self.db_engine) as session:
+            course_db = session.query(CourseModel).get(course_id)
+
+            course_db.name = course.get("name", course_db.name)
+            course_db.description = course.get(
+                "description", course_db.description)
+            course_db.long_description = course.get(
+                "long_description", course_db.long_description)
+            course_db.thumbnail = course.get("thumbnail", course_db.thumbnail)
+            course_db.teacher_id = course.get(
+                "teacher_id", course_db.teacher_id)
+            course_db.lessons = course.get("lessons", course_db.lessons)
+            course_db.teaser_material_id = course.get(
+                "teaser_material_id", course_db.teaser_material_id)
+            course_db.is_active = course.get("is_active", course_db.is_active)
+
+            session.commit()
+            session.refresh(course_db)
+            return course_db

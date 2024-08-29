@@ -1,1 +1,1 @@
-from .course_application import create
+from .course_application import create, add_thumbnail_to_course_async
