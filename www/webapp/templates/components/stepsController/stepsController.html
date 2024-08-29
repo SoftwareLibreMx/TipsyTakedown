@@ -1,4 +1,4 @@
-{% macro steps_controller(current_step, step_ids) %}
+{% macro steps_controller(current_step, step_ids, lazy_loading=False, bind_to_id='') %}
 <div class="d-flex justify-content-between" style="width: 100%;">
     <button class="btn btn-primary" id="prevStep" disabled>
         <i class="fas fa-arrow-left"></i> Previous Step
@@ -9,36 +9,26 @@
     </button>
 </div>
 
-<script>
-    const prevStep = document.getElementById('prevStep');
-    const nextStep = document.getElementById('nextStep');
-    let currentStep = parseInt("{{current_step}}");
-    
-    const steps = "{{step_ids}}".split(',').map(step => {
-        step = step.trim();
-        return document.getElementById(step)
-    });
-    
-    steps[currentStep].classList.remove('d-none');
+<script type="module">
+    import { StepsController } from '/static/js/components/stepsController.js';
 
-    prevStep.addEventListener('click', () => {
-        steps[currentStep].classList.add('d-none');
-        steps[currentStep - 1].classList.remove('d-none');
-        currentStep--;
-        nextStep.disabled = false;
-        if (currentStep === 0) {
-            prevStep.disabled = true;
-        }
-    });
+    const stepsController = new StepsController(
+        parseInt('{{ current_step }}'), '{{step_ids}}'
+    );
+    
+    
+    if ('{{ lazy_loading }}' === 'False') {
+        stepsController.initialize();
+    }
 
-    nextStep.addEventListener('click', () => {
-        steps[currentStep].classList.add('d-none');
-        steps[currentStep + 1].classList.remove('d-none');
-        currentStep++;
-        prevStep.disabled = false;
-        if (currentStep === steps.length - 1) {
-            nextStep.disabled = true;
-        }
-    });
+    if ('{{ bind_to_id }}' !== '') {
+        const bindToElement = document.querySelector('#{{ bind_to_id }}');
+        globalThis.stepsController = stepsController;
+        
+        const event = document.createEvent('HTMLEvents');
+        event.initEvent('stepsControllerLoaded', true, false);
+        bindToElement.dispatchEvent(event);
+        bindToElement.dispatchEvent(new Event('stepsControllerLoaded'));
+    }
 </script>
 {%endmacro%}
