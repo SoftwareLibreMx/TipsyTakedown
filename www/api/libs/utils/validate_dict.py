@@ -33,7 +33,9 @@ def validate_dict(data: dict, vk_options: list[VKOptions]) -> list[str]:
             data[vk_option.key] = vk_option.default
             continue
 
-        if vk_option.required and data.get(vk_option.key, None) is None:
+        strEmpty = data.get(vk_option.key, None) == ''
+        anyNone = data.get(vk_option.key, None) is None
+        if vk_option.required and (strEmpty or anyNone):
             errors.append(f'{vk_option.key} is required')
 
         invalid_type = __is_invalid_type(vk_option, data)
