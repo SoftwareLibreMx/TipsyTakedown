@@ -1,0 +1,29 @@
+{% from 'components/QuerySelectorModal/QuerySelectorModal.html' import query_selector_modal %}
+{% macro select_material_modal(modal_id) %}
+{{ query_selector_modal(
+    modal_id, 
+    "Select Material",
+    "Type to search a material...", 
+    "Add Material"
+) }}
+<script type="module">
+    import { QuerySelector } from "/static/js/components/querySelectorModal.js";
+    
+    async function getMaterialList(query) {
+        const response = await fetch(`/api/admin/material?query=${query}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${sessionStorage.getItem("token")}`,
+            },
+        });
+        const materials = await response.json();
+
+        return materials;
+    }
+
+    const materialSelector = new QuerySelector(
+        getMaterialList, "{{modal_id}}"
+    );
+</script>
+{% endmacro %}
