@@ -1,10 +1,10 @@
-{% from "layout/components/pricing.html" import pricing %}
+{% from "components/priceTable/priceTable.html" import priceTable %}
 {% extends "layout/base.html" %} {% block title %}
 
 <title>TipsyTakedown - Sign</title>
 {% endblock %} {% block body %}
 <link rel="stylesheet" href="/static/css/signup_form.css">
-{{ pricing(subscription_types) }}
+{{ priceTable(subscription_types) }}
 <div class="container">
   <main class="form-signin w-100 m-auto">
     <form>
