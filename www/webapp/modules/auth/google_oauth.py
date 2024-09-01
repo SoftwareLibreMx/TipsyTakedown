@@ -86,6 +86,8 @@ def callback():
     if error:
         abort(500, error)
 
+    session["token"] = userc.get("token")
+
     return render_template(
         f"{TEMPLATE_DIR}/callback.html",
         translations=get_translations('auth'),

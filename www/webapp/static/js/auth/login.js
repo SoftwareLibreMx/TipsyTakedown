@@ -100,7 +100,7 @@ async function loginForm() {
   const data = await response.json();
 
   sessionStorage.setItem("token", data?.token);
-  window.location.href = "/";
+  window.location.href = `/?token=${data?.token}`;
 }
 
 async function registerForm() {

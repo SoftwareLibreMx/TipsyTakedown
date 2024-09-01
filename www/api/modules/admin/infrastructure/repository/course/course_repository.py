@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.engine.base import Engine
 
 from api.libs.domain.entity import CourseModel
+from api.libs.utils import process_filters
 
 
 class CourseRepository:
@@ -15,9 +16,15 @@ class CourseRepository:
             session.refresh(course)
             return course
 
-    def get_by_id(self, course_id: str):
+    def get_by_id(self, course_id: str, filters: dict = None):
         with Session(self.db_engine) as session:
-            return session.query(CourseModel).get(course_id)
+            base_query = session.query(CourseModel).filter_by(
+                id=course_id, deleted_at=None)
+
+            if filters:
+                base_query = process_filters(CourseModel, base_query, filters)
+
+            return base_query.first()
 
     def update(self, course_id: str, course: dict):
         with Session(self.db_engine) as session:

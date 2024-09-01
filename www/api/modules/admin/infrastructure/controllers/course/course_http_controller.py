@@ -38,3 +38,14 @@ def create_course(user):
         return Response(json.dumps({"errors": errors}), status=400)
 
     return Response(as_json_dumps(course), status=201)
+
+
+@admin_course_api.route('/<course_id>', methods=['get'])
+@api_authorizer([UserType.ADMIN, UserType.TEACHER])
+def get_course_detail(user, course_id):
+    errors, course = application.course.get_detail(user, course_id)
+
+    if errors:
+        return Response(json.dumps({"errors": errors}), status=400)
+
+    return Response(json.dumps(course, default=str), status=200)

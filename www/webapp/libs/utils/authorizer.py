@@ -2,15 +2,15 @@ import jwt
 from typing import Union, Optional
 from functools import wraps
 
-from flask import request
+from flask import session
 
-from api.libs.utils import abort
-from api.libs.domain_entity import UserType
+from shared.utils import abort
+
+from shared.domain.entity import UserType
+from shared.globals import jwt_credentials
 
 
 def verify_token(token) -> tuple[Optional[str], Optional[str]]:
-    from shared.globals import jwt_credentials
-
     secret_key = jwt_credentials.get('jwt_secret_key', '')
 
     try:
@@ -38,7 +38,7 @@ def authorizer(
 
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            token = request.headers.get('Authorization', None)
+            token = session.get('token', None)
             errors, payload = verify_token(token)
 
             if errors:

@@ -1,6 +1,7 @@
-from sqlalchemy import text
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
+
+from api.modules.admin.domain.entity import LessonModel
 
 
 class LessonRepository:
@@ -9,6 +10,10 @@ class LessonRepository:
 
     def search_by_name(self, query: str):
         with Session(self.db_engine) as session:
-            return session.execute(text('''
-                SELECT name FROM lessons WHERE name LIKE :query
-            '''), {'query': query}).fetchall()
+            return session.query(LessonModel).filter(
+                LessonModel.name.ilike(f'%{query}%')).all()
+
+    def get_by_ids(self, lesson_ids: list[str]):
+        with Session(self.db_engine) as session:
+            return session.query(LessonModel).filter(
+                LessonModel.id.in_(lesson_ids)).all()
