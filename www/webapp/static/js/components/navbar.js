@@ -12,7 +12,8 @@ function checkIfLoggedIn() {
 
 document.getElementById('btn-signout').addEventListener('click', function() {
     sessionStorage.removeItem('token');
-    window.location.href = '/';
+
+    window.location.href = '/auth/logout';
 });
 
 checkIfLoggedIn();

@@ -1,4 +1,3 @@
-import json
 from flask import Blueprint, render_template
 
 from shared.utils import abort
@@ -12,13 +11,15 @@ admin_router = Blueprint('admin', __name__)
 
 
 @admin_router.route('/')
-def index():
+@authorizer([UserType.ADMIN, UserType.TEACHER])
+def index(user):
     return render_template(f'{TEMPLATE_DIR}/index.html',
                            translations=get_translations())
 
 
 @admin_router.route('/course/new')
-def course():
+@authorizer([UserType.ADMIN, UserType.TEACHER])
+def course(user):
     return render_template(f'{TEMPLATE_DIR}/course/create.html',
                            translations=get_translations())
 
@@ -37,6 +38,8 @@ def course_edit(user, course_id):
 
 
 @admin_router.route('/video/uploader')
+@authorizer([UserType.ADMIN, UserType.TEACHER])
 def upload_video():
     return render_template(
-        f'{TEMPLATE_DIR}/video/uploader/index.html', translations=get_translations())
+        f'{TEMPLATE_DIR}/video/uploader/index.html',
+        translations=get_translations())
