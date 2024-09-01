@@ -42,7 +42,7 @@ def authorizer(
             errors, payload = verify_token(token)
 
             if errors:
-                abort(401, errors)
+                abort(401)
 
             from api.modules.auth import application
 
@@ -53,7 +53,7 @@ def authorizer(
                 )
 
                 if errors:
-                    abort(403, 'Forbidden')
+                    abort(403)
 
             return f(payload.get('user', {}), *args, **kwargs)
 
