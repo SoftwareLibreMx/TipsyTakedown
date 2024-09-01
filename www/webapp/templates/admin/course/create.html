@@ -18,7 +18,7 @@
 <input id="{{globalSteps}}" class="d-none"/>
 <div class="d-flex flex-column mx-5 mt-2 content">
     <div class="d-flex justify-content-between">
-        <h1>Add Course</h1>
+        <h1>{{ 'Add Course' if not course else 'Edit Course' }}</h1>
         
         <div class="d-flex align-items-center">
             <button id="saveBtn"
@@ -34,7 +34,7 @@
     <div id="steps" class="mt-4">
         <div id="generalInfo" class="d-none">
             <!-- I'm initializing steps controller here -->
-            {{ general_info(1, globalSteps) }}
+            {{ general_info(1, globalSteps, course) }}
         </div>
         <div id="createMaterial" class="d-none">
             {{ create_material(2) }}

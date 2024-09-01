@@ -13,3 +13,8 @@ class LessonService:
             lessons.append(lesson[0])
 
         return lessons
+
+    def get_by_ids(self, lesson_ids: list[str]):
+        lessons_db = self.lesson_repository.get_by_ids(lesson_ids)
+
+        return lessons_db

@@ -5,21 +5,33 @@ from werkzeug.datastructures import FileStorage
 from api.libs.domain_entity import FlaskFile
 from shared.globals import db_engine, minion_credentials
 
-from ...infrastructure.repository import CourseRepository, MinioRepository
-from ...domain.service import CourseService, MinioService
+from ...infrastructure.repository import (
+    CourseRepository, MinioRepository,
+    LessonRepository, MaterialRepository
+)
+from ...domain.service import (
+    CourseService, MinioService,
+    LessonService, MaterialService
+)
 
-COURSE_REPOSITORY = None
 MINIO_REPOSITORY = None
 MINIO_SERVICE = None
+
+LESSON_REPOSITORY = None
+LESSON_SERVICE = None
+
+MATERIAL_REPOSITORY = None
+MATERIAL_SERVICE = None
+
+COURSE_REPOSITORY = None
 COURSE_SERVICE = None
 
 
 def __init_classes() -> CourseService:
-    global COURSE_SERVICE, COURSE_REPOSITORY
     global MINIO_REPOSITORY, MINIO_SERVICE
-
-    if not COURSE_REPOSITORY:
-        COURSE_REPOSITORY = CourseRepository(db_engine)
+    global LESSON_REPOSITORY, LESSON_SERVICE
+    global MATERIAL_REPOSITORY, MATERIAL_SERVICE
+    global COURSE_SERVICE, COURSE_REPOSITORY
 
     if not MINIO_REPOSITORY:
         MINIO_REPOSITORY = MinioRepository(
@@ -33,8 +45,26 @@ def __init_classes() -> CourseService:
     if not MINIO_SERVICE:
         MINIO_SERVICE = MinioService(MINIO_REPOSITORY, [])
 
+    if not LESSON_REPOSITORY:
+        LESSON_REPOSITORY = LessonRepository(db_engine)
+
+    if not LESSON_SERVICE:
+        LESSON_SERVICE = LessonService(LESSON_REPOSITORY)
+
+    if not MATERIAL_REPOSITORY:
+        MATERIAL_REPOSITORY = MaterialRepository(db_engine)
+
+    if not MATERIAL_SERVICE:
+        MATERIAL_SERVICE = MaterialService(MATERIAL_REPOSITORY, MINIO_SERVICE)
+
+    if not COURSE_REPOSITORY:
+        COURSE_REPOSITORY = CourseRepository(db_engine)
+
     if not COURSE_SERVICE:
-        COURSE_SERVICE = CourseService(COURSE_REPOSITORY, MINIO_SERVICE)
+        COURSE_SERVICE = CourseService(
+            COURSE_REPOSITORY, LESSON_SERVICE,
+            MATERIAL_SERVICE, MINIO_SERVICE
+        )
 
     return COURSE_SERVICE
 
@@ -59,3 +89,9 @@ def add_thumbnail_to_course_async(course_id: str, thumbnail_file: FileStorage):
 
     Thread(target=lambda: course_service.add_thumbnail_to_course(
         course_id, thumbnail_flask_file)).start()
+
+
+def get_detail(user, course_id):
+    course_service = __init_classes()
+
+    return course_service.get_detail(user, course_id)

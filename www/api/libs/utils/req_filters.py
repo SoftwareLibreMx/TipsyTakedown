@@ -1,6 +1,4 @@
-def process_filters(model, query, filters: dict):
-    items = filters.get('items', [])
-
+def filter_items(model, query, items: list):
     def get_operations(item):
         operations = {
             'equal': lambda query, field, value: query.filter(field=value),
@@ -32,5 +30,14 @@ def process_filters(model, query, filters: dict):
         field = getattr(model, item['field'])
         operation = get_operations(item['operator'])
         query = operation(query, field, item['value'])
+
+    return query
+
+
+def process_filters(model, query, filters: dict):
+    items = filters.get('items', None)
+
+    if items:
+        query = filter_items(model, query, items)
 
     return query

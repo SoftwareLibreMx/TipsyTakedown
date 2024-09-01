@@ -42,13 +42,15 @@
         courses.forEach(course => {
             const card = document.createElement('div');
             card.classList.add('card');
+            card.classList.add('mb-2');
             card.innerHTML = `
                 <h5 class="card-header">${course.name}</h5>
                 <div class="card-body">
                     <h5 class="card-title">${course.description}</h5>
                     <p class="card-text">${course.teacher}</p>
 
-                    <a href="/admin/courses/${course.id}" class="btn btn-primary">Edit</a>
+                    <a href="/admin/course/${course.id}/edit" class="btn btn-primary">Edit</a>
+                    <a class="btn btn-danger">Delete</a>
                 </div>
             `;
             coursesDeiv.appendChild(card);

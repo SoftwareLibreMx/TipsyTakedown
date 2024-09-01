@@ -1,5 +1,5 @@
 {% from "components/inputs/input_text.html" import input, input_text %}
-{% macro general_info(step_number, global_step) %}
+{% macro general_info(step_number, global_step, course=None) %}
 <form class="d-flex flex-column" style="flex: 1 1 auto; height: 40rem; overflow-y: auto;">
     <div class="mb-4">
         <h3>Step {{step_number}}: Course General Info</h3>
@@ -36,9 +36,6 @@
 </form>
 <script type="module">
     import {spinnerTemplate} from '/static/js/components/spinner.js';
-    let creatingCourse = false;
-    const stepsElement = document.querySelector("#{{ global_step }}");
-    const courseId = document.querySelector("#id");
 
     class ThumnailController {
         constructor() {
@@ -68,64 +65,124 @@
 
             reader.readAsDataURL(file);
         }
+
+        loadFromUrl(url) {
+            this.thumbnailPlaceholder.classList.add("d-none");
+
+            this.loadedThumbnail.classList.remove("d-none");
+            this.loadedThumbnail.src = url;
+        }
     }
 
-    function digestErrorsAndAlert(body) {
-        const {errors} = body;
-
-        if (!Array.isArray(errors)) {
-            alert('An error occurred. Please try again later.');
-            return;
-        }
-
-        let missingFields = '';
-        errors.forEach(error => {
-            missingFields += `* ${error.split(' ')[0]} \n`;
-        });
-
-        alert(`Missing fields: \n${missingFields}`);
-    }
-
-    async function saveCourse() {
-        if (creatingCourse || courseId.value) {
-            return;
-        }
-
-        const nextStepButton = document.querySelector("#nextStep"); // query here because it's not available in the global scope
-        nextStepButton.innerHTML = spinnerTemplate('');
-
-        const response = await fetch('/api/admin/course', {
-            method: 'POST',
-            headers: {
-                'Authorization': `${sessionStorage.getItem('token')}`
-            },
-            body: new FormData(document.querySelector('form'))
-        });
-
-        const body = await response.json();
-
+    class FormController {
         creatingCourse = false;
-        if (!response.ok) {
-            nextStepButton.innerHTML = "Next Step";
 
-            digestErrorsAndAlert(body);
+        constructor() {
+            this.thumbnail = new ThumnailController();
 
-            return body;
+            this.courseId = document.querySelector("#id");
+            this.nextStepButton = document.querySelector("#nextStep");
+            this.stepsElement = document.querySelector("#{{ global_step }}");
+
+            this.stepsElement.addEventListener(
+                "stepsControllerLoaded",
+                this.addSaveBeforeNextStep.bind(this)
+            );
+
+            this.isEdit = "{{ course }}" !== "None";
+
+            if (this.isEdit) {
+                this.populateForm();
+            }
         }
 
-        nextStepButton.innerHTML = "Next Step";
-        courseId.value = body.id;
+        populateForm() {
+            const {name, description, long_description, thumbnail, id} = JSON.parse(`{{ course | tojson }}`);
+            document.querySelector("#name").value = name;
+            document.querySelector("#description").value = description;
+            document.querySelector("#long_description").value = long_description;
+            document.querySelector("#id").value = id;
+
+            this.thumbnail.loadFromUrl(thumbnail);
+        }
+
+        addSaveBeforeNextStep() {
+            const stepsController = globalThis.stepsController;
+
+            stepsController.runBeforeNextStep(this.saveCourse.bind(this));
+            stepsController.initialize();
+        }
+
+        digestErrorsAndAlert(body) {
+            const {errors} = body;
+
+            if (!Array.isArray(errors)) {
+                alert('An error occurred. Please try again later.');
+                return;
+            }
+
+            let missingFields = '';
+            errors.forEach(error => {
+                missingFields += `* ${error.split(' ')[0]} \n`;
+            });
+
+            alert(`Missing fields: \n${missingFields}`);
+        }
+
+        async saveCourse() {
+            if (this.creatingCourse || this.courseId.value) {
+                return;
+            }
+
+            this.nextStepButton.innerHTML = spinnerTemplate('');
+
+            // TODO: if isEdit then updateCourseRequest else createCourseRequest
+            const response = await this.createCourseRequest();
+
+            let body;
+            try {
+                body = await response.json();
+            } catch (e) {
+                const errorMessage = 'An error occurred. Please try again later.';
+                this.nextStepButton.innerHTML = "Next Step";
+                alert(errorMessage);
+                return errorMessage;
+            }
+
+            this.creatingCourse = false;
+            if (!response.ok) {
+                this.nextStepButton.innerHTML = "Next Step";
+
+                this.digestErrorsAndAlert(body);
+
+                return body;
+            }
+
+            this.nextStepButton.innerHTML = "Next Step";
+            this.courseId.value = body.id;
+        }
+
+        createCourseRequest() {
+            return fetch('/api/admin/course', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `${sessionStorage.getItem('token')}`
+                },
+                body: new FormData(document.querySelector('form'))
+            });
+        }
+
+        updateCourseRequest() {
+            return fetch(`/api/admin/course/${this.courseId.value}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `${sessionStorage.getItem('token')}`
+                },
+                body: new FormData(document.querySelector('form'))
+            });
+        }
     }
 
-    function addSaveBeforeNextStep() {
-        const stepsController = globalThis.stepsController;
-
-        stepsController.runBeforeNextStep(saveCourse);
-        stepsController.initialize();
-    }
-
-    new ThumnailController();
-
-    stepsElement.addEventListener("stepsControllerLoaded", addSaveBeforeNextStep);
+    const formController = new FormController();
 </script>
 {% endmacro %}
