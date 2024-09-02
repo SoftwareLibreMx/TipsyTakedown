@@ -21,16 +21,6 @@ def get(subscription_type_id):
     return Response(as_json_dumps(subscription_type), status=200)
 
 
-@subscription_type_api.route('/<subscription_type_id>', methods=['GET'])
-@api_authorizer([UserType.ADMIN, UserType.TEACHER, UserType.STUDENT])
-def get(subscription_type_id):
-    errors, subscription_type = subscription_type_app.get(subscription_type_id)
-    if errors:
-        return Response(json.dumps({"errors": errors}), status=404)
-
-    return Response(as_json_dumps(subscription_type), status=200)
-
-
 @subscription_type_api.route('', methods=['GET'])
 def all():
     subscription_types = subscription_type_app.get_all()
