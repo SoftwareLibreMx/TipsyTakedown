@@ -27,7 +27,7 @@ async function checkMail() {
     email: email,
   };
     
-  // setSubmitBtnSpinner();
+  setSubmitBtnSpinner();
   const response = await fetch("/api/auth/check_email", {
     method: "POST",
     headers: {
@@ -82,7 +82,7 @@ async function loginForm() {
     password: password,
   };
 
-  // setSubmitBtnSpinner();
+  setSubmitBtnSpinner();
   const response = await fetch("/api/auth/sign_in", {
     method: "POST",
     headers: {
@@ -121,7 +121,7 @@ async function registerForm() {
     surname: surname,
   };
   
-  // setSubmitBtnSpinner();
+  setSubmitBtnSpinner();
   const response = await fetch("/api/auth/sign_up", {
     method: "POST",
     headers: {
