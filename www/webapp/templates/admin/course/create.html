@@ -3,10 +3,12 @@
 {% from "admin/course/components/createLesson/createLesson.html" import create_lesson %}
 {% from "admin/course/components/generalInfo.html" import general_info %}
 {% from "components/stepsController/stepsController.html" import steps_controller %}
+
 {% set initialStep = 0 %}
 {% set steps = "generalInfo, createMaterial, createLesson" %}
-{% set isLazy = True %}
 {% set globalSteps = "globalStepsController" %}
+{% set title = 'Add Course' if not course else 'Edit Course' %}
+
 {% extends "layout/base.html" %}
 
 {% block title %}
@@ -17,36 +19,22 @@
 {% block body %}
 <input id="{{globalSteps}}" class="d-none"/>
 <div class="d-flex flex-column mx-5 mt-2 content">
-    <div class="d-flex justify-content-between">
-        <h1>{{ 'Add Course' if not course else 'Edit Course' }}</h1>
-        
-        <div class="d-flex align-items-center">
-            <button id="saveBtn"
-                class="btn btn-primary">
-                <div id="saveText">Save</div>
-                <div id="spinner" class="d-none">
-                    {{ loader() }}
-                </div>
-            </button>
-        </div>
-    </div>
+    <h1>{{ title }}</h1>
     
     <div id="steps" class="mt-4">
         <div id="generalInfo" class="d-none">
-            <!-- I'm initializing steps controller here -->
             {{ general_info(1, globalSteps, course) }}
         </div>
         <div id="createMaterial" class="d-none">
             {{ create_material(2) }}
         </div>
         <div id="createLesson" class="d-none h-full">
-            {{ create_lesson(3) }}
+            {{ create_lesson(3, globalSteps, course) }}
         </div>
     </div>
 
     <div id="stepsController" class="d-flex h-full align-items-end w-full">
-        <!-- Lazy initialization of steps controller, -->
-        {{ steps_controller(initialStep, steps, isLazy, globalSteps) }}
+        {{ steps_controller(initialStep, steps, globalSteps) }}
     </div>
 </div>
 

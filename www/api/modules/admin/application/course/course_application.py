@@ -95,3 +95,9 @@ def get_detail(user, course_id):
     course_service = __init_classes()
 
     return course_service.get_detail(user, course_id)
+
+
+def update(user, course_id, req_course: dict):
+    course_service = __init_classes()
+
+    return course_service.update(user, course_id, req_course)

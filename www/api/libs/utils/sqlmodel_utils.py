@@ -6,7 +6,10 @@ from sqlalchemy.orm import declarative_base
 from datetime import datetime
 
 
-def as_dict(obj):
+def as_dict(obj: object | list[object]) -> dict | list[dict]:
+    if isinstance(obj, list):
+        return [as_dict(o) for o in obj]
+
     return {
         c.key: getattr(obj, c.key)
         for c in inspect(obj).mapper.column_attrs

@@ -1,6 +1,9 @@
 export class StepsController {
     initialized = false;
-    nextStepCallbacks = [];
+    beforeNextStepCallbacks = [];
+    beforePrevStepCallbacks = [];
+    afterNextStepCallbacks = [];
+    afterPrevStepCallbacks = [];
 
     constructor(currentStep, steps) {
         this.prevStep = document.querySelector('#prevStep');
@@ -16,19 +19,39 @@ export class StepsController {
     }
 
     runBeforeNextStep(callback) {
-        this.nextStepCallbacks.push(callback)
+        this.beforeNextStepCallbacks.push(callback)
+    }
+
+    runBeforePrevStep(callback) {
+        this.beforePrevStepCallbacks.push(callback)
+    }
+
+    runAfterNextStep(callback) {
+        this.afterNextStepCallbacks.push(callback)
+    }
+
+    runAfterPrevStep(callback) {
+        this.afterPrevStepCallbacks.push(callback)
     }
 
     initialize() {
         if (this.initialized) return;
 
-        this.prevStep.addEventListener('click', () => { this.prevStepHandler() });
-        this.nextStep.addEventListener('click', async () => { await this.nextStepHandler() });
+        this.prevStep.addEventListener('click', this.prevStepHandler.bind(this));
+        this.nextStep.addEventListener('click', this.nextStepHandler.bind(this));
         
         this.initialized = true;
     }
 
-    prevStepHandler() {
+    async prevStepHandler() {
+        for (let callback of this.beforePrevStepCallbacks) {
+            const error = await callback();
+
+            if (error) {
+                throw new Error(error);
+            }
+        }
+
         this.steps[this.currentStep].classList.add('d-none');
         this.steps[this.currentStep - 1].classList.remove('d-none');
         this.currentStep--;
@@ -36,10 +59,14 @@ export class StepsController {
         if (this.currentStep === 0) {
             this.prevStep.disabled = true;
         }
+
+        for (let callback of this.afterPrevStepCallbacks) {
+            callback();
+        }
     }
 
     async nextStepHandler() {
-        for (let callback of this.nextStepCallbacks) {
+        for (let callback of this.beforeNextStepCallbacks) {
             const error = await callback();
 
             if (error) {
@@ -54,5 +81,13 @@ export class StepsController {
         if (this.currentStep === this.steps.length - 1) {
             this.nextStep.disabled = true;
         }
+
+        for (let callback of this.afterNextStepCallbacks) {
+            callback();
+        }
+    }
+
+    isCurrentStep(step) {
+        return step === this.currentStep;
     }
 }

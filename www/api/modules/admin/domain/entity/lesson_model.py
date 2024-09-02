@@ -7,6 +7,8 @@ from api.libs.utils import (
     BaseModel,
     TrackTimeMixin,
     SoftDeleteMixin,
+    validate_dict,
+    VKOptions
 )
 
 
@@ -18,3 +20,16 @@ class LessonModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
     materials: Mapped[list[str]] = mapped_column(ARRAY(UUID), nullable=False)
     is_active: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=True)
+
+    @staticmethod
+    def from_dict(data: dict) -> 'LessonModel':
+        validate_dict(data, [
+            VKOptions('name', str, True),
+            VKOptions('materials', list, False),
+        ])
+
+        return LessonModel(
+            id=str(uuid.uuid4()),
+            name=data.get('name'),
+            materials=data.get('materials', []),
+        )
