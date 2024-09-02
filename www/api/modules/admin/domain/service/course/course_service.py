@@ -60,6 +60,26 @@ class CourseService:
 
         return None
 
+    def update(self, user, course_id, req_course):
+        if user.get("user_type") not in self.__valid_user_types:
+            return "User is not authorized to update a course", None
+
+        course = self.course_repo.get_by_id(course_id)
+        if not course:
+            return "Course not found", None
+
+        if req_course.get("lessons"):
+            error, lesson_ids = self.lesson_service.get_or_create(
+                req_course.get("lessons")
+            )
+
+            if error:
+                return error, None
+
+            req_course["lessons"] = lesson_ids
+
+        return None, as_dict(self.course_repo.update(course_id, req_course))
+
     def get_detail(self, user, course_id):
         if user.get("user_type") not in self.__valid_user_types:
             return "User is not authorized to get course detail", None
@@ -67,7 +87,7 @@ class CourseService:
         try:
             course = self.course_repo.get_by_id(course_id)
         except Exception as e:
-            # print(e)
+            print(e)
             return ["Error while getting course detail"], None
 
         if not course:

@@ -1,10 +1,14 @@
-from flask import Blueprint, render_template, redirect, request, url_for, session
+from flask import (
+    Blueprint, render_template, redirect,
+    request, url_for, session
+)
 
 from .modules.admin import admin_router
 from .modules.auth import oauth_router
 from .modules.errors import error_router
 from .modules.video import video_router
 from .libs.utils.language import get_translations
+
 webapp = Blueprint('web', __name__)
 
 webapp.register_blueprint(admin_router, url_prefix='/admin')
