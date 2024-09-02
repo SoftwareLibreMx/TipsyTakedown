@@ -10,25 +10,17 @@
     </div>
     
     <div>
-        <div class="d-none" id="subscription-type-id"></div>
         <!-- TODO: Add csrf token to form -->
         <form id="pricingForm">
           {{ priceTable(subscription_types, false) }}
         </form>
-
     </div>
-
-    <!-- <div id="materials-container" 
-        class="mt-2 d-flex flex-wrap" 
-        style="flex: 1 1 auto; height: 14rem; overflow-y: auto;">
-    </div> -->
-
 </div>
 
 <script type="module">
     import {spinnerTemplate} from '/static/js/components/spinner.js';
     let getSubscriptionType = false;
-    let subscriptionType = null;
+    let stepNumber = parseInt("{{ step_number }}");
     const stepsElement = document.querySelector("#{{ global_step }}");
     const subscriptionTypeId = document.querySelector("#subscription-type-id");
 
@@ -49,24 +41,23 @@
     }
 
     async function saveSubscriptionType() {
-        if (getSubscriptionType || subscriptionTypeId.value) {
+        const isCurrentStep = stepsController.isCurrentStep(stepNumber);
+        if (isCurrentStep || getSubscriptionType || subscriptionTypeId.value == "") {
             return;
         }
 
         const nextStepButton = document.querySelector("#nextStep"); // query here because it's not available in the global scope
         nextStepButton.innerHTML = spinnerTemplate('');
-
-        const response = await fetch('/api/subscription_type/'+
-            subscriptionTypeId.value, {
+        getSubscriptionType = true;
+        const response = await fetch('/api/subscription_type/'+ subscriptionTypeId.value, 
+        {
             method: 'GET',
             headers: {
                 'Authorization': `${sessionStorage.getItem('token')}`
-            },
-            body: new FormData(document.querySelector('form'))
+            }
         });
 
         const body = await response.json();
-
         getSubscriptionType = false;
         if (!response.ok) {
             nextStepButton.innerHTML = "Next Step";
@@ -82,9 +73,10 @@
 
     function addSaveBeforeNextStep() {
         const stepsController = globalThis.stepsController;
-
-        stepsController.runBeforeNextStep(saveSubscriptionType);
+        
+        stepsController.runBeforeNextStep(saveSubscriptionType.bind(this));
         stepsController.initialize();
+        
     }
 
 

@@ -1,14 +1,9 @@
 {% from "components/loader/loader.html" import loader %}
-
-<!-- {% from "admin/course/components/createMaterial.html" import create_material %} -->
-<!-- {% from "admin/course/components/createLesson/createLesson.html" import create_lesson %} -->
-<!-- {% from "checkout/components/user.html" import user %} -->
+{% from "components/stepsController/stepsController.html" import steps_controller %}
 {% from "checkout/components/pricing.html" import pricing %}
 {% from "checkout/components/creditCard.html" import credit_card %}
-{% from "components/stepsController/stepsController.html" import steps_controller %}
 {% set initialStep = 0 %}
 {% set steps = "pricing, creditCard" %}
-{% set isLazy = True %}
 {% set globalSteps = "globalStepsController" %}
 {% extends "layout/base.html" %}
 
@@ -23,43 +18,24 @@
 <div class="d-flex flex-column mx-5 mt-2 content">
     <div class="d-flex justify-content-between">
         <h1>Add Check Out</h1>
-        
-        <div class="d-flex align-items-center">
-            <button id="saveBtn"
-                class="btn btn-primary">
-                <div id="saveText">Save</div>
-                <div id="spinner" class="d-none">
-                    {{ loader() }}
-                </div>
-            </button>
-        </div>
     </div>
-    
     <div id="steps" class="mt-4">
-
         <div id="pricing" class="d-none">
-            <!-- I'm initializing steps controller here -->
+            <div class="d-none" id="subscription-type-id"> {{ subscription_type_id }}</div>
             {{ pricing(1, globalSteps, subscription_types) }}
         </div>
         <div id="creditCard" class="d-none h-full">
             {{ credit_card(2) }}
         </div>
     </div>
-
     <div id="stepsController" class="d-flex h-full align-items-end w-full">
-        <!-- Lazy initialization of steps controller, -->
-        {{ steps_controller(initialStep, steps, isLazy, globalSteps) }}
+        {{ steps_controller(initialStep, steps, globalSteps) }}
     </div>
 </div>
 
 <script src="/static/js/utils/authorizer.js"></script>
 <script>
-    getJWTData();
-    const subscription_type_id = {{ subscription_type_id }};
-    const subscriptionTypeId = document.querySelector("#subscription-type-id");
-    if (subscription_type_id){
-        subscriptionTypeId.value = subscription_type_id;
-    }
+    let subscriptionType = null;
     authorizer([UserTypes.ADMIN, UserTypes.TEACHER, UserTypes.STUDENT]);
 </script>
 {% endblock %}

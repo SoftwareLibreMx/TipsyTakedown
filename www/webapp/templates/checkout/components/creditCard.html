@@ -1,3 +1,4 @@
+{% from "components/loader/loader.html" import loader %}
 {% macro credit_card(step_number) %}
 <style>
     .card-icons img {
@@ -47,7 +48,7 @@
         <div id="step-2" class="card p-4 mt-4" style="display: none;">
             <div class="mb-3">
                 <label class="form-label">User Email</label>
-                <p id="summary-email" class="form-control-plaintext">user@example.com</p>
+                <p id="summary-email" class="form-control-plaintext"></p>
             </div>
             <div class="mb-3">
                 <label class="form-label">Cardholder Name</label>
@@ -71,13 +72,14 @@
             </div>
             <button type="button" class="btn btn-secondary" onclick="showStep1()">Back</button>
             <button type="submit" id="btn-confirm-and-pay" class="btn btn-success">Confirm and Pay</button>
+            <div id="loader" class="d-flex d-none">
+                {{ loader() }}
+            </div>
         </div>
     </div>
 </div>
 <script>
-    // const { user } = globalThis.user;
-    // const { subscriptionType } = globalThis.subscriptionType;
-
+    let createPayment = false;
     document.getElementById('card-number').addEventListener('input', function (e) {
       let input = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
       if (input.length > 16) {
@@ -116,7 +118,7 @@
         document.getElementById('summary-cardholder-name').innerText = cardholderName;
         document.getElementById('summary-last4').innerText = cardNumber.slice(-4);
 
-        showUserEmail(user);
+        showUserEmail(user.user);
         showSubscriptionTypeSummary(subscriptionType)
     }
   
@@ -124,21 +126,56 @@
         document.getElementById('step-2').style.display = 'none';
         document.getElementById('step-1').style.display = 'block';
     }
+
     function showUserEmail(user){
         document.getElementById('summary-email').innerText = user.email;
     }
+
     function showSubscriptionTypeSummary(subscriptionType){
         document.getElementById('summary-subscription-type').innerText = subscriptionType.name;
         document.getElementById('summary-subscription-price').innerText = `$${subscriptionType.price}`;
         document.getElementById('summary-subscription-currency').innerText = `${subscriptionType.currency}`;
     }
+
+
+    document.getElementById('btn-confirm-and-pay').addEventListener('click', function (e) {
+        e.preventDefault();
+        if (createPayment) {
+            return;
+        }
+        createPayment = true;
+        document.getElementById('loader').classList.remove('d-none');
+        submitPayment();
+    });
+    
     function submitPayment(){
+
+            const cardholderName = document.getElementById('cardholder-name').value;
+            const cardNumber = document.getElementById('card-number').value;
+            const cardExpiration = document.getElementById('card-expiration').value;
+            const cardCvv = document.getElementById('card-cvv').value;
+            const subscriptionTypeId = document.querySelector("#subscription-type-id");
+            const subscriptionType = subscriptionTypeId.value;
+            const paymentData = {
+                cardholderName,
+                cardNumber,
+                cardExpiration,
+                cardCvv,
+                subscriptionType,
+                user_id: user.user.id
+            };
+            
+            console.log(paymentData);
+            // createPayment = false;
+            // document.getElementById('loader').classList.add('d-none');
+
+            // submitPayment(paymentData);
         // Submit subscription
         // Submit payment
-        // redirect to success page
+        // need to refresh token with the subscription info
         // or show error message
         // or show success message
-        // remove the globalThis.subscriptionType
+
     }
   </script>
   

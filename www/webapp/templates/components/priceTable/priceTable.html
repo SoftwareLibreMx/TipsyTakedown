@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     button.addEventListener('click', function() {
       selectSubscriptionTypeId(this);
       if (is_redirect_price_table == "True"){
-        window.location.href = '/checkout';
+        window.location.href = '/checkout/'+subscription_type_id;
       }else{
         const subscriptionTypeId = document.querySelector("#subscription-type-id");
         subscriptionTypeId.value = subscription_type_id

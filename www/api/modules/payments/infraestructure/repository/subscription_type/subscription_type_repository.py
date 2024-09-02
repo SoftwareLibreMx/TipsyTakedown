@@ -5,6 +5,8 @@ from sqlalchemy.engine import Engine
 from typing import Optional
 
 from ....domain.entity import SubscriptionTypeModel
+# from ....dto.subscription_type_dto import SubscriptionTypeDTO
+# from ....domain.dto import SubscriptionTypeDTO
 
 
 class SubscriptionTypeRepository:
@@ -12,7 +14,7 @@ class SubscriptionTypeRepository:
         self.db_engine = db_engine
 
     def get(self,
-            subscription_type_id: str) -> Optional[SubscriptionTypeModel]:
+            subscription_type_id: str):
         with Session(self.db_engine) as session:
             return session.query(SubscriptionTypeModel).filter_by(
                 id=subscription_type_id, deleted_at=None).first()
