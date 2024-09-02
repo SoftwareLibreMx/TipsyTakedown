@@ -1,7 +1,45 @@
 From quay.io/centos/centos:stream9-minimal
 
-RUN dnf install yum -y
+RUN microdnf upgrade --refresh -y 
+RUN microdnf install python3.12 -y && \
+ln -s /usr/bin/python3.12 /usr/bin/python && \
+microdnf install python3.12-pip -y && \
+ln -s /usr/bin/pip3.12 /usr/bin/pip 
 
-RUN yum -y update && yum -y install gcc openssl-devel bzip2-devel libffi-devel zlib-devel wget make && yum clean all
+#RUN microdnf -y update && microdnf -y install gcc openssl-devel bzip2-devel libffi-devel zlib-devel wget make tar findutils && microdnf clean all
 
-RUN cd /opt && wget --no-check-certificate https://www.python.org/ftp/python/3.14.0/Python-3.14.0a0.tgz && tar xzf Python-3.14.0a0.tgz && cd Python-3.14*/ && ./configure --enable-optimizations && make altinstall && rm -rf /opt/Python* 
+#RUN cd /opt && wget --no-check-certificate https://www.python.org/ftp/python/3.12.5/Python-3.12.5.tgz && tar xzf Python-3.12.5.tgz && cd Python-3.12*/ && ./configure --enable-optimizations && make altinstall && rm -rf /opt/Python* 
+
+# Set the working directory
+WORKDIR /www
+ENV PYTHONPATH /www
+
+# Copy requirements.txt
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install -r requirements.txt
+
+# Install ffmpeg
+RUN microdnf install -y 'dnf-command(config-manager)' && \
+curl -sSL -o /tmp/epel-release-latest-9.noarch.rpm https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
+curl -sSL -o /tmp/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm && \
+curl -sSL -o /tmp/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm && \
+rpm -ivh /tmp/epel-release-latest-9.noarch.rpm && \
+rpm -ivh /tmp/rpmfusion-free-release-9.noarch.rpm && \
+rpm -ivh /tmp/rpmfusion-nonfree-release-9.noarch.rpm && \
+rm -f /tmp/*.rpm  
+#microdnf install ffmpeg -y && \
+#microdnf install ffmpeg-devel -y
+
+#RUN  apt install -y ffmpeg
+
+# Change to the working directory
+
+# Copy the current directory contents into the container at /www
+ENTRYPOINT ["gunicorn", "app:flask_app", "--config", "/www/gunicorn_config.py"]
+
+HEALTHCHECK --interval=10s --timeout=3s CMD curl --fail http://localhost:8000/health|| exit 1
+
+
+# microdnf config-manager --set-enabled crb && \
