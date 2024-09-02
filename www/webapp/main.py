@@ -1,16 +1,22 @@
-from flask import Blueprint, render_template, redirect, request, url_for, session
+from flask import (
+    Blueprint, render_template, redirect,
+    request, url_for, session
+)
 
 from .modules.admin import admin_router
 from .modules.auth import oauth_router
 from .modules.errors import error_router
 from .modules.video import video_router
+from .modules.checkout import checkout_router
 from .libs.utils.language import get_translations
+
 webapp = Blueprint('web', __name__)
 
 webapp.register_blueprint(admin_router, url_prefix='/admin')
 webapp.register_blueprint(oauth_router, url_prefix='/auth')
 webapp.register_blueprint(error_router, url_prefix='/error')
 webapp.register_blueprint(video_router, url_prefix='/video')
+webapp.register_blueprint(checkout_router, url_prefix='/checkout')
 
 
 @webapp.route('/')

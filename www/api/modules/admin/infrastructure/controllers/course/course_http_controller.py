@@ -40,10 +40,27 @@ def create_course(user):
     return Response(as_json_dumps(course), status=201)
 
 
-@admin_course_api.route('/<course_id>', methods=['get'])
+@admin_course_api.route('/<course_id>', methods=['GET'])
 @api_authorizer([UserType.ADMIN, UserType.TEACHER])
 def get_course_detail(user, course_id):
     errors, course = application.course.get_detail(user, course_id)
+
+    if errors:
+        return Response(json.dumps({"errors": errors}), status=400)
+
+    return Response(json.dumps(course, default=str), status=200)
+
+
+@admin_course_api.route('/<course_id>', methods=['PUT'])
+@api_authorizer([UserType.ADMIN, UserType.TEACHER])
+def update_course(user, course_id):
+    request_data = (
+        request.form.to_dict()
+        if request.content_type != 'application/json' else
+        request.get_json()
+    )
+
+    errors, course = application.course.update(user, course_id, request_data)
 
     if errors:
         return Response(json.dumps({"errors": errors}), status=400)

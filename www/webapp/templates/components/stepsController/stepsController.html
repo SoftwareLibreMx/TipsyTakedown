@@ -1,4 +1,4 @@
-{% macro steps_controller(current_step, step_ids, lazy_loading=False, bind_to_id='') %}
+{% macro steps_controller(current_step, step_ids, bind_to_id='') %}
 <div class="d-flex justify-content-between" style="width: 100%;">
     <button class="btn btn-primary" id="prevStep" disabled>
         <i class="fas fa-arrow-left"></i> Previous Step
@@ -16,10 +16,7 @@
         parseInt('{{ current_step }}'), '{{step_ids}}'
     );
     
-    
-    if ('{{ lazy_loading }}' === 'False') {
-        stepsController.initialize();
-    }
+    stepsController.initialize();
 
     if ('{{ bind_to_id }}' !== '') {
         const bindToElement = document.querySelector('#{{ bind_to_id }}');

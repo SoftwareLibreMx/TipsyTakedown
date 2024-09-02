@@ -1,77 +1,12 @@
 {% from "components/priceTable/priceTable.html" import priceTable %}
+{% from "layout/components/login.html" import login %}
 {% extends "layout/base.html" %} {% block title %}
 
 <title>TipsyTakedown - Sign</title>
 {% endblock %} {% block body %}
 <link rel="stylesheet" href="/static/css/signup_form.css">
-{{ priceTable(subscription_types) }}
-<div class="container">
-  <main class="form-signin w-100 m-auto">
-    <form>
-      <h1 id="main-title" class="h3 mb-3 fw-normal">{{ translations['login']['main_title'] }}</h1>
-      <div class="mb-3">
-        <label for="email" class="form-label">{{ translations['login']['email'] }}</label>
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          placeholder="{{ translations['login']['ph_email'] }}"
-          required />
-      </div>
-      <div class="mb-3 sign-up-form d-none sign-in-form">
-        <label for="password" class="form-label">{{ translations['login']['password'] }}</label>
-        <input
-          type="password"
-          class="form-control"
-          id="password"
-          placeholder="{{ translations['login']['ph_password'] }}" />
-      </div>
-      <div class="mb-3 sign-up-form d-none">
-        <label for="confirm_password" class="form-label">{{ translations['login']['confirm_password'] }}</label>
-        <input
-          type="password"
-          class="form-control"
-          id="confirm_password"
-          placeholder="{{ translations['login']['ph_confirm_password'] }}"
-          name="confirm_password" />
-      </div>
-      <div class="mb-3 sign-up-form d-none">
-        <label for="given_name" class="form-label">{{ translations['login']['given_name'] }}</label>
-        <input
-          type="text"
-          class="form-control"
-          id="given_name"
-          name="given_name" />
-      </div>
-      <div class="mb-3 sign-up-form d-none">
-        <label for="surname" class="form-label">{{ translations['login']['surname'] }}</label>
-        <input type="text" class="form-control" id="surname" name="surname" />
-      </div>
-      <div class="alert alert-danger d-none" role="alert" id="errorMessage">
-        {{ translations['login']['error']['invalid_email'] }}
-      </div>
-      <button class="btn btn-primary w-100 py-2" id="btn-submit" action="0">{{ translations['login']['next_button'] }}</button>
-    </form>
-    <hr class="border-top" />
-    <div class="text-center">
-      <a class="btn btn-secondary w-100 py-2" href="/auth/google">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          class="bi bi-google"
-          viewBox="0 0 16 16">
-          <path
-            d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z" />
-        </svg>
-        <span class="mx-2">{{ translations['login']['google_sign_in'] }}</span>
-      </a>
-    </div>
-  </main>
-  <script>
-    const translations = {{ translations['login'] | tojson }};
-  </script>
-  <script src="/static/js/auth/login.js"></script>
-</div>
+{{ priceTable(subscription_types, true) }}
+
+{{ login(translations, true) }}
+
 {% endblock %}

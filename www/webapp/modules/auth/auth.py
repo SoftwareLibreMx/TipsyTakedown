@@ -6,7 +6,6 @@ from api.modules.payments.application.subscription_type import (
 )
 
 TEMPLATE_DIR = "auth"
-
 auth_router = Blueprint("auth", __name__)
 
 

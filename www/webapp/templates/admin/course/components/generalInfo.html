@@ -75,9 +75,12 @@
     }
 
     class FormController {
+        initializeNextStep = false;
         creatingCourse = false;
+        stepsController = null;
 
         constructor() {
+            this.stepNumber = parseInt("{{ step_number }}");
             this.thumbnail = new ThumnailController();
 
             this.courseId = document.querySelector("#id");
@@ -107,10 +110,14 @@
         }
 
         addSaveBeforeNextStep() {
-            const stepsController = globalThis.stepsController;
+            if (this.initializeNextStep) {
+                return;
+            }
+
+            this.stepsController = globalThis.stepsController;
 
             stepsController.runBeforeNextStep(this.saveCourse.bind(this));
-            stepsController.initialize();
+            this.initializeNextStep = true;
         }
 
         digestErrorsAndAlert(body) {
@@ -130,12 +137,14 @@
         }
 
         async saveCourse() {
-            if (this.creatingCourse || this.courseId.value) {
+            const isCurrentStep = this.stepsController.isCurrentStep(this.stepNumber);
+            if (isCurrentStep || this.creatingCourse || this.courseId.value) {
                 return;
             }
 
             this.nextStepButton.innerHTML = spinnerTemplate('');
 
+            this.creatingCourse = true;
             // TODO: if isEdit then updateCourseRequest else createCourseRequest
             const response = await this.createCourseRequest();
 

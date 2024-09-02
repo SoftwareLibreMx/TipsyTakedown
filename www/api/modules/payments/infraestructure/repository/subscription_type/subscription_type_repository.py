@@ -20,7 +20,7 @@ class SubscriptionTypeRepository:
     def get_all(self):
         with Session(self.db_engine) as session:
             return session.execute(text('''
-                SELECT name, payment_cycle, price, currency, is_active
+                SELECT id, name, payment_cycle, price, currency, is_active
                 FROM subscription_types
                 WHERE deleted_at IS NULL AND is_active = TRUE
             ''')).fetchall()
