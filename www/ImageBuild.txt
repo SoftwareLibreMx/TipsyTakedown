@@ -1,0 +1,7 @@
+To build the container image:
+
+podman build . -f ContainerfileFedora -t fedora40-minimal
+
+To run a container based on the previous image:
+
+podman run --name pythontest --rm -it localhost/fedora40-minima:latest
