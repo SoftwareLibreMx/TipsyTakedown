@@ -9,9 +9,10 @@
         </div>
 
         <div class="card-body">
-          <div class="subscription-type-id d-none">
+          <input type="hidden" class="subscription-type-id" value="{{ subscription_type.id }}">
+          <!-- <div class="subscription-type-id d-none">
             {{ subscription_type.id }}
-          </div>
+          </div> -->
             <h1 class="card-title pricing-card-title py-3">
               ${{ "{:.2f}".format(subscription_type.price) }} 
               {{ subscription_type.currency }}
@@ -36,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     button.addEventListener('click', function() {
       selectSubscriptionTypeId(this);
       if (is_redirect_price_table == "True"){
-        window.location.href = '/checkout/'+subscription_type_id;
+        window.location.href = '/checkout/?subscription_type_id='+subscription_type_id;
       }else{
         const subscriptionTypeId = document.querySelector("#subscription-type-id");
         subscriptionTypeId.value = subscription_type_id
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 function selectSubscriptionTypeId(_this) {
-  subscription_type_id = _this.parentNode.querySelector('.subscription-type-id').textContent.trim();
+  subscription_type_id = _this.parentNode.querySelector('.subscription-type-id').value.trim();
   const buttons = document.querySelectorAll('.btn-subscribe');
 
   // Remove btn-primary class from all buttons

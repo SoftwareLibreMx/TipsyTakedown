@@ -57,15 +57,18 @@ class SubscriptionService:
 
         subscription_type = SubscriptionTypeDTO(
             id=subscription_type.id,
-            transaction_amount=self._calculate_payment_amount(
+            name=subscription_type.name,
+            price=self._calculate_payment_amount(
                 subscription_type, promo_code),
             currency=subscription_type.currency,
-            payment_cycle=subscription_type.payment_cycle
+            payment_cycle=subscription_type.payment_cycle,
+            is_active=subscription_type.is_active
         )
 
         errors, payment_audit_log = self._create_audit_log(
             user,
-            subscription_type.transaction_amount,
+            self._calculate_payment_amount(
+                subscription_type, promo_code),
             subscription_type.currency,
             payment_method
         )
@@ -77,7 +80,8 @@ class SubscriptionService:
             user, subscription_type, payment_audit_log, card)
 
         if error:
-            error['status'] = PaymentStatus.REJECTED.value
+            print(error)
+            # error['status'] = PaymentStatus.REJECTED.value
             self.payment_audit_repository.update(payment_audit_log.id, error)
             return error, {}
 

@@ -25,7 +25,9 @@
             {{ pricing(1, globalSteps, subscription_types) }}
         </div>
         <div id="creditCard" class="d-none h-full">
-            {{ credit_card(2) }}
+            <form id="creditCardForm">
+                {{ credit_card(2) }}
+            </form>
         </div>
     </div>
     <div id="stepsController" class="d-flex h-full align-items-end w-full">

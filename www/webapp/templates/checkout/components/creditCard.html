@@ -148,28 +148,52 @@
         submitPayment();
     });
     
-    function submitPayment(){
+    async function submitPayment(){
 
-            const cardholderName = document.getElementById('cardholder-name').value;
-            const cardNumber = document.getElementById('card-number').value;
-            const cardExpiration = document.getElementById('card-expiration').value;
-            const cardCvv = document.getElementById('card-cvv').value;
-            const subscriptionTypeId = document.querySelector("#subscription-type-id");
-            const subscriptionType = subscriptionTypeId.value;
-            const paymentData = {
-                cardholderName,
-                cardNumber,
-                cardExpiration,
-                cardCvv,
-                subscriptionType,
-                user_id: user.user.id
-            };
-            
-            console.log(paymentData);
-            // createPayment = false;
-            // document.getElementById('loader').classList.add('d-none');
+        const cardholderName = document.getElementById('cardholder-name').value;
+        const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+        const cardExpiration = document.getElementById('card-expiration').value;
+        const cardCvv = document.getElementById('card-cvv').value;
+        const subscriptionTypeId = document.querySelector("#subscription-type-id");
+        const subscriptionType = subscriptionTypeId.value;
+        const paymentData = {
+            'subscription_type_id':subscriptionType,
+            'payment_method': 'CREDIT_CARD',
+            'card':{
+                'card_holder_name': cardholderName,
+                'card_number': cardNumber,
+                'expiration_date': cardExpiration,
+                'cvv': cardCvv
+            }
+        };
+        
+        const response = await fetch('/api/payment/subscription', {
+            method: 'POST',
+            headers: {
+                'Authorization':  sessionStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(paymentData)
+        });
+        if (!response.ok) {
+            console.log(response);
+            createPayment = false;
+            document.getElementById('loader').classList.add('d-none');
+            alert('Error on payment subscription');
+            return 'Error on payment subscription';
+        }
+        const data = await response.json();
+        // Handle the response data here
+        console.log(data);
+        alert('Payment subscription created');
 
-            // submitPayment(paymentData);
+        console.log(paymentData);
+        createPayment = false;
+        document.getElementById('loader').classList.add('d-none');
+
+        
+        // redirect('/');
+        // submitPayment(paymentData);
         // Submit subscription
         // Submit payment
         // need to refresh token with the subscription info
