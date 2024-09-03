@@ -1,15 +1,27 @@
 import json
 from flask import Blueprint, request
 
+from api.libs.domain_entity import UserType
 from api.libs.utils import (
     api_response as Response,
     as_json_dumps,
-    dataclass_to_json_dumps
+    dataclass_to_json_dumps,
+    api_authorizer
 )
 
 from .... import application
 
 admin_material_api = Blueprint('admin_material_api', __name__)
+
+
+@admin_material_api.route('', methods=['GET'])
+@api_authorizer([UserType.ADMIN, UserType.TEACHER])
+def search_by_name(user):
+    query = request.args.get('query')
+
+    lessons = application.material.search_by_name(query)
+
+    return Response(json.dumps(lessons, default=str), status=200)
 
 
 @admin_material_api.route('/<material_id>', methods=['GET'])

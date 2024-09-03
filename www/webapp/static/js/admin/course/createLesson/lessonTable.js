@@ -161,13 +161,32 @@ export class Lesson {
         this.lessonId = this.lessonTrElement.querySelector('#lessonId');
         this.lessonName = this.lessonTrElement.querySelector('#lessonName');
         this.removeLessonButton = this.lessonTrElement.querySelector('#remove-lesson');
+        this.addMaterialButton = this.lessonTrElement.querySelector('#add-material');
 
         this.removeLessonButton.addEventListener('click', this.removeLesson.bind(this));
+        this.addMaterialButton.addEventListener('click', this.selectMaterialCallback.bind(this));
     }
 
     removeLesson() {
         this.materialTrElement.remove();
         this.lessonTrElement.remove();
+    }
+
+    selectMaterialCallback() {
+        const that = this;
+        const materialSelector = globalThis.materialSelector;
+
+        materialSelector.setSaveCallback((material) => {
+            that.addMaterial(material);
+        })
+    }
+
+    addMaterial(material) {
+        const materialElement = document.createElement('div');
+        materialElement.style = 'min-width: 50%;';
+        materialElement.innerHTML = this.container.newLessonTemplate(material);
+
+        this.materialTrElement.appendChild(materialElement);
     }
 
     setInput(key, value) {

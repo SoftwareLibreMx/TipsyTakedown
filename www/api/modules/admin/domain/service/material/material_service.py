@@ -1,9 +1,9 @@
 from ..minio import MinioService
 
-from api.modules.admin.infrastructure.repository import MaterialRepository
+from api.libs.domain.entity import MaterialModel, MaterialType
 
+from api.modules.admin.infrastructure.repository import MaterialRepository
 from api.modules.admin.domain.dto import MaterialResponseDTO
-from api.modules.admin.domain.entity import MaterialModel, MaterialType
 
 
 class MaterialService:
@@ -11,6 +11,14 @@ class MaterialService:
                  minio_service: MinioService):
         self.material_repository = material_repository
         self.minio_service = minio_service
+
+    def search_by_name(self, query: str):
+        material_db = self.material_repository.search_by_name(query)
+
+        return list(map(lambda material: {
+            'id': material.id,
+            'name': material.name
+        }, material_db))
 
     def get_by_id(self,
                   material_id: str) -> tuple[list[str], MaterialResponseDTO]:

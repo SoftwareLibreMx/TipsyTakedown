@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy.orm import Session
 
-from api.modules.admin.domain.entity import MaterialModel
+from api.libs.domain.entity import MaterialModel
 
 
 class MaterialRepository:
@@ -19,6 +19,11 @@ class MaterialRepository:
             session.commit()
             session.refresh(material)
             return material
+
+    def search_by_name(self, query: str):
+        with Session(self.db_engine) as session:
+            return session.query(MaterialModel).filter(
+                MaterialModel.name.ilike(f'%{query}%')).all()
 
     def update(self, material_id: str, material_dict: dict) -> MaterialModel:
         with Session(self.db_engine) as session:
