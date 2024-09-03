@@ -1,7 +1,7 @@
 
 from dataclasses import dataclass
 
-from api.modules.admin.domain.entity import MaterialModel
+from api.libs.domain.entity import MaterialModel
 
 
 @dataclass

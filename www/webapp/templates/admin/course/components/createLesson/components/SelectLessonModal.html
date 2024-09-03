@@ -1,13 +1,13 @@
 {% from 'components/QuerySelectorModal/QuerySelectorModal.html' import query_selector_modal %}
 {% macro select_lesson_modal(modal_id) %}
 {{ query_selector_modal(
-modal_id,
-"Select Lesson",
-"Type to search a lesson...",
-"Add Lesson"
+    modal_id,
+    "Select Lesson",
+    "Type to search a lesson...",
+    "Add Lesson"
 ) }}
 <script type="module">
-    import {QuerySelector} from "/static/js/components/querySelectorModal.js";
+    import { QuerySelector } from "/static/js/components/querySelectorModal.js";
 
     async function getLessonList(query) {
         const response = await fetch(`/api/admin/lesson?query=${query}`, {

@@ -21,6 +21,7 @@ webapp.register_blueprint(video_router, url_prefix='/video')
 def index():
     if request.args.get('token'):
         session['token'] = request.args.get('token')
+        return redirect('/')
 
     return render_template('index.html', translations=get_translations())
 

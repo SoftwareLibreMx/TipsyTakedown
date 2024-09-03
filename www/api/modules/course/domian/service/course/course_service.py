@@ -2,10 +2,11 @@ from typing import Optional
 
 from api.libs.domain_entity import Pagination
 from api.libs.utils import as_dict
+from api.modules.course.infrastructure.repository import CourseRepository
 
 
 class CourseService:
-    def __init__(self, course_repository):
+    def __init__(self, course_repository: CourseRepository):
         self.course_repository = course_repository
 
     def get_all(

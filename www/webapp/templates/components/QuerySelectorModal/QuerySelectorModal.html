@@ -4,16 +4,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">{{title}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button id="closeButton" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input class="form-control" list="lessons" id="searchInput"
+                <input class="form-control" list="{{modal_id}}Options" id="searchInput"
                     placeholder="{{placeholder if placeholder else 'Search item...'}}">
-                <datalist id="datalist">
+                <datalist id="{{modal_id}}Options">
                 </datalist>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">
+                <button id="saveButton" type="button" class="btn btn-primary">
                     {{action_text if action_text else 'Save'}}
                 </button>
             </div>
