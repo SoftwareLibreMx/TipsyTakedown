@@ -117,8 +117,8 @@ class SubscriptionService:
 
     def _get_datetime_interval(self, payment_cycle: PaymentCycle):
         return {
-            PaymentCycle.MONTHLY: timedelta(days=30),
-            PaymentCycle.ANNUALLY: timedelta(days=365),
+            PaymentCycle.MONTHLY.value: timedelta(days=30),
+            PaymentCycle.ANNUALLY.value: timedelta(days=365),
         }.get(payment_cycle, timedelta(days=0))
 
     def _calculate_payment_amount(self, subscription_type, promo_code):
