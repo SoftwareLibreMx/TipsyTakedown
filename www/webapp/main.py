@@ -23,6 +23,7 @@ webapp.register_blueprint(checkout_router, url_prefix='/checkout')
 def index():
     if request.args.get('token'):
         session['token'] = request.args.get('token')
+        return redirect('/')
 
     return render_template('index.html', translations=get_translations())
 

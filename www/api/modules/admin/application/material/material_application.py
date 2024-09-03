@@ -40,6 +40,12 @@ def __init_classes() -> MaterialService:
     return MATERIAL_SERVICE
 
 
+def search_by_name(query: str) -> tuple[list[str], MaterialResponseDTO]:
+    material_service = __init_classes()
+
+    return material_service.search_by_name(query)
+
+
 def get_by_id(material_id: str) -> tuple[list[str], MaterialResponseDTO]:
     material_service = __init_classes()
 

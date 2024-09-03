@@ -17,4 +17,4 @@ def search_by_name(user):
 
     lessons = application.lesson.search_by_name(query)
 
-    return Response(json.dumps(lessons), status=200)
+    return Response(json.dumps(lessons, default=str), status=200)

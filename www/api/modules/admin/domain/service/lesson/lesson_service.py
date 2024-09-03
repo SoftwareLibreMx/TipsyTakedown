@@ -49,7 +49,10 @@ class LessonService:
 
         lessons = []
         for lesson in lessons_db:
-            lessons.append(lesson[0])
+            lessons.append({
+                'name': lesson.name,
+                'id': lesson.id
+            })
 
         return lessons
 
