@@ -80,8 +80,6 @@ class SubscriptionService:
             user, subscription_type, payment_audit_log, card)
 
         if error:
-            print(error)
-            # error['status'] = PaymentStatus.REJECTED.value
             self.payment_audit_repository.update(payment_audit_log.id, error)
             return error, {}
 

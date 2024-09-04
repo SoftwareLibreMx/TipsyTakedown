@@ -176,7 +176,6 @@
             body: JSON.stringify(paymentData)
         });
         if (!response.ok) {
-            console.log(response);
             createPayment = false;
             document.getElementById('loader').classList.add('d-none');
             alert('Error on payment subscription');
@@ -184,22 +183,11 @@
         }
         const data = await response.json();
         // Handle the response data here
-        console.log(data);
         alert('Payment subscription created');
 
-        console.log(paymentData);
         createPayment = false;
         document.getElementById('loader').classList.add('d-none');
-
-        
-        // redirect('/');
-        // submitPayment(paymentData);
-        // Submit subscription
-        // Submit payment
-        // need to refresh token with the subscription info
-        // or show error message
-        // or show success message
-
+        redirect('/');
     }
   </script>
   

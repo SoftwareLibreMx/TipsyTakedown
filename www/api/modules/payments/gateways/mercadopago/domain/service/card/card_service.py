@@ -34,7 +34,7 @@ class CardService:
 
         if error:
             return self._get_error_dict(error), None
-
+        # TODO: FIX HIDDING EMAIL
         error, response = self.mp_repository.pay_subscription({
             "transaction_amount": transaction_amount,
             "token": card_token.get('id'),
@@ -42,7 +42,7 @@ class CardService:
             "payment_method_id": payment_method_id,
             "installments": 1,
             "payer": {
-                "email": req_user.email
+                "email": "supertipsy@gmail.com"
             }
         })
 

@@ -12,10 +12,10 @@ checkout_router = Blueprint('checkout', __name__)
 
 @checkout_router.route('/')
 def index():
-    # token = session['token']
-    # if not token:
-    #     parsed_url = urllib.parse.quote( '/login?redirect="/checkout"')
-    #     return redirect( parsed_url )
+    token = session['token']
+    if not token:
+        parsed_url = urllib.parse.quote('/login?redirect="/checkout"')
+        return redirect(f'/login?redirect={parsed_url}')
 
     subscription_types = subscription_type_application.get_all()
     subscription_type_id = request.args.get('subscription_type_id')
