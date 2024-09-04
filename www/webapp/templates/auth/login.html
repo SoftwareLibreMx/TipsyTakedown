@@ -1,12 +1,26 @@
 {% from "components/priceTable/priceTable.html" import priceTable %}
 {% from "layout/components/login.html" import login %}
-{% extends "layout/base.html" %} {% block title %}
+{% extends "layout/base.html" %} 
 
+{% block title %}
 <title>TipsyTakedown - Sign</title>
-{% endblock %} {% block body %}
+{% endblock %} 
+
+{% block body %}
 <link rel="stylesheet" href="/static/css/signup_form.css">
-{{ priceTable(subscription_types, true) }}
 
-{{ login(translations) }}
+<div class="d-flex">
+    <div class="d-none" id="priceTable">
+        {{ priceTable(subscription_types) }}
+    </div>
 
+    {{ login(translations) }}
+</div>
+<script>
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has('pricetable')) {
+        document.getElementById('priceTable').classList.remove('d-none');
+    }
+</script>
 {% endblock %}

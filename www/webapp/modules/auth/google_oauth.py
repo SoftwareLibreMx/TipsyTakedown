@@ -84,7 +84,7 @@ def callback():
     error, userc = auth_application.get_or_create_user_token(user_info)
 
     if error:
-        abort(500, error)
+        abort(500)
 
     session["token"] = userc.get("token")
 
