@@ -1,4 +1,4 @@
-{% macro login(translations, is_redirect_login) %}
+{% macro login(translations) %}
 <div class="container">
   <main class="form-signin w-100 m-auto">
     <form>
@@ -64,7 +64,6 @@
     </div>
   </main>
   <script>
-    let is_redirect_login = "{{ is_redirect_login }}";
     const translations = {{ translations['login'] | tojson }};
   </script>
   <script src="/static/js/auth/login.js"></script>

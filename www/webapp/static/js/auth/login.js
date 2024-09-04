@@ -100,12 +100,19 @@ async function loginForm() {
   const data = await response.json();
 
   sessionStorage.setItem("token", data?.token);
+    
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has("redirect")) {
+    const redirect = decodeURI(urlParams.get("redirect"));
 
-  if(is_redirect_login == "True"){
-    window.location.href = `/?token=${data?.token}`;
-  }else{
-    document.getElementById("btn-submit").classList.add("d-none");
+    const url = new URL(`${window.location.origin}${redirect}`);
+    url.searchParams.set("token", data?.token);
+
+    window.location.href = url.href;
+    return;
   }
+
+  window.location.href = `/?token=${data?.token}`;
 }
 
 async function registerForm() {
