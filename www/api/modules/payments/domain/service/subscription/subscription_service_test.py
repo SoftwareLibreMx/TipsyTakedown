@@ -67,7 +67,7 @@ class TestSubscriptionService:
                 (None, Mock(id='valid')),
                 ({'eror': True}, None),
                 None,
-                ({'eror': True, 'status': 'REJECTED'}, {})
+                ({'eror': True}, {})
             ],
             [
                 Mock(
