@@ -13,7 +13,7 @@ subscription_type_api = Blueprint('subscription_type_api', __name__)
 
 
 @subscription_type_api.route('/<subscription_type_id>', methods=['GET'])
-@api_authorizer()
+# @api_authorizer()
 def get(subscription_type_id):
     errors, subscription_type = subscription_type_app.get(subscription_type_id)
     if errors:

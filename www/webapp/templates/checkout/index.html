@@ -21,8 +21,8 @@
     </div>
     <div id="steps" class="mt-4">
         <div id="pricing" class="d-none">
-            <div class="d-none" id="subscription-type-id"> {{ subscription_type_id }}</div>
-            {{ pricing(1, globalSteps, subscription_types) }}
+            <input type="hidden" id="subscription-type-id" value="{{ subscription_type_id }}">
+            {{ pricing(1, globalSteps, subscription_types, subscription_type_id) }}
         </div>
         <div id="creditCard" class="d-none h-full">
             <form id="creditCardForm">

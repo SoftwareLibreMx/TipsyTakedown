@@ -10,12 +10,9 @@
 
         <div class="card-body">
           <input type="hidden" class="subscription-type-id" value="{{ subscription_type.id }}">
-          <!-- <div class="subscription-type-id d-none">
-            {{ subscription_type.id }}
-          </div> -->
-            <h1 class="card-title pricing-card-title py-3">
-              ${{ "{:.2f}".format(subscription_type.price) }} 
-              {{ subscription_type.currency }}
+          <h1 class="card-title pricing-card-title py-3">
+            ${{ "{:.2f}".format(subscription_type.price) }} 
+            {{ subscription_type.currency }}
           </h1>
           
           <button type="button" class="w-100 btn btn-lg btn-subscribe btn-outline-primary">Select Subscribe!</button>

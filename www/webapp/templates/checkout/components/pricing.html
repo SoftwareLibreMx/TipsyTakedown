@@ -2,7 +2,7 @@
 {% from "components/priceTable/priceTable.html" import priceTable %}
 
 {% from "components/loader/loader.html" import loader %}
-{% macro pricing(step_number, global_step, subscription_types)%}
+{% macro pricing(step_number, global_step, subscription_types, subscription_type_id)%}
 <div>
     <div>
         <h3>Step {{step_number}}: Select Subscription Type</h3>
@@ -49,16 +49,20 @@
         const nextStepButton = document.querySelector("#nextStep"); // query here because it's not available in the global scope
         nextStepButton.innerHTML = spinnerTemplate('');
         getSubscriptionType = true;
-        const response = await fetch('/api/subscription_type/'+ subscriptionTypeId.value, 
+        setSubscriptionType( subscriptionTypeId.value )
+        getSubscriptionType = false;
+        nextStepButton.innerHTML = "Next Step";
+    }
+
+    async function setSubscriptionType(subscription_type_id, next_step = false) {
+        const response = await fetch('/api/subscription_type/'+ subscription_type_id, 
         {
             method: 'GET',
             headers: {
                 'Authorization': `${sessionStorage.getItem('token')}`
             }
         });
-
         const body = await response.json();
-        getSubscriptionType = false;
         if (!response.ok) {
             nextStepButton.innerHTML = "Next Step";
 
@@ -66,9 +70,10 @@
 
             return body;
         }
-
-        nextStepButton.innerHTML = "Next Step";
         subscriptionType = body;
+        if (next_step){
+            stepsController.nextStepHandler();
+        }
     }
 
     function addSaveBeforeNextStep() {
@@ -78,8 +83,12 @@
         stepsController.initialize();
         
     }
-
-
-    stepsElement.addEventListener("stepsControllerLoaded", addSaveBeforeNextStep);
+    
+    const render_subscription_type_id = "{{ subscription_type_id }}";
+    if (render_subscription_type_id == ""){
+        stepsElement.addEventListener("stepsControllerLoaded", addSaveBeforeNextStep);
+    }else{
+        setSubscriptionType(render_subscription_type_id, true);
+    }
 </script>
 {% endmacro %}
