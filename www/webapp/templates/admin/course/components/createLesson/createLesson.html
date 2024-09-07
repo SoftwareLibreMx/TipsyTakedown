@@ -76,8 +76,7 @@
 
         return [lessonTr, materialTr];
     };
-
-    const course = "{{ course }}" !== "None" ? `{{ course | tojson }}` : null;
+    let course = "{{ course | tojson if course else null }}";
 
     new LessonTable(
         "{{step_number}}", newLessonTemplate,
