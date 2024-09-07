@@ -46,11 +46,12 @@ def create_material():
         print(errors)
         return Response(json.dumps({"errors": errors}), status=400)
 
-    material_file = request.files.get('video', None)
+    material_file = request.files.get('file', None)
 
-    application.video_encoding.add_video_file_to_encoding_queue_async(
-        material.id, material_file
-    )
+    if material_file and material_file.filename.split('.')[-1] != 'pdf':
+        application.video_encoding.add_video_file_to_encoding_queue_async(
+            material.id, material_file
+        )
 
     return Response(dataclass_to_json_dumps(material), status=201)
 
