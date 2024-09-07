@@ -66,7 +66,7 @@
                         </tr>
                     </thead>
                     <tbody id="materialsContainer">
-                        <tr>
+                        <tr id="placeHolder">
                             <td>No materials added yet.</td>
                         </tr>
                     </tbody>
@@ -76,10 +76,25 @@
 
         return [lessonTr, materialTr];
     };
-    let course = "{{ course | tojson if course else null }}";
+
+    const newMaterialTemplate = (material, ondragg, ondraggover) => {
+        const materialTr = document.createElement("tr");
+        materialTr.draggable = true;
+        materialTr.ondragstart = ondragg;
+        materialTr.ondragover = ondraggover;
+
+        materialTr.innerHTML = `
+            <td>${material.id}</td>
+            <td>${material.name}</td>
+        `;
+
+        return materialTr;
+    }
+
+    const course = "{{ course }}" !== "None" ? `{{ course | tojson if course else '{}' }}` : null;
 
     new LessonTable(
-        "{{step_number}}", newLessonTemplate,
+        "{{step_number}}", newLessonTemplate, newMaterialTemplate,
         "{{global_step}}", course
     );
 </script>

@@ -29,8 +29,6 @@ def course(user):
 def course_edit(user, course_id):
     errors, course_detail = application.course.get_detail(user, course_id)
 
-    print(course_detail)
-
     if errors or not course_detail:
         abort(404)
 
