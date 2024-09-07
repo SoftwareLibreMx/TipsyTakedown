@@ -169,13 +169,19 @@ export class LessonTable {
 }
 
 export class Lesson {
+    dragedElement = null;
+
     constructor(container, lessonTrElement, materialTrElement) {
         this.container = container;
+        this.materialContainer = materialTrElement.querySelector(
+            "#materialsContainer"
+        );
 
         this.lessonTrElement = lessonTrElement;
         this.materialTrElement = materialTrElement;
 
         this.newMaterialTemplate = container.newMaterialTemplate;
+        this.materialIds = new Set();
 
         this.lessonId = this.lessonTrElement.querySelector("#lessonId");
         this.lessonName = this.lessonTrElement.querySelector("#lessonName");
@@ -204,10 +210,18 @@ export class Lesson {
         const materialSelector = globalThis.materialSelector;
 
         materialSelector.setSaveCallback((material) => {
+            if (that.materialIds.has(material.id)) {
+                alert("Material already added");
+                return;
+            }
+
+            that.materialIds.add(material.id);
             new MaterialTable(
                 that.materialTrElement,
                 that.newMaterialTemplate,
-                material
+                material,
+                that.startDrag.bind(that),
+                that.dragOver.bind(that)
             );
         });
     }
@@ -232,28 +246,48 @@ export class Lesson {
 
         this.inputs[key].value = value;
     }
+
+    startDrag(event) {
+        this.dragedElement = event.target;
+    }
+
+    dragOver(event) {
+        event.preventDefault();
+        
+        const children = Array.from(this.materialContainer.children);
+        const parentNode = event.target.parentNode;
+
+        if (
+            children.indexOf(parentNode) > children.indexOf(this.dragedElement)
+        ) {
+            parentNode.after(this.dragedElement);
+        } else {
+            parentNode.before(this.dragedElement);
+        }
+    }
 }
 
 export class MaterialTable {
-    constructor(container, newMaterialTemplate, material) {
+    constructor(container, newMaterialTemplate, material, startDrag, dragOver) {
         this.container = container.querySelector("#materialsContainer");
 
         this.newMaterialTemplate = newMaterialTemplate;
 
         this.removePlaceholder();
-        this.addMaterial(material);
+        this.addMaterial(material, startDrag, dragOver);
     }
 
     removePlaceholder() {
         const placeholder = this.container.querySelector("#placeHolder");
 
-        console.log(placeholder);
         if (placeholder) {
             placeholder.remove();
         }
     }
 
-    addMaterial(material) {
-        this.container.appendChild(this.newMaterialTemplate());
+    addMaterial(material, startDrag, dragOver) {
+        this.container.appendChild(this.newMaterialTemplate(
+            material, startDrag, dragOver
+        ));
     }
 }

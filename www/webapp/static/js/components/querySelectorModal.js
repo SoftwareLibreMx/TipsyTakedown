@@ -2,6 +2,7 @@ export class QuerySelector {
     previewsQuery = null;
     previewsResponse = [];
     callback = null;
+    emptyResponse = false;
 
     constructor(getItems, modalId = "#querySelectorModal") {
         this.getItems = getItems;
@@ -23,12 +24,16 @@ export class QuerySelector {
             query.startsWith(this.previewsQuery)
             && this.previewsResponse.length === 0
         );
-
         if (query.length < 3 || emptyPreviewsQuery) {
             return;
         }
         
         const items = await this.getItems(query);
+
+        if (items.length === 0) {
+            this.emptyResponse = true;
+            return;
+        }
 
         this.previewsResponse = items;
         this.previewsQuery = query;
@@ -49,7 +54,9 @@ export class QuerySelector {
     }
 
     save() {
-        const selectedValue = this.previewsResponse.find((item) => item.id === this.datalist.value);
+        const selectedValue = this.previewsResponse.find(
+            (item) => item.id === this.searchBar.value
+        );
 
         if (this.callback) {
             this.callback(selectedValue);

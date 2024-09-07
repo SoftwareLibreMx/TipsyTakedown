@@ -100,7 +100,8 @@
         }
 
         populateForm() {
-            const course = "{{  course | tojson if course else null }}";
+            const course = "{{ course }}" !== "" ? `{{ course | tojson if course else '{}' }}` : null;
+            console.log(course);
             if (!course) {
                 return;
             }

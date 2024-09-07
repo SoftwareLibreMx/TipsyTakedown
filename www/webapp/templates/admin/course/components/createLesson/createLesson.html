@@ -77,19 +77,21 @@
         return [lessonTr, materialTr];
     };
 
-    const newMaterialTemplate = (material) => {
+    const newMaterialTemplate = (material, ondragg, ondraggover) => {
         const materialTr = document.createElement("tr");
+        materialTr.draggable = true;
+        materialTr.ondragstart = ondragg;
+        materialTr.ondragover = ondraggover;
 
-        console.log(material);
         materialTr.innerHTML = `
-            <td>1</td>
-            <td>Example</td>
+            <td>${material.id}</td>
+            <td>${material.name}</td>
         `;
 
         return materialTr;
     }
 
-    const course = "{{ course }}" !== "None" ? `{{ course | tojson }}` : null;
+    const course = "{{ course }}" !== "None" ? `{{ course | tojson if course else '{}' }}` : null;
 
     new LessonTable(
         "{{step_number}}", newLessonTemplate, newMaterialTemplate,
