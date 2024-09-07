@@ -84,7 +84,7 @@ CREATE TABLE promo_codes (
 
 -- SUBSCRIPTION tables
 DROP TYPE IF EXISTS PaymentCycle;
-CREATE Type PaymentCycle AS ENUM ('MONTHLY', 'ANUAL');
+CREATE Type PaymentCycle AS ENUM ('MONTHLY', 'ANNUALLY');
 
 CREATE TABLE subscription_types (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,

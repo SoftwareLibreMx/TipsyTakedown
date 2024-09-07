@@ -40,4 +40,4 @@ def pay(
 
     card_service = __init_classes()
 
-    return card_service.pay(user, card, subscription_type.transaction_amount)
+    return card_service.pay(user, card, subscription_type.price)

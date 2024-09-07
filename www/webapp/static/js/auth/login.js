@@ -100,6 +100,18 @@ async function loginForm() {
   const data = await response.json();
 
   sessionStorage.setItem("token", data?.token);
+    
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has("redirect")) {
+    const redirect = decodeURI(urlParams.get("redirect"));
+
+    const url = new URL(`${window.location.origin}${redirect}`);
+    url.searchParams.set("token", data?.token);
+
+    window.location.href = url.href;
+    return;
+  }
+
   window.location.href = `/?token=${data?.token}`;
 }
 

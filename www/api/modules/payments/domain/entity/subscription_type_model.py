@@ -19,6 +19,7 @@ class SubscriptionTypeModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
     __tablename__ = 'subscription_types'
 
     id: Mapped[str] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
     payment_cycle: Mapped[PaymentCycle] = mapped_column(
         String(36), nullable=False)
     price: Mapped[float] = mapped_column(Float, nullable=False)
@@ -32,6 +33,7 @@ class SubscriptionTypeModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
         data: dict
     ) -> tuple[Optional[list[str]], 'SubscriptionTypeModel']:
         errors = validate_dict(data, [
+            VKOptions('name', str, True),
             VKOptions('payment_cycle', str, True),
             VKOptions('price', float, True),
             VKOptions('currency', str, False),
@@ -43,6 +45,7 @@ class SubscriptionTypeModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
 
         return None, SubscriptionTypeModel(
             id=data.get('id', None),
+            name=data.get('name', None),
             payment_cycle=data.get('payment_cycle', None),
             price=data.get('price', None),
             currency=data.get('currency', 'MXN'),

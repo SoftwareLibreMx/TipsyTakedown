@@ -1,0 +1,94 @@
+
+{% from "components/priceTable/priceTable.html" import priceTable %}
+
+{% from "components/loader/loader.html" import loader %}
+{% macro pricing(step_number, global_step, subscription_types, subscription_type_id)%}
+<div>
+    <div>
+        <h3>Step {{step_number}}: Select Subscription Type</h3>
+        <p>You can select the subscription type you needed</p>
+    </div>
+    
+    <div>
+        <!-- TODO: Add csrf token to form -->
+        <form id="pricingForm">
+          {{ priceTable(subscription_types, false) }}
+        </form>
+    </div>
+</div>
+
+<script type="module">
+    import {spinnerTemplate} from '/static/js/components/spinner.js';
+    let getSubscriptionType = false;
+    let stepNumber = parseInt("{{ step_number }}");
+    const stepsElement = document.querySelector("#{{ global_step }}");
+    const subscriptionTypeId = document.querySelector("#subscription-type-id");
+
+    function digestErrorsAndAlert(body) {
+        const {errors} = body;
+
+        if (!Array.isArray(errors)) {
+            alert('An error occurred. Please try again later.');
+            return;
+        }
+
+        let missingFields = '';
+        errors.forEach(error => {
+            missingFields += `* ${error.split(' ')[0]} \n`;
+        });
+
+        alert(`Missing fields: \n${missingFields}`);
+    }
+
+    async function saveSubscriptionType() {
+        const isCurrentStep = stepsController.isCurrentStep(stepNumber);
+        if (isCurrentStep || getSubscriptionType || subscriptionTypeId.value == "") {
+            return;
+        }
+
+        const nextStepButton = document.querySelector("#nextStep"); // query here because it's not available in the global scope
+        nextStepButton.innerHTML = spinnerTemplate('');
+        getSubscriptionType = true;
+        setSubscriptionType( subscriptionTypeId.value )
+        getSubscriptionType = false;
+        nextStepButton.innerHTML = "Next Step";
+    }
+
+    async function setSubscriptionType(subscription_type_id, next_step = false) {
+        const response = await fetch('/api/subscription_type/'+ subscription_type_id, 
+        {
+            method: 'GET',
+            headers: {
+                'Authorization': `${sessionStorage.getItem('token')}`
+            }
+        });
+        const body = await response.json();
+        if (!response.ok) {
+            nextStepButton.innerHTML = "Next Step";
+
+            digestErrorsAndAlert(body);
+
+            return body;
+        }
+        subscriptionType = body;
+        if (next_step){
+            stepsController.nextStepHandler();
+        }
+    }
+
+    function addSaveBeforeNextStep() {
+        const stepsController = globalThis.stepsController;
+        
+        stepsController.runBeforeNextStep(saveSubscriptionType.bind(this));
+        stepsController.initialize();
+        
+    }
+    
+    const render_subscription_type_id = "{{ subscription_type_id }}";
+    if (render_subscription_type_id == ""){
+        stepsElement.addEventListener("stepsControllerLoaded", addSaveBeforeNextStep);
+    }else{
+        setSubscriptionType(render_subscription_type_id, true);
+    }
+</script>
+{% endmacro %}

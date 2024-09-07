@@ -44,6 +44,7 @@ def sign_in():
         'user': asdict(userc_token.get('user'))
     }, default=str), status=200)
 
+
 @auth_api.route('check_email', methods=['POST'])
 def check_email():
     request_data = request.get_json()

@@ -67,7 +67,7 @@ class TestSubscriptionService:
                 (None, Mock(id='valid')),
                 ({'eror': True}, None),
                 None,
-                ({'eror': True, 'status': 'REJECTED'}, {})
+                ({'eror': True}, {})
             ],
             [
                 Mock(
@@ -153,8 +153,8 @@ class TestSubscriptionService:
         assert subscription_service._get_payment_method(method) == expected
 
     @pytest.mark.parametrize('payment_cycle, expected', [
-        [PaymentCycle.MONTHLY, timedelta(days=30)],
-        [PaymentCycle.ANNUALLY, timedelta(days=365)],
+        [PaymentCycle.MONTHLY.value, timedelta(days=30)],
+        [PaymentCycle.ANNUALLY.value, timedelta(days=365)],
         ['invalid', timedelta(days=0)],
     ])
     def test__get_datetime_interval(self, payment_cycle, expected):

@@ -1,0 +1,43 @@
+{% from "components/loader/loader.html" import loader %}
+{% from "components/stepsController/stepsController.html" import steps_controller %}
+{% from "checkout/components/pricing.html" import pricing %}
+{% from "checkout/components/creditCard.html" import credit_card %}
+{% set initialStep = 0 %}
+{% set steps = "pricing, creditCard" %}
+{% set globalSteps = "globalStepsController" %}
+{% extends "layout/base.html" %}
+
+{% block title %}
+<title> Check Out </title>
+<link rel="stylesheet" href="/static/css/signup_form.css">
+<link rel="stylesheet" href="/static/css/admin/course/create.css">
+{% endblock %}
+
+{% block body %}
+<input id="{{globalSteps}}" class="d-none"/>
+<div class="d-flex flex-column mx-5 mt-2 content">
+    <div class="d-flex justify-content-between">
+        <h1>Add Check Out</h1>
+    </div>
+    <div id="steps" class="mt-4">
+        <div id="pricing" class="d-none">
+            <input type="hidden" id="subscription-type-id" value="{{ subscription_type_id }}">
+            {{ pricing(1, globalSteps, subscription_types, subscription_type_id) }}
+        </div>
+        <div id="creditCard" class="d-none h-full">
+            <form id="creditCardForm">
+                {{ credit_card(2) }}
+            </form>
+        </div>
+    </div>
+    <div id="stepsController" class="d-flex h-full align-items-end w-full">
+        {{ steps_controller(initialStep, steps, globalSteps) }}
+    </div>
+</div>
+
+<script src="/static/js/utils/authorizer.js"></script>
+<script>
+    let subscriptionType = null;
+    authorizer([UserTypes.ADMIN, UserTypes.TEACHER, UserTypes.STUDENT]);
+</script>
+{% endblock %}

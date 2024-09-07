@@ -1,4 +1,4 @@
-{% macro priceTable(subscription_types) %}
+{% macro priceTable(subscription_types, is_redirect_price_table) %}
 <main class="mx-auto my-3 d-flex justify-content-center">
   <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
     {% for subscription_type in subscription_types %}
@@ -7,18 +7,55 @@
         <div class="card-header flex-fill mb-2">
           <h4 class="my-0 ">{{ subscription_type.name }}</h4>
         </div>
+
         <div class="card-body">
-            <h1 class="card-title pricing-card-title py-3">
-              ${{ "{:.2f}".format(subscription_type.price) }} 
-              {{ subscription_type.currency }}
+          <input type="hidden" class="subscription-type-id" value="{{ subscription_type.id }}">
+          <h1 class="card-title pricing-card-title py-3">
+            ${{ "{:.2f}".format(subscription_type.price) }} 
+            {{ subscription_type.currency }}
           </h1>
           
-          <button type="button" class="w-100 btn btn-lg btn-primary">Subscribe NOW!</button>
+          <button type="button" class="w-100 btn btn-lg btn-subscribe btn-outline-primary">Select Subscribe!</button>
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
 </main>
+<script>
 
+let is_redirect_price_table = "{{ is_redirect_price_table }}";
+
+let subscription_type_id = null;
+document.addEventListener('DOMContentLoaded', function() {
+  const buttons = document.querySelectorAll('.btn-subscribe');
+  
+  buttons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      selectSubscriptionTypeId(this);
+      if (is_redirect_price_table == "True"){
+        window.location.href = '/checkout/?subscription_type_id='+subscription_type_id;
+      }else{
+        const subscriptionTypeId = document.querySelector("#subscription-type-id");
+        subscriptionTypeId.value = subscription_type_id
+      }
+    });
+  });
+});
+function selectSubscriptionTypeId(_this) {
+  subscription_type_id = _this.parentNode.querySelector('.subscription-type-id').value.trim();
+  const buttons = document.querySelectorAll('.btn-subscribe');
+
+  // Remove btn-primary class from all buttons
+  buttons.forEach(function(btn) {
+    btn.classList.remove('btn-primary');
+    btn.classList.add('btn-outline-primary');
+  });
+  
+  // Add btn-primary class to clicked button
+  _this.classList.add('btn-primary');
+  _this.classList.remove('btn-outline-primary');
+}
+
+</script>
 {%- endmacro %}
