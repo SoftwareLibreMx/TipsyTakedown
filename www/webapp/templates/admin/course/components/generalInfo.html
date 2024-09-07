@@ -100,7 +100,12 @@
         }
 
         populateForm() {
-            const {name, description, long_description, thumbnail, id} = JSON.parse(`{{ course | tojson }}`);
+            const course = "{{  course | tojson if course else null }}";
+            if (!course) {
+                return;
+            }
+
+            const {name, description, long_description, thumbnail, id} = JSON.parse(course);
             document.querySelector("#name").value = name;
             document.querySelector("#description").value = description;
             document.querySelector("#long_description").value = long_description;

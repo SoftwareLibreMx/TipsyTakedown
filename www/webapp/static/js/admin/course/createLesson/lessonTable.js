@@ -108,6 +108,9 @@ export class LessonTable {
     }
 
     initialize() {
+        if(this.course === null) {
+            return;
+        }
         this.course.lessons.forEach(lesson => {
             const lessonElement = this.addLesson();
             
