@@ -44,6 +44,10 @@
 
         lessonTr.innerHTML = `
             <td>
+                <input id="lessonKey" 
+                    name="lesson_key" 
+                    type="hidden" 
+                    class="d-none">
                 <input id="lessonId" name="lesson_id" type="hidden" class="d-none">
                 <input id="lessonName" name="lesson_name" type="text" class="" placeholder="Lesson Name">
             </td>
@@ -77,14 +81,21 @@
         return [lessonTr, materialTr];
     };
 
-    const newMaterialTemplate = (material, ondragg, ondraggover) => {
+    const newMaterialTemplate = (lessonKey, material, ondragg, ondraggover) => {
         const materialTr = document.createElement("tr");
         materialTr.draggable = true;
         materialTr.ondragstart = ondragg;
         materialTr.ondragover = ondraggover;
 
         materialTr.innerHTML = `
-            <td>${material.id}</td>
+            <td>
+                <input id="materialId" 
+                    name="material_id_${lessonKey}"
+                    type="hidden" 
+                    value=${material.id}
+                    class="d-none">
+                ${material.id}
+            </td>
             <td>${material.name}</td>
         `;
 
