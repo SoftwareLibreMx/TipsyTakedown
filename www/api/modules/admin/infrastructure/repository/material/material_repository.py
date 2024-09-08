@@ -13,6 +13,11 @@ class MaterialRepository:
             return session.query(MaterialModel).filter_by(
                 id=material_id, deleted_at=None).first()
 
+    def get_by_ids(self, material_ids: list) -> list:
+        with Session(self.db_engine) as session:
+            return session.query(MaterialModel).filter(
+                MaterialModel.id.in_(material_ids)).all()
+
     def create(self, material: MaterialModel) -> MaterialModel:
         with Session(self.db_engine) as session:
             session.add(material)
