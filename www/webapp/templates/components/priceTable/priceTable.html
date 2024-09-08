@@ -1,21 +1,23 @@
 {% macro priceTable(subscription_types, is_redirect_price_table) %}
 <main class="mx-auto my-3 d-flex justify-content-center">
-  <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+  <div class="row row-cols-1 row-cols-md-1 row-cols-lg-2 mb-3 text-center">
     {% for subscription_type in subscription_types %}
-    <div class="flex-column card mb-4 rounded-3 shadow-sm">
-      <div class="d-flex align-content-centered flex-wrap">
-        <div class="card-header flex-fill mb-2">
-          <h4 class="my-0 ">{{ subscription_type.name }}</h4>
-        </div>
+    <div class="col">
+      <div class="card mb-4 rounded-3 shadow-sm flex-fill">
+        <div class="align-content-centered">
+          <div class="card-header mb-2">
+            <h4 class="my-0">{{ subscription_type.name }}</h4>
+          </div>
+          <div class="card-body">
+            <input type="hidden" class="subscription-type-id" value="{{ subscription_type.id }}">
+            <h1 class="card-title pricing-card-title py-3">
+              ${{ "{:.2f}".format(subscription_type.price) }} 
+              {{ subscription_type.currency }}
+            </h1>
+            <p class="py-3">{{ subscription_type.payment_cycle }}</p>
 
-        <div class="card-body">
-          <input type="hidden" class="subscription-type-id" value="{{ subscription_type.id }}">
-          <h1 class="card-title pricing-card-title py-3">
-            ${{ "{:.2f}".format(subscription_type.price) }} 
-            {{ subscription_type.currency }}
-          </h1>
-          
-          <button type="button" class="w-100 btn btn-lg btn-subscribe btn-outline-primary">Select Subscribe!</button>
+            <button type="button" class="w-100 btn btn-lg btn-subscribe btn-outline-primary">Select Subscribe!</button>
+          </div>
         </div>
       </div>
     </div>
