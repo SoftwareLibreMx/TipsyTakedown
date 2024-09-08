@@ -17,8 +17,11 @@ class CourseRepository:
         pagination: Optional[Pagination] = None
     ):
         with Session(self.db_engine) as session:
-            query = session.query(CourseModel).filter(
-                CourseModel.deleted_at.is_(None))
+            query = (session
+                     .query(CourseModel)
+                     .filter(CourseModel.deleted_at.is_(None))
+                     .order_by(CourseModel.updated_at.desc())
+                     )
 
             if filters:
                 query = process_filters(CourseModel, query, filters)

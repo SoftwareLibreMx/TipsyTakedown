@@ -3,12 +3,17 @@ from flask import (
     request, url_for, session
 )
 
+from shared.utils import abort
+from api.modules.course import application
+
+from .libs.utils.language import get_translations
+
 from .modules.admin import admin_router
 from .modules.auth import oauth_router
 from .modules.errors import error_router
 from .modules.video import video_router
 from .modules.checkout import checkout_router
-from .libs.utils.language import get_translations
+
 
 webapp = Blueprint('web', __name__)
 
@@ -25,7 +30,20 @@ def index():
         session['token'] = request.args.get('token')
         return redirect('/')
 
-    return render_template('index.html', translations=get_translations())
+    errors, courses = application.course.get_all(
+        filters={},
+        pagination={'page': 1, 'per_page': 10}
+    )
+
+    courses.extend(courses)
+    courses.extend(courses)
+
+    if errors:
+        abort(500)
+
+    return render_template('index.html',
+                           translations=get_translations(),
+                           courses=courses)
 
 
 @webapp.route('/change_language/<language>')
