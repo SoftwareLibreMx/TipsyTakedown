@@ -2,7 +2,8 @@
   "navbar":{
     "sign_up": "Sign in / Sign up",
     "sign_out": "Sign Out",
-    "profile": "Profile"
+    "profile": "Profile",
+    "checkout": "Subscribe"
   },
   "login":{
     "main_title": "Please fill the form",
