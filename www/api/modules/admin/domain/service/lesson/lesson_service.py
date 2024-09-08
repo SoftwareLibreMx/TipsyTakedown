@@ -10,7 +10,7 @@ class LessonService:
     def __init__(self, lesson_repository: LessonRepository):
         self.lesson_repository = lesson_repository
 
-    def get_or_create(
+    def update_or_create(
         self,
         lessons: dict | list[dict]
     ) -> tuple[Optional[str], Optional[str]]:
@@ -20,6 +20,7 @@ class LessonService:
         missing_lessons = []
         for index, lesson in enumerate(lessons):
             if lesson.get("id"):
+                self.lesson_repository.update(lesson)
                 continue
 
             lessons[index] = None

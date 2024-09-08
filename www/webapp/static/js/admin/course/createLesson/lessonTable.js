@@ -47,12 +47,26 @@ export class FormController {
 
         const lessons = [];
         lessonMap.get("lesson_name").forEach((name, index) => {
+            if (!name) {
+                alert("Lesson name is required");
+                return 'Error saving lessons';
+            }
+
+            const lessonKey = lessonMap.get("lesson_key")[index];
+            const materials = lessonMap.get(`material_id_${lessonKey}`);
+
+            if (!materials) {
+                alert(`At least one Material is required, remove or add a material to ${name}`);
+                return 'Error saving lessons';
+            }
+
             lessons.push({
                 id: lessonMap.get("lesson_id")[index],
                 name,
+                materials
             });
         });
-
+        
         const response = await fetch(`/api/admin/course/${this.course.id}`, {
             method: "PUT",
             headers: {
@@ -128,6 +142,10 @@ export class LessonTable {
             lessonElement.setInput("id", lesson.id);
             lessonElement.setInput("name", lesson.name);
             // TODO: Add material to lesson
+            
+            lesson.materials.forEach((material) => {
+                lessonElement.addMaterial(material);
+            });
         });
     }
 
@@ -172,6 +190,7 @@ export class Lesson {
     dragedElement = null;
 
     constructor(container, lessonTrElement, materialTrElement) {
+        this.key = self.crypto.randomUUID();
         this.container = container;
         this.materialContainer = materialTrElement.querySelector(
             "#materialsContainer"
@@ -198,6 +217,9 @@ export class Lesson {
             "click",
             this.selectMaterialCallback.bind(this)
         );
+
+        const lessonKey = this.lessonTrElement.querySelector("#lessonKey");
+        lessonKey.value = this.key;
     }
 
     removeLesson() {
@@ -206,32 +228,27 @@ export class Lesson {
     }
 
     selectMaterialCallback() {
-        const that = this;
         const materialSelector = globalThis.materialSelector;
 
-        materialSelector.setSaveCallback((material) => {
-            if (that.materialIds.has(material.id)) {
-                alert("Material already added");
-                return;
-            }
-
-            that.materialIds.add(material.id);
-            new MaterialTable(
-                that.materialTrElement,
-                that.newMaterialTemplate,
-                material,
-                that.startDrag.bind(that),
-                that.dragOver.bind(that)
-            );
-        });
+        materialSelector.setSaveCallback((material) => 
+            this.addMaterial(material));
     }
 
     addMaterial(material) {
-        const materialElement = document.createElement("div");
-        materialElement.style = "min-width: 50%;";
-        materialElement.innerHTML = this.container.newLessonTemplate(material);
+        if (this.materialIds.has(material.id)) {
+            alert("Material already added");
+            return;
+        }
 
-        this.materialTrElement.appendChild(materialElement);
+        this.materialIds.add(material.id);
+        new MaterialTable(
+            this.key,
+            this.materialTrElement,
+            this.newMaterialTemplate,
+            material,
+            this.startDrag.bind(this),
+            this.dragOver.bind(this)
+        );
     }
 
     setInput(key, value) {
@@ -268,7 +285,15 @@ export class Lesson {
 }
 
 export class MaterialTable {
-    constructor(container, newMaterialTemplate, material, startDrag, dragOver) {
+    constructor(
+        lessonKey,
+        container,
+        newMaterialTemplate,
+        material,
+        startDrag,
+        dragOver
+    ) {
+        this.lessonKey = lessonKey;
         this.container = container.querySelector("#materialsContainer");
 
         this.newMaterialTemplate = newMaterialTemplate;
@@ -287,7 +312,7 @@ export class MaterialTable {
 
     addMaterial(material, startDrag, dragOver) {
         this.container.appendChild(this.newMaterialTemplate(
-            material, startDrag, dragOver
+            this.lessonKey, material, startDrag, dragOver
         ));
     }
 }

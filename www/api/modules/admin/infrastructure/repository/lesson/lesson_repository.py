@@ -27,3 +27,18 @@ class LessonRepository:
         with Session(self.db_engine) as session:
             return session.query(LessonModel).filter(
                 LessonModel.id.in_(lesson_ids)).all()
+
+    def update(self, lesson: dict):
+        with Session(self.db_engine) as session:
+            lesson_db = session.query(LessonModel).get(lesson.get('id'))
+
+            if not lesson_db:
+                return None
+
+            lesson_db.name = lesson.get('name', lesson_db.name)
+            lesson_db.materials = lesson.get('materials', lesson_db.materials)
+            lesson_db.is_active = lesson.get('is_active', lesson_db.is_active)
+
+            session.commit()
+            session.refresh(lesson_db)
+            return lesson_db
