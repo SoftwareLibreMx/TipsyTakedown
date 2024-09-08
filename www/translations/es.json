@@ -2,7 +2,8 @@
   "navbar": {
     "sign_up": "Iniciar sesión / Registrarse",
     "sign_out": "Cerrar sesión",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "checkout": "Suscribete"
   },
   "login":{
     "main_title": "Por favor completa el formulario",

@@ -19,9 +19,12 @@
         <h1>{{ video.name }}</h1>
         <h6>{{ video.description }}</h6>
     </div>
+    <div class="h4">
+      <a class="mx-4" href="/checkout">{{ translations['navbar']['checkout']}}!</a>
+    </div>
   </main>
   <sidebar class="sidebar col-sm-12 col-md-12 col-lg-4 col-2">
-        <h4 class="mb-4">List of next lessons</h4>
+        <h4 class="mb-4 mx-3">List of next lessons</h4>
         {{ lessonItem() }}
         {{ lessonItem() }}
         {{ lessonItem() }}
