@@ -1,6 +1,7 @@
 from ..minio import MinioService
 
 from api.libs.domain.entity import MaterialModel, MaterialType
+from api.libs.utils import as_dict
 
 from api.modules.admin.infrastructure.repository import MaterialRepository
 from api.modules.admin.domain.dto import MaterialResponseDTO
@@ -31,6 +32,15 @@ class MaterialService:
         material_response.urls = self._get_file_urls(material)
 
         return None, material_response
+
+    def get_by_ids(self, material_ids: list[str]) -> dict[str, dict]:
+        materials = self.material_repository.get_by_ids(material_ids)
+
+        material_map = {}
+        for material in materials:
+            material_map[material.id] = as_dict(material)
+
+        return material_map
 
     def _get_file_urls(self, material: MaterialModel) -> list[str]:
         locations = {

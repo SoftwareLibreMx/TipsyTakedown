@@ -142,6 +142,10 @@ export class LessonTable {
             lessonElement.setInput("id", lesson.id);
             lessonElement.setInput("name", lesson.name);
             // TODO: Add material to lesson
+            
+            lesson.materials.forEach((material) => {
+                lessonElement.addMaterial(material);
+            });
         });
     }
 
@@ -224,33 +228,27 @@ export class Lesson {
     }
 
     selectMaterialCallback() {
-        const that = this;
         const materialSelector = globalThis.materialSelector;
 
-        materialSelector.setSaveCallback((material) => {
-            if (that.materialIds.has(material.id)) {
-                alert("Material already added");
-                return;
-            }
-
-            that.materialIds.add(material.id);
-            new MaterialTable(
-                this.key,
-                that.materialTrElement,
-                that.newMaterialTemplate,
-                material,
-                that.startDrag.bind(that),
-                that.dragOver.bind(that)
-            );
-        });
+        materialSelector.setSaveCallback((material) => 
+            this.addMaterial(material));
     }
 
     addMaterial(material) {
-        const materialElement = document.createElement("div");
-        materialElement.style = "min-width: 50%;";
-        materialElement.innerHTML = this.container.newLessonTemplate(material);
+        if (this.materialIds.has(material.id)) {
+            alert("Material already added");
+            return;
+        }
 
-        this.materialTrElement.appendChild(materialElement);
+        this.materialIds.add(material.id);
+        new MaterialTable(
+            this.key,
+            this.materialTrElement,
+            this.newMaterialTemplate,
+            material,
+            this.startDrag.bind(this),
+            this.dragOver.bind(this)
+        );
     }
 
     setInput(key, value) {

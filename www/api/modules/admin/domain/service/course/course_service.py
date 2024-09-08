@@ -69,7 +69,7 @@ class CourseService:
             return "Course not found", None
 
         if req_course.get("lessons"):
-            error, lesson_ids = self.lesson_service.get_or_create(
+            error, lesson_ids = self.lesson_service.update_or_create(
                 req_course.get("lessons")
             )
 
@@ -95,15 +95,15 @@ class CourseService:
 
         course.lessons = self.lesson_service.get_by_ids(course.lessons)
 
-        # materials = []
-        # for lesson in course.lessons:
-        #     materials.extend(lesson.materials)
+        materials = []
+        for lesson in course.lessons:
+            materials.extend(lesson.get('materials', []))
 
-        # materials = self.material_service.get_by_ids(materials)
+        materials = self.material_service.get_by_ids(materials)
 
-        # for lesson in course.lessons:
-        #     lesson.materials = [
-        # material for material in materials if material.id in
-        # lesson.materials]
+        for lesson in course.lessons:
+            lesson['materials'] = [
+                materials[material_id] for material_id in lesson['materials']
+            ]
 
         return None, as_dict(course)
