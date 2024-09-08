@@ -6,7 +6,9 @@ from api.modules.course.infrastructure.controllers import (
     course_api, material_api
 )
 from api.modules.payments.infraestructure.controllers import payment_api
-from api.modules.payments.infraestructure.controllers.subscription_type import subscription_type_api
+from api.modules.payments.infraestructure.controllers.subscription_type import (
+    subscription_type_api
+)
 
 api = Blueprint('api', __name__)
 
