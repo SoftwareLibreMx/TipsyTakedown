@@ -24,9 +24,9 @@
                     <div class="input-group">
                         <input type="text" class="form-control" id="card-number" placeholder="Card Number" required>
                         <div class="input-group-append card-icons">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="MasterCard">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo_2018.svg" alt="Amex">
+                            <img src="/static/img/svg/visa-logo.svg" alt="Visa">
+                            <img src="/static/img/svg/mastercard-logo.svg" alt="MasterCard">
+                            <img src="/static/img/svg/amex-logo.svg" alt="Amex">
                         </div>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                 <p id="summary-subscription-currency" class="form-control-plaintext">USD</p>
             </div>
             <button type="button" class="btn btn-secondary" onclick="showStep1()">Back</button>
-            <button type="submit" id="btn-confirm-and-pay" class="btn btn-success">Confirm and Pay</button>
+            <button type="submit" id="btn-confirm-and-pay" class="btn btn-success float-end">Confirm and Pay</button>
             <div id="loader" class="d-flex d-none">
                 {{ loader() }}
             </div>
@@ -143,9 +143,12 @@
         if (createPayment) {
             return;
         }
-        createPayment = true;
-        document.getElementById('loader').classList.remove('d-none');
-        submitPayment();
+        
+        if (confirm("Are you sure you want to confirm and pay?")) {
+            createPayment = true;
+            document.getElementById('loader').classList.remove('d-none');
+            submitPayment();
+        }
     });
     
     async function submitPayment(){
