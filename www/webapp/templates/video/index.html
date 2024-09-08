@@ -1,4 +1,5 @@
 {% from "components/videoPlayer/videoPlayer.html" import videoPlayer %}
+{% from "components/videoPlayer/lessonItem.html" import lessonItem %}
 
 {% extends 'layout/base.html' %}
 
@@ -7,17 +8,38 @@
 {% endblock %}
 
 {% block body %}
-<div class="mx-5">
-    <div class="d-flex flex-grow flex-row">
-        <div>
-            {{ videoPlayer([video_src]) }}
-        </div>
-        <div class="">
-            List of next lessons
-        </div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.6.8/dist/plyr.css" />
+<link rel="stylesheet" href="/static/css/video_player.css">
+<div class="row row row-cols-xs-6 row-cols-sm-2 row-cols-md-4">
+  <main class="main-content col-sm-12 col-md-12 col-lg-8 col-10">
+    <div class="custom-player mx-2">
+        {{ videoPlayer([video_src]) }}
     </div>
-
-    <h1>{{ video.name }}</h1>
+    <div class="px-4">
+        <h1>{{ video.name }}</h1>
+        <h6>{{ video.description }}</h6>
+    </div>
+  </main>
+  <sidebar class="sidebar col-sm-12 col-md-12 col-lg-4 col-2">
+        <h4 class="mb-4">List of next lessons</h4>
+        {{ lessonItem() }}
+        {{ lessonItem() }}
+        {{ lessonItem() }}
+        {{ lessonItem() }}
+         Add more video items here 
+    </sidebar>
 </div>
+<script>
+    // JavaScript to handle video switching
+    document.querySelectorAll('.video-item').forEach(item => {
+      item.addEventListener('click', function () {
+        const videoId = this.getAttribute('data-video-id');
+        document.getElementById('video-player').src = `https://www.youtube.com/embed/${videoId}`;
+      });
+    });
+    const player = new Plyr('#player');
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/plyr@3.6.8/dist/plyr.min.js"></script>
+  <!-- source https://github.com/sampotts/plyr -->
 {% endblock %}
 

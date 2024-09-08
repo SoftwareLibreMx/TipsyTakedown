@@ -1,0 +1,20 @@
+{% macro lessonItem(item = None) %}
+<div class="row row-lesson-item">
+  <div class="col-4 col-xs-6 col-sm-3 col-md-3" style="min-width: 60px;">
+    <a href="#">
+      <div class="video-item" data-video-id="dQw4w9WgXcQ">
+        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" 
+        class="img-thumbnail video-thumbnail" alt="Video 1 Thumbnail"/>
+      </div>
+    </a>
+  </div>
+  <div class="col-8 col-xs-6 col-sm-9 col-md-9">
+      <div class="video-item-title">
+        Never Gonna Give You Up
+      </div>
+      <div class="video-item-description">
+        short description
+      </div>
+  </div>
+</div>
+{%- endmacro %}
