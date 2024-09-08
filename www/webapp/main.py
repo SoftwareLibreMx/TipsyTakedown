@@ -10,18 +10,20 @@ from .libs.utils.language import get_translations
 
 from .modules.admin import admin_router
 from .modules.auth import oauth_router
+from .modules.checkout import checkout_router
+from .modules.course import course_router
 from .modules.errors import error_router
 from .modules.video import video_router
-from .modules.checkout import checkout_router
 
 
 webapp = Blueprint('web', __name__)
 
 webapp.register_blueprint(admin_router, url_prefix='/admin')
 webapp.register_blueprint(oauth_router, url_prefix='/auth')
+webapp.register_blueprint(checkout_router, url_prefix='/checkout')
+webapp.register_blueprint(course_router, url_prefix='/course')
 webapp.register_blueprint(error_router, url_prefix='/error')
 webapp.register_blueprint(video_router, url_prefix='/video')
-webapp.register_blueprint(checkout_router, url_prefix='/checkout')
 
 
 @webapp.route('/')
