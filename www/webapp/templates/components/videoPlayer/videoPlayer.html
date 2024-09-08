@@ -1,13 +1,6 @@
 {% macro videoPlayer(sources) %}
-<video
-    id="my-video"
-    class="video-js"
-    controls
-    preload="auto"
-    width="1240"
-    height="664"
-    data-setup="{}"
->
+<video id="player" playsinline controls preload="auto"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
     {%- for source in sources %}
         <source src="{{source}}" type="video/mp4" />
     {%- endfor %}
@@ -20,7 +13,4 @@
         </a>
     </p>
 </video>
-
-<script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
-<link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
 {%- endmacro %}
