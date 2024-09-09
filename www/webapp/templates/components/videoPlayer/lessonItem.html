@@ -1,19 +1,19 @@
-{% macro lessonItem(item = None) %}
+{% macro lessonItem(item = None, course_id='') %}
 <div class="row row-lesson-item">
   <div class="col-4 col-xs-6 col-sm-3 col-md-3" style="min-width: 60px;">
-    <a href="#">
+    <a href="/course/{{course_id}}/material/{{item.id}}">
       <div class="video-item" data-video-id="dQw4w9WgXcQ">
-        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" 
-        class="img-thumbnail video-thumbnail" alt="Video 1 Thumbnail"/>
+        <img src="/static/img/svg/filetype-{{ item.material_type|lower }}.svg" 
+        class="img-thumbnail video-thumbnail" alt="Thumbnail"/>
       </div>
     </a>
   </div>
   <div class="col-8 col-xs-6 col-sm-9 col-md-9">
       <div class="video-item-title">
-        Never Gonna Give You Up
+        {{ item.get('name', 'Lesson Name') }}
       </div>
       <div class="video-item-description">
-        short description
+        {{ item.get('description', 'Lesson description') }}
       </div>
   </div>
 </div>

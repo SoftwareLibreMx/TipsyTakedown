@@ -19,11 +19,9 @@ def course_material(user, course_id, material_id):
 
     if errors or not course_detail:
         abort(404)
-
     for lesson in course_detail.get('lessons', []):
-        print(lesson)
-        for meterial in lesson.get('materials', []):
-            if str(meterial.get('id', None)) == material_id:
+        for material in lesson.get('materials', []):
+            if str(material.get('id', None)) == material_id:
                 errors, video = m_application.get_by_id(material_id)
                 return render_template(f'{TEMPLETE_DIR}/material.html',
                                        material=video,

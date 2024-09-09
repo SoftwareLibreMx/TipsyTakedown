@@ -22,11 +22,11 @@
   </main>
   <sidebar class="sidebar col-sm-12 col-md-12 col-lg-4 col-2">
         <h4 class="mb-4">List of next lessons</h4>
-        {{ lessonItem() }}
-        {{ lessonItem() }}
-        {{ lessonItem() }}
-        {{ lessonItem() }}
-         Add more video items here 
+        {% for lesson in course.get('lessons', []) %}
+          {% for material in lesson.get('materials', []): %}
+            {{ lessonItem(material, course.get('id','')) }}
+          {%- endfor %}
+        {%- endfor %}
     </sidebar>
 </div>
 <script>
