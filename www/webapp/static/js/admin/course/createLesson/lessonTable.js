@@ -85,7 +85,8 @@ export class FormController {
             alert("Error saving lessons");
             return "Error saving lessons";
         }
-
+        
+        sessionStorage.removeItem("course");
         window.location.href = `/admin/`;
     }
 
@@ -144,7 +145,7 @@ export class LessonTable {
     }
 
     initialize() {
-        if (this.course === null) {
+        if (this.course === null || this.course.lessons.length === 0) {
             return;
         }
         this.course.lessons.forEach((lesson) => {
@@ -190,8 +191,6 @@ export class LessonTable {
             }
 
             const lesson = await response.json();
-
-            console.log(lesson);
 
             const lessonElement = this.addLesson();
 
