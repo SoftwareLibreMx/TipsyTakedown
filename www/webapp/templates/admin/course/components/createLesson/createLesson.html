@@ -11,10 +11,10 @@
 
     <div class="d-flex justify-content-center mb-2">
         <a id="addLesson" class="btn btn-secondary mx-1">New Lesson</a>
-        <button id="selectLesson" class="btn btn-success mx-1" data-bs-toggle="modal"
+        <a id="selectLesson" class="btn btn-success mx-1" data-bs-toggle="modal"
             data-bs-target="#selectLessonModal">
             Select Existing Lesson
-        </button>
+        </a>
     </div>
 
     <form id="lessonForm" class="d-flex justify-content-center mt-5">
@@ -101,8 +101,8 @@
 
         return materialTr;
     }
-
-    const course = "{{ course }}" !== "None" ? `{{ course | tojson if course else '{}' }}` : null;
+    
+    const course = "{{ course }}" !== "" ? `{{ course | tojson if course else '{}' }}` : null;
 
     new LessonTable(
         "{{step_number}}", newLessonTemplate, newMaterialTemplate,

@@ -23,6 +23,10 @@ class LessonRepository:
             return session.query(LessonModel).filter(
                 LessonModel.name.ilike(f'%{query}%')).all()
 
+    def get_by_id(self, lesson_id: str):
+        with Session(self.db_engine) as session:
+            return session.query(LessonModel).get(lesson_id)
+
     def get_by_ids(self, lesson_ids: list[str]):
         with Session(self.db_engine) as session:
             return session.query(LessonModel).filter(

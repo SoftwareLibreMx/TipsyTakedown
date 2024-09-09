@@ -2,13 +2,17 @@ from typing import Optional
 
 from api.libs.utils import as_dict
 
+from api.modules.admin.domain.service.material import MaterialService
 from api.modules.admin.infrastructure.repository import LessonRepository
 from api.modules.admin.domain.entity import LessonModel
 
 
 class LessonService:
-    def __init__(self, lesson_repository: LessonRepository):
+    def __init__(self,
+                 lesson_repository: LessonRepository,
+                 material_service: MaterialService):
         self.lesson_repository = lesson_repository
+        self.material_service = material_service
 
     def update_or_create(
         self,
@@ -56,6 +60,21 @@ class LessonService:
             })
 
         return lessons
+
+    def get_detail_by_id(self, lesson_id: str):
+        lesson_db = self.lesson_repository.get_by_id(lesson_id)
+
+        if not lesson_db:
+            return 'Lesson not found', None
+
+        material_map = self.material_service.get_by_ids(
+            lesson_db.materials
+        )
+
+        lesson_db.materials = [material_map.get(material_id)
+                               for material_id in lesson_db.materials]
+
+        return None, as_dict(lesson_db)
 
     def get_by_ids(self, lesson_ids: list[str]):
         lessons_db = self.lesson_repository.get_by_ids(lesson_ids)

@@ -45,17 +45,16 @@ def __init_classes() -> CourseService:
     if not MINIO_SERVICE:
         MINIO_SERVICE = MinioService(MINIO_REPOSITORY, [])
 
-    if not LESSON_REPOSITORY:
-        LESSON_REPOSITORY = LessonRepository(db_engine)
-
-    if not LESSON_SERVICE:
-        LESSON_SERVICE = LessonService(LESSON_REPOSITORY)
-
     if not MATERIAL_REPOSITORY:
         MATERIAL_REPOSITORY = MaterialRepository(db_engine)
 
     if not MATERIAL_SERVICE:
         MATERIAL_SERVICE = MaterialService(MATERIAL_REPOSITORY, MINIO_SERVICE)
+    if not LESSON_REPOSITORY:
+        LESSON_REPOSITORY = LessonRepository(db_engine)
+
+    if not LESSON_SERVICE:
+        LESSON_SERVICE = LessonService(LESSON_REPOSITORY, MATERIAL_SERVICE)
 
     if not COURSE_REPOSITORY:
         COURSE_REPOSITORY = CourseRepository(db_engine)
