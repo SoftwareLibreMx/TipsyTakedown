@@ -123,12 +123,18 @@ export class LessonTable {
         this.course = JSON.parse(courseStr || sessionStorage.getItem("course"));
 
         this.newLesson = document.querySelector("#addLesson");
+        this.selectLesson = document.querySelector("#selectLesson");
         this.container = document.querySelector("#lessonsContainer");
 
         this.newLessonTemplate = newLessonTemplate;
         this.newMaterialTemplate = newMaterialTemplate;
 
         this.newLesson.addEventListener("click", this.addLesson.bind(this));
+        this.selectLesson.addEventListener(
+            "click", 
+            this.selectLessonCallback.bind(this)
+        );
+
         this.stepsButton = new FormController(
             this.course,
             this.stepNumber,
@@ -146,7 +152,6 @@ export class LessonTable {
 
             lessonElement.setInput("id", lesson.id);
             lessonElement.setInput("name", lesson.name);
-            // TODO: Add material to lesson
             
             lesson.materials.forEach((material) => {
                 lessonElement.addMaterial(material);
@@ -166,6 +171,37 @@ export class LessonTable {
         this.container.appendChild(materialTrElement);
 
         return lesson;
+    }
+
+    selectLessonCallback() {
+        const lessonSelector = globalThis.lessonSelector;
+
+        lessonSelector.setSaveCallback(async (selectedLesson) => {
+            const response = await fetch(`/api/admin/lesson/${selectedLesson.id}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `${sessionStorage.getItem("token")}`,
+                },
+            });
+
+            if (!response.ok) {
+                alert("Error fetching lesson");
+                return;
+            }
+
+            const lesson = await response.json();
+
+            console.log(lesson);
+
+            const lessonElement = this.addLesson();
+
+            lessonElement.setInput("id", lesson.id);
+            lessonElement.setInput("name", lesson.name);
+
+            lesson.materials.forEach((material) => {
+                lessonElement.addMaterial(material);
+            })
+        });
     }
 
     startDrag(event) {
