@@ -7,6 +7,8 @@
 
 
     {{ input('name', 'Course Title') }}
+    {{ input('description', 'Enter short description') }}
+    {{ input('long_description', 'Enter long description') }}
 
     <div id="thumbnailButton" class="thumbnail mb-2">
         <div class="thumbnail-container">
@@ -24,10 +26,6 @@
 
         <img id="loadedThumbnail" src="" alt="Course Image" class="d-none">
     </div>
-
-    {{ input('description', 'Enter short description') }}
-    {{ input('long_description', 'Enter long description') }}
-
 
     <div class="d-none">
         {{ input('id', 'Course Title') }}
@@ -78,6 +76,7 @@
         initializeNextStep = false;
         creatingCourse = false;
         stepsController = null;
+        isEdit = false;
 
         constructor() {
             this.stepNumber = parseInt("{{ step_number }}");
@@ -92,7 +91,7 @@
                 this.addSaveBeforeNextStep.bind(this)
             );
 
-            this.isEdit = "{{ course }}" !== "None";
+            this.isEdit = "{{ course }}" !== "";
 
             if (this.isEdit) {
                 this.populateForm();
@@ -143,15 +142,17 @@
 
         async saveCourse() {
             const isCurrentStep = this.stepsController.isCurrentStep(this.stepNumber);
-            if (isCurrentStep || this.creatingCourse || this.courseId.value) {
+            if (isCurrentStep || this.creatingCourse) {
                 return;
             }
 
             this.nextStepButton.innerHTML = spinnerTemplate('');
 
             this.creatingCourse = true;
-            // TODO: if isEdit then updateCourseRequest else createCourseRequest
-            const response = await this.createCourseRequest();
+            const response = await (this.isEdit ?
+                this.updateCourseRequest() :
+                this.createCourseRequest()
+            );
 
             let body;
             try {
@@ -174,6 +175,7 @@
 
             this.nextStepButton.innerHTML = "Next Step";
             this.courseId.value = body.id;
+            sessionStorage.setItem('course', JSON.stringify(body));
         }
 
         createCourseRequest() {

@@ -45,6 +45,11 @@ export class FormController {
             lessonMap.set(key, [value]);
         }
 
+        if (!lessonMap.has("lesson_name")) {
+            alert("At least one lesson is required");
+            return 'Error saving lessons';
+        }
+
         const lessons = [];
         lessonMap.get("lesson_name").forEach((name, index) => {
             if (!name) {
