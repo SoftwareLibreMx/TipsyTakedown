@@ -19,7 +19,6 @@ export class FormController {
         }
 
         this.stepsController = globalThis.stepsController;
-
         this.stepsController.runBeforeNextStep(this.onClickSave.bind(this));
         this.stepsController.runAfterNextStep(
             this.changeButtonIfCurrentStep.bind(this)
@@ -71,7 +70,9 @@ export class FormController {
                 materials
             });
         });
-        
+        if (this.course === undefined){
+            this.course = JSON.parse(sessionStorage.getItem("course"));
+        }
         const response = await fetch(`/api/admin/course/${this.course.id}`, {
             method: "PUT",
             headers: {
@@ -121,8 +122,7 @@ export class LessonTable {
         courseStr
     ) {
         this.stepNumber = parseInt(stepNumberTitle) - 1;
-        this.course = JSON.parse(courseStr || sessionStorage.getItem("course"));
-
+        this.course = JSON.parse(sessionStorage.getItem("course") || courseStr);
         this.newLesson = document.querySelector("#addLesson");
         this.selectLesson = document.querySelector("#selectLesson");
         this.container = document.querySelector("#lessonsContainer");
