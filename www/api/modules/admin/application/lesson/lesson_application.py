@@ -38,3 +38,9 @@ def get_detail_by_id(lesson_id: str):
     lesson_service = __init_classes()
 
     return lesson_service.get_detail_by_id(lesson_id)
+
+
+def get_by_ids(lesson_ids: list[str]):
+    lesson_service = __init_classes()
+
+    return lesson_service.get_by_ids(lesson_ids)
