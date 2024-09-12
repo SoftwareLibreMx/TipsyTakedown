@@ -2,10 +2,12 @@ from flask import (
     Blueprint, render_template, redirect,
     request, url_for, session
 )
+from urllib.parse import urljoin
 
 from shared.utils import abort
 from api.modules.course import application
-
+# www/api/modules/admin/application/lesson/lesson_application.py
+from api.modules.admin.application.lesson.lesson_application import get_by_ids
 from .libs.utils.language import get_translations
 
 from .modules.admin import admin_router
@@ -36,16 +38,26 @@ def index():
         filters={},
         pagination={'page': 1, 'per_page': 10}
     )
-
-    courses.extend(courses)
-    courses.extend(courses)
+    base_url = request.url_root
+    courses_materials = []
+    for course in courses:
+        if course['lessons']:
+            lessons = get_by_ids(course['lessons'])
+            for lesson in lessons:
+                if lesson['materials']:
+                    courses_materials.append({
+                        'course_id': course.get('id'),
+                        'course_name': course.get('name'),
+                        'course_thumbnail': urljoin(base_url, course.get('thumbnail')),
+                        'material_id': lesson['materials'][0],
+                    })
 
     if errors:
         abort(500)
 
     return render_template('index.html',
                            translations=get_translations(),
-                           courses=courses)
+                           courses=courses_materials)
 
 
 @webapp.route('/change_language/<language>')
