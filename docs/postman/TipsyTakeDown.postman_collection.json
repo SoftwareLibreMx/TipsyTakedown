@@ -1,0 +1,225 @@
+{
+	"info": {
+		"_postman_id": "e2c2dd9c-e4f4-4dbf-b18a-deb6030568fd",
+		"name": "TipsyTakeDown",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3735308"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Video",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Test 1",
+											"type": "text"
+										},
+										{
+											"key": "teacher_id",
+											"value": "c38cacb1-fb88-4df1-85f5-a2e3baabf330",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "this is an example",
+											"type": "text"
+										},
+										{
+											"key": "video_file",
+											"type": "file",
+											"src": "/Users/user/Desktop/IMG_2524.MOV"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:8000/api/video/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"video",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"new name\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/api/video/373e315d-acd6-4539-b9b7-e327f53ff3b0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"video",
+										"373e315d-acd6-4539-b9b7-e327f53ff3b0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get video by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/api/video/547b3fc5-3254-4658-8b5b-596dfc9f3057",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"video",
+										"547b3fc5-3254-4658-8b5b-596dfc9f3057"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/api/video/4a360bde-77fb-4cc4-a1a2-583895e3ecb4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"video",
+										"4a360bde-77fb-4cc4-a1a2-583895e3ecb4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Course",
+					"item": [
+						{
+							"name": "Create course",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiZTUxZTNhYjctNjQ4Yy00NjNmLTk2MGMtMzVlZjI4MWY1NjdkIiwidXNlcl90eXBlIjoiVEVBQ0hFUiIsImVtYWlsIjoiYWxmb25zb2N2dUBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiVGVzdCIsInN1cm5hbWUiOiJ0ZXN0IiwiYXZhdGFyIjpudWxsfSwiaXNzIjpudWxsLCJleHAiOjE3MjUxMjYzNzF9.aGFl3zJdI0_zB7U0ziTiAjXhA7JHH5TWSAp1PXm97eE",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"New Course\",\n    \"thumbnail\": \"https://file.com\",\n    \"description\": \"This is my description\",\n    \"long_description\": \"my long description\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/admin/course",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"course"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "payments",
+			"item": [
+				{
+					"name": "Pay Subscription",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMWY0ZmUxM2EtZGRkMS00YjhjLThjMDgtMDRmNTFlNWQ1NjNmIiwidXNlcl90eXBlIjoiVXNlclR5cGUuU1RVREVOVCIsImVtYWlsIjoiYWxmb25zb2N2dUBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiQWxmb25zbyIsInN1cm5hbWUiOiJWaWxsYWxvYm9zIiwiYXZhdGFyIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jTDZPR0JMN2lVMk1qTjNOZjBjcGpaV3RjVl96dXViUHFGcmtzQkR3MGVtNThKaXVMR3NFZz1zMTAwIn0sImlzcyI6bnVsbCwiZXhwIjoxNzI0MzgwOTAwfQ.s4rDNQMPA_5N9jx-ubar68LsfscIrynDZLYgoq7j7Wg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"subscription_type_id\": \"160608e7-4e27-4584-8246-64cecf220cf3\",\n    \"payment_method\": \"CREDIT_CARD\",\n    \"card\": {\n        \"card_number\": \"5474925432670366\",\n        \"expiration_date\": \"11/25\",\n        \"cvv\": \"123\",\n        \"card_holder_name\": \"APRO\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/payment/subscription",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"payment",
+								"subscription"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": []
+		}
+	]
+}
