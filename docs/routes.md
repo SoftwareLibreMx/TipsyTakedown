@@ -2,47 +2,39 @@ GET '/'
 GET '/health'
 GET '/change_language/<language>'
 
-POST 'admin/course'
-GET 'admin/course/<course_id>'
-PUT 'admin/course/<course_id>'
+GET 'admin/'
+POST 'api/admin/course'
+GET 'api/admin/course/<course_id>'
+DELETE 'api/admin/course/<course_id>'
+PUT 'api/admin/course/<course_id>'
 
-GET 'admin/lesson'
-GET 'admin/lesson/<lesson_id>'
+GET 'api/admin/material'
+GET 'api/admin/material/<material_id>'
+POST 'api/admin/material/'
+PATCH 'api/admin/material/<material_id>'
+DELETE 'api/admin/material/<material_id>'
 
-GET 'admin/material'
-GET 'admin/material/<material_id>'
-POST 'admin/material/'
-PATCH 'admin/material/<material_id>'
-DELETE 'admin/material/<material_id>'
+GET 'api/admin/lesson'
+GET 'api/admin/lesson/<lesson_id>'
 
-POST 'auth/sign_up'
-POST 'auth/sign_in'
-POST 'auth/check_email'
+POST 'api/auth/sign_up'
+POST 'api/auth/sign_in'
+POST 'api/auth/check_email'
 
-POST 'course/'
-GET 'course/'
 
-POST 'material/'
-GET 'material/'
+POST 'api/payment/'
 
-POST 'payment/'
-
-GET 'subscription_type/<subscription_type_id>'
-GET 'subscription_type/'
-
-GET 'admin_router/'
-GET 'admin_router/course/new'
-GET 'admin_router/course/<course_id>/edit'
-GET 'admin_router/video/uploader'
-
-GET "auth/login"
-GET "auth/logout"
-
-GET "auth/google/"
-GET "auth/google/callback"
+GET 'api/subscription_type/<subscription_type_id>'
 
 GET 'checkout/'
 
+GET "api/auth/sign_in"
+POST "api/auth/sign_uo"
+POST "api/auth/check_email"
+GET "auth/logout"
+
+GET "auth/google"
+GET "auth/google/callback"
+
 GET 'course/<course_id>/material/<material_id>'
 
-GET 'video/<video_id>'
