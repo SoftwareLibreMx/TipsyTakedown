@@ -1,6 +1,6 @@
 import os
+import json
 
-from flask import url_for
 from dotenv import load_dotenv
 
 from .utils.db import get_db_engine
@@ -31,13 +31,16 @@ os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = os.getenv(
 google_oauth_credentials = {
     "cs_file": os.getenv(
         "GOOGLE_CLIEN_SECRET_NAME", "client_secret.json"),
-    "redirect_uri": (
-        lambda: url_for("web.oauth.google.callback", _external=True)),
     "scopes": os.getenv(
         "GOOGLE_SCOPES",
         "https://www.googleapis.com/auth/userinfo.profile,https://www.googleapis.com/auth/userinfo.email"
     ).split(",")
 }
+
+if os.path.exists(google_oauth_credentials["cs_file"]):
+    with open(google_oauth_credentials["cs_file"], "r") as f:
+        google_oauth_credentials["redirect_uri"] = json.loads(f.read()).get(
+            "web", {}).get("redirect_uris", [""])[0]
 
 mercadopago_credentials = {
     "hidde_user_email_salt": os.getenv(
