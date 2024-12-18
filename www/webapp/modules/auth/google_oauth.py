@@ -19,7 +19,7 @@ def login():
     flow = InstalledAppFlow.from_client_secrets_file(
         google_oauth_credentials.get("cs_file"),
         scopes=google_oauth_credentials.get("scopes", []),
-        redirect_uri=google_oauth_credentials.get("redirect_uri", lambda: "")()
+        redirect_uri=google_oauth_credentials.get("redirect_uri", "")
     )
 
     authorization_url, state = flow.authorization_url(
@@ -70,8 +70,7 @@ def callback():
     flow = InstalledAppFlow.from_client_secrets_file(
         google_oauth_credentials.get("cs_file"),
         scopes=google_oauth_credentials.get("scopes", []),
-        redirect_uri=google_oauth_credentials.get(
-            "redirect_uri", lambda: "")(),
+        redirect_uri=google_oauth_credentials.get("redirect_uri", ""),
         state=session["state"]
     )
 
