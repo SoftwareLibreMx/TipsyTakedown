@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "e2c2dd9c-e4f4-4dbf-b18a-deb6030568fd",
+		"_postman_id": "1f8fc471-5cd3-41b8-82ea-1f568455c6a1",
 		"name": "TipsyTakeDown",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "3735308"
+		"_exporter_id": "2588971"
 	},
 	"item": [
 		{
@@ -16,7 +16,13 @@
 							"name": "create",
 							"request": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "formdata",
 									"formdata": [
@@ -38,17 +44,15 @@
 										{
 											"key": "video_file",
 											"type": "file",
-											"src": "/Users/user/Desktop/IMG_2524.MOV"
+											"src": "/Users/alfonso/Desktop/IMG_2524.MOV"
 										}
 									]
 								},
 								"url": {
-									"raw": "http://localhost:8000/api/video/",
-									"protocol": "http",
+									"raw": "{{host}}/api/video/",
 									"host": [
-										"localhost"
+										"{{host}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"video",
@@ -73,12 +77,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8000/api/video/373e315d-acd6-4539-b9b7-e327f53ff3b0",
-									"protocol": "http",
+									"raw": "{{host}}/api/video/373e315d-acd6-4539-b9b7-e327f53ff3b0",
 									"host": [
-										"localhost"
+										"{{host}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"video",
@@ -94,12 +96,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8000/api/video/547b3fc5-3254-4658-8b5b-596dfc9f3057",
-									"protocol": "http",
+									"raw": "{{host}}/api/video/547b3fc5-3254-4658-8b5b-596dfc9f3057",
 									"host": [
-										"localhost"
+										"{{host}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"video",
@@ -115,12 +115,10 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8000/api/video/4a360bde-77fb-4cc4-a1a2-583895e3ecb4",
-									"protocol": "http",
+									"raw": "{{host}}/api/video/4a360bde-77fb-4cc4-a1a2-583895e3ecb4",
 									"host": [
-										"localhost"
+										"{{host}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"video",
@@ -142,18 +140,39 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiZTUxZTNhYjctNjQ4Yy00NjNmLTk2MGMtMzVlZjI4MWY1NjdkIiwidXNlcl90eXBlIjoiVEVBQ0hFUiIsImVtYWlsIjoiYWxmb25zb2N2dUBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiVGVzdCIsInN1cm5hbWUiOiJ0ZXN0IiwiYXZhdGFyIjpudWxsfSwiaXNzIjpudWxsLCJleHAiOjE3MjUxMjYzNzF9.aGFl3zJdI0_zB7U0ziTiAjXhA7JHH5TWSAp1PXm97eE",
+										"value": "{{authToken}}",
 										"type": "text"
 									}
 								],
 								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"New Course\",\n    \"thumbnail\": \"https://file.com\",\n    \"description\": \"This is my description\",\n    \"long_description\": \"my long description\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": " title1",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": " short description",
+											"type": "text"
+										},
+										{
+											"key": "long_description",
+											"value": " long description",
+											"type": "text"
+										},
+										{
+											"key": "id",
+											"value": " ",
+											"type": "text"
+										},
+										{
+											"key": "thumbnail",
+											"type": "file",
+											"src": "/Users/balam.palma/Downloads/FRASE.png"
 										}
-									}
+									]
 								},
 								"url": {
 									"raw": "{{host}}/api/admin/course",
@@ -168,8 +187,433 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Get course",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": " title1",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": " short description",
+											"type": "text"
+										},
+										{
+											"key": "long_description",
+											"value": " long description",
+											"type": "text"
+										},
+										{
+											"key": "id",
+											"value": " ",
+											"type": "text"
+										},
+										{
+											"key": "thumbnail",
+											"type": "file",
+											"src": "/Users/balam.palma/Downloads/FRASE.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/admin/course",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"course"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update course",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": " title1",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": " short description",
+											"type": "text"
+										},
+										{
+											"key": "long_description",
+											"value": " long description",
+											"type": "text"
+										},
+										{
+											"key": "id",
+											"value": " c78ae8f4-16ab-4518-976d-39d2cc483038",
+											"type": "text"
+										},
+										{
+											"key": "thumbnail",
+											"type": "file",
+											"src": "/Users/balam.palma/Downloads/FRASE.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/admin/course/c78ae8f4-16ab-4518-976d-39d2cc483038",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"course",
+										"c78ae8f4-16ab-4518-976d-39d2cc483038"
+									]
+								}
+							},
+							"response": []
 						}
 					]
+				},
+				{
+					"name": "Material",
+					"item": [
+						{
+							"name": "Create material",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "teacher_id",
+											"value": "e85f3cd0-b40b-4a3f-9867-79df7e60f4a9",
+											"type": "text"
+										},
+										{
+											"key": "material_type",
+											"value": "PDF",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "foo",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "description",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/Users/balam.palma/Downloads/dummy.pdf"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/admin/material/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"material",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update material",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "teacher_id",
+											"value": "e85f3cd0-b40b-4a3f-9867-79df7e60f4a9",
+											"type": "text"
+										},
+										{
+											"key": "material_type",
+											"value": "PDF",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "foo",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "description",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/Users/balam.palma/Downloads/dummy.pdf"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/admin/material/c376bb0a-67c9-47b4-8372-6ed4eaab2788",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"material",
+										"c376bb0a-67c9-47b4-8372-6ed4eaab2788"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search material",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/admin/material?query=foo",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"material"
+									],
+									"query": [
+										{
+											"key": "query",
+											"value": "foo"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Material",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/admin/material/c376bb0a-67c9-47b4-8372-6ed4eaab2788",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"material",
+										"c376bb0a-67c9-47b4-8372-6ed4eaab2788"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Material",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/admin/material/c376bb0a-67c9-47b4-8372-6ed4eaab2788",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"material",
+										"c376bb0a-67c9-47b4-8372-6ed4eaab2788"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Lesson",
+					"item": [
+						{
+							"name": "Get Lessons",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/admin/material/c376bb0a-67c9-47b4-8372-6ed4eaab2788",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"material",
+										"c376bb0a-67c9-47b4-8372-6ed4eaab2788"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Lesson",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/admin/lesson/c376bb0a-67c9-47b4-8372-6ed4eaab2788",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"lesson",
+										"c376bb0a-67c9-47b4-8372-6ed4eaab2788"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "admin",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Retrieve the token from the environment (simulating session.get)",
+									"let token = pm.environment.get(\"authToken\") || null;",
+									"",
+									"if (token) {",
+									"    // Add the token to the request header or cookies",
+									"    pm.request.headers.add({ key: \"Authorization\", value: `Bearer ${token}` });",
+									"    pm.request.headers.add({ key: \"Cookie\", value: `session=${token}` });",
+									"",
+									"    console.log(\"Token added to request:\", token);",
+									"} else {",
+									"    console.log(\"Token not found in session.\");",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/admin",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"admin"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -186,13 +630,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiMWY0ZmUxM2EtZGRkMS00YjhjLThjMDgtMDRmNTFlNWQ1NjNmIiwidXNlcl90eXBlIjoiVXNlclR5cGUuU1RVREVOVCIsImVtYWlsIjoiYWxmb25zb2N2dUBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiQWxmb25zbyIsInN1cm5hbWUiOiJWaWxsYWxvYm9zIiwiYXZhdGFyIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jTDZPR0JMN2lVMk1qTjNOZjBjcGpaV3RjVl96dXViUHFGcmtzQkR3MGVtNThKaXVMR3NFZz1zMTAwIn0sImlzcyI6bnVsbCwiZXhwIjoxNzI0MzgwOTAwfQ.s4rDNQMPA_5N9jx-ubar68LsfscIrynDZLYgoq7j7Wg",
+								"value": "{{authToken}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"subscription_type_id\": \"160608e7-4e27-4584-8246-64cecf220cf3\",\n    \"payment_method\": \"CREDIT_CARD\",\n    \"card\": {\n        \"card_number\": \"5474925432670366\",\n        \"expiration_date\": \"11/25\",\n        \"cvv\": \"123\",\n        \"card_holder_name\": \"APRO\"\n    }\n}",
+							"raw": "{\n    \"subscription_type_id\": \"8361c656-a59c-4d71-81b8-0198278413a4\",\n    \"payment_method\": \"CREDIT_CARD\",\n    \"card\": {\n        \"card_number\": \"5474925432670366\",\n        \"expiration_date\": \"11/25\",\n        \"cvv\": \"123\",\n        \"card_holder_name\": \"APRO\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -200,16 +644,85 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/payment/subscription",
-							"protocol": "http",
+							"raw": "{{host}}/api/payment/subscription",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"payment",
 								"subscription"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "checkout",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let cookieToken = pm.environment.get(\"authToken\");",
+									"if (cookieToken) {",
+									"    pm.request.headers.add({ key: \"Cookie\", value: `session=${cookieToken}` });",
+									"    console.log(\"Added session cookie:\", `session=${cookieToken}`);",
+									"} else {",
+									"    console.error(\"authToken is not set in the environment.\");",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/checkout/?token={{authToken}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"checkout",
+								""
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{authToken}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscription type",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/subscription_type/8361c656-a59c-4d71-81b8-0198278413a4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"subscription_type",
+								"8361c656-a59c-4d71-81b8-0198278413a4"
 							]
 						}
 					},
@@ -219,7 +732,370 @@
 		},
 		{
 			"name": "auth",
-			"item": []
+			"item": [
+				{
+					"name": "google",
+					"item": [
+						{
+							"name": "google",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/auth/google",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"auth",
+										"google"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "google callback",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/auth/google/callback?state=R5e7sBbptGImiv9wyqXjqCJYWHH1dY&code=4%2F0AeanS0aVr41Cq72eJvN2iglGA2U4u2CoEEaTvmsTDeNfauJoRYGS1ACYqR2Ysl876_wBxg&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"auth",
+										"google",
+										"callback"
+									],
+									"query": [
+										{
+											"key": "state",
+											"value": "R5e7sBbptGImiv9wyqXjqCJYWHH1dY"
+										},
+										{
+											"key": "code",
+											"value": "4%2F0AeanS0aVr41Cq72eJvN2iglGA2U4u2CoEEaTvmsTDeNfauJoRYGS1ACYqR2Ysl876_wBxg"
+										},
+										{
+											"key": "scope",
+											"value": "email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile"
+										},
+										{
+											"key": "authuser",
+											"value": "0"
+										},
+										{
+											"key": "prompt",
+											"value": "none"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "check email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"foo@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/check_email",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"check_email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sign in",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Save token to sessionStorage\", function () {",
+									"    let response = pm.response.json(); // Parse the response",
+									"    if (response.token) {",
+									"        // Save token to an environment variable",
+									"        pm.environment.set(\"authToken\", response.token);",
+									"",
+									"        // Simulate sessionStorage",
+									"        pm.environment.set(\"sessionStorage\", JSON.stringify({",
+									"            authToken: response.token",
+									"        }));",
+									"        console.log(\"Token saved to sessionStorage:\", response.token);",
+									"    } else {",
+									"        console.error(\"No token found in the response.\");",
+									"    }",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"foo@gmail.com\",\n    \"password\": \"123123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/sign_in",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"sign_in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sign in Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Save token to sessionStorage\", function () {",
+									"    let response = pm.response.json(); // Parse the response",
+									"    if (response.token) {",
+									"        // Save token to an environment variable",
+									"        pm.environment.set(\"authToken\", response.token);",
+									"",
+									"        // Simulate sessionStorage",
+									"        pm.environment.set(\"sessionStorage\", JSON.stringify({",
+									"            authToken: response.token",
+									"        }));",
+									"        console.log(\"Token saved to sessionStorage:\", response.token);",
+									"    } else {",
+									"        console.error(\"No token found in the response.\");",
+									"    }",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"foo@foo.com\",\n    \"password\": \"123123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/sign_in",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"sign_in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sign up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"foo@foo.com\",\n    \"password\": \"123123\",\n    \"given_name\": \"foo\",\n    \"surname\": \"foo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/sign_up",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"sign_up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/auth/logout",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "root",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "health check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/health",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "change language",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/change_language/en",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"change_language",
+						"en"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
