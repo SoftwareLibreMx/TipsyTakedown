@@ -91,3 +91,6 @@ class AuthService:
             return ['Error not found'], None
 
         return None, userc
+
+    def get_user_types(self) -> list:
+        return self.user_service.get_user_types()

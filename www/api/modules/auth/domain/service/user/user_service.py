@@ -68,3 +68,9 @@ class UserService:
             return error, None
 
         return None, UserCDTO.from_uc(user, user_cred)
+
+    def get_user_types(self):
+        user_types_enum = self.user_repository.get_user_types()
+        user_types = [user_type.value for user_type in user_types_enum]
+
+        return user_types

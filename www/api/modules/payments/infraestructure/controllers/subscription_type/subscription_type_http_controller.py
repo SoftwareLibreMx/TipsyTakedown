@@ -57,4 +57,4 @@ def create(user):
 def get_payment_cycles():
     payment_cycles = subscription_type_app.get_payment_cycles()
 
-    return Response(json.dumps(payment_cycles), status=200)
+    return Response(json.dumps({"payment_cycles": payment_cycles}), status=200)

@@ -56,3 +56,10 @@ def check_email():
         return Response(json.dumps({"errors": errors}), status=400)
 
     return Response(dataclass_to_json_dumps(userc), status=200)
+
+
+@auth_api.route('user_types', methods=['GET'])
+def get_user_types():
+    user_types = application.get_user_types()
+
+    return Response(json.dumps({"user_types": user_types}), status=200)
