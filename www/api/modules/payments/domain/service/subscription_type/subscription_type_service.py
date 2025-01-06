@@ -1,11 +1,15 @@
 from typing import List, Optional
 
+from api.libs.domain_entity import UserType
+
 from ...dto.subscription_type_dto import SubscriptionTypeDTO
 from ....infraestructure.repository.subscription_type import SubscriptionTypeRepository
 from ...entity import SubscriptionTypeModel
 
 
 class SubscriptionTypeService:
+    __valid_user_types = [UserType.ADMIN.value]
+
     def __init__(self, repository: SubscriptionTypeRepository):
         self.repository = repository
 
@@ -29,8 +33,13 @@ class SubscriptionTypeService:
         return subscription_types
 
     def create(self,
+               user,
                subscription_type_data: dict
-               ) -> tuple[List[str], Optional[SubscriptionTypeDTO]]:
+               ):
+
+        if user.get("user_type") not in self.__valid_user_types:
+            return "User is not authorized to create a subscription type", None
+
         error, subscription_type = SubscriptionTypeModel.from_dict(
             subscription_type_data)
 

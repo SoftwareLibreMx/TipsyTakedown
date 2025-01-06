@@ -30,11 +30,11 @@ def all():
 
 
 @subscription_type_api.route('', methods=['POST'])
-# @api_authorizer([UserType.ADMIN])
-def create():
+@api_authorizer([UserType.ADMIN])
+def create(user):
     data = request.get_json()
 
-    errors, subscription_type = subscription_type_app.create(data)
+    errors, subscription_type = subscription_type_app.create(user, data)
 
     if errors:
         return Response(json.dumps({"errors": errors}), status=404)
