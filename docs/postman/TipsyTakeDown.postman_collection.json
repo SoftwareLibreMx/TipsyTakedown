@@ -729,6 +729,34 @@
 					"response": []
 				},
 				{
+					"name": "Get Payment cycles",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/subscription_type/payment_cycles",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"subscription_type",
+								"payment_cycles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Subscription type",
 					"request": {
 						"auth": {

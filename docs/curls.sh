@@ -101,6 +101,10 @@ curl -X POST "$HOST/api/payment/subscription" \
 curl --location "$HOST/api/subscription_type/8361c656-a59c-4d71-81b8-0198278413a4" \
 	-H "Authorization: $AUTH_TOKEN" 
 
+# Subscription Type Payment cycles- Get
+curl --location "$HOST/api/subscription_type/payment_cycles" \
+	-H "Authorization: $AUTH_TOKEN" 
+
 # Subscription Type - post
 curl --location "$HOST/api/subscription_type" \
     -H "Authorization: $AUTH_TOKEN" 
