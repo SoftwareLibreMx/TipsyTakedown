@@ -51,3 +51,10 @@ def create(user):
             'is_active': subscription_type_dict.get('is_active')
         }, default=str
     ), status=201)
+
+
+@subscription_type_api.route('/payment_cycles', methods=['GET'])
+def get_payment_cycles():
+    payment_cycles = subscription_type_app.get_payment_cycles()
+
+    return Response(json.dumps(payment_cycles), status=200)

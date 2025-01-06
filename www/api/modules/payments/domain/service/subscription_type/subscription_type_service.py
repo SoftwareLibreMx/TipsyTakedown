@@ -55,3 +55,9 @@ class SubscriptionTypeService:
             return ['Failed to create subscription type'], None
 
         return None, subscription_type
+
+    def get_payment_cycles(self):
+        payment_cycles_enum = self.repository.get_payment_cycles()
+        payment_cycles = [cycle.value for cycle in payment_cycles_enum]
+
+        return payment_cycles

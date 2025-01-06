@@ -42,3 +42,9 @@ def create(user, subscription_type_data: dict) -> SubscriptionTypeDTO:
     subscription_type_service = __init_classes()
 
     return subscription_type_service.create(user, subscription_type_data)
+
+
+def get_payment_cycles() -> list[str]:
+    subscription_type_service = __init_classes()
+
+    return subscription_type_service.get_payment_cycles()

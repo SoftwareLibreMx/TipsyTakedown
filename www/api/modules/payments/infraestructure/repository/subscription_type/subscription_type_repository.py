@@ -5,6 +5,7 @@ from sqlalchemy.engine import Engine
 from typing import Optional
 
 from ....domain.entity import SubscriptionTypeModel
+from ....domain.entity import PaymentCycle
 
 
 class SubscriptionTypeRepository:
@@ -24,6 +25,9 @@ class SubscriptionTypeRepository:
                 FROM subscription_types
                 WHERE deleted_at IS NULL AND is_active = TRUE
             ''')).fetchall()
+
+    def get_payment_cycles(self):
+        return PaymentCycle
 
     def create(self, subscription_type: SubscriptionTypeModel) -> dict:
         with Session(self.db_engine) as session:
