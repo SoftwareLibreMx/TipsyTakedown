@@ -25,6 +25,7 @@ POST 'api/auth/check_email'
 POST 'api/payment/'
 
 GET 'api/subscription_type/<subscription_type_id>'
+POST 'api/subscription_type'
 
 GET 'checkout/'
 

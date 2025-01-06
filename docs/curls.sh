@@ -101,6 +101,18 @@ curl -X POST "$HOST/api/payment/subscription" \
 curl --location "$HOST/api/subscription_type/8361c656-a59c-4d71-81b8-0198278413a4" \
 	-H "Authorization: $AUTH_TOKEN" 
 
+# Subscription Type - post
+curl --location "$HOST/api/subscription_type" \
+    -H "Authorization: $AUTH_TOKEN" 
+    -H 'Content-Type: application/json' \
+--data-raw '{
+    "name": "foo",
+    "payment_cycle":"MONTHLY",
+    "price":200.00,
+    "currency":"MXN",
+    "is_active": true
+}'
+
 # Checkout
 curl --location "$HOST/checkout/?token=$AUTH_TOKEN"
 
