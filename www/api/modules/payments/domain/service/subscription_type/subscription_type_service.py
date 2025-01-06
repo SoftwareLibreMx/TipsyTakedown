@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from ...dto.subscription_type_dto import SubscriptionTypeDTO
 from ....infraestructure.repository.subscription_type import SubscriptionTypeRepository
+from ...entity import SubscriptionTypeModel
 
 
 class SubscriptionTypeService:
@@ -26,3 +27,22 @@ class SubscriptionTypeService:
             subscription_types.append(sub_type._asdict())
 
         return subscription_types
+
+    def create(self,
+               subscription_type_data: dict
+               ) -> tuple[List[str], Optional[SubscriptionTypeDTO]]:
+        error, subscription_type = SubscriptionTypeModel.from_dict(
+            subscription_type_data)
+
+        if error:
+            return error, None
+
+        try:
+            subscription_type = self.repository.create(subscription_type)
+        except Exception as e:
+            return [str(e)], None
+
+        if not subscription_type:
+            return ['Failed to create subscription type'], None
+
+        return None, subscription_type

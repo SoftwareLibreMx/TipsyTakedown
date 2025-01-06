@@ -24,3 +24,10 @@ class SubscriptionTypeRepository:
                 FROM subscription_types
                 WHERE deleted_at IS NULL AND is_active = TRUE
             ''')).fetchall()
+
+    def create(self, subscription_type: SubscriptionTypeModel) -> dict:
+        with Session(self.db_engine) as session:
+            session.add(subscription_type)
+            session.commit()
+            session.refresh(subscription_type)
+            return subscription_type

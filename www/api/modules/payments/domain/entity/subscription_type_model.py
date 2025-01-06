@@ -1,3 +1,5 @@
+import uuid
+
 from typing import Optional
 
 from sqlalchemy import String, Float, Boolean
@@ -44,7 +46,7 @@ class SubscriptionTypeModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
             return errors, None
 
         return None, SubscriptionTypeModel(
-            id=data.get('id', None),
+            id=str(uuid.uuid4()),
             name=data.get('name', None),
             payment_cycle=data.get('payment_cycle', None),
             price=data.get('price', None),

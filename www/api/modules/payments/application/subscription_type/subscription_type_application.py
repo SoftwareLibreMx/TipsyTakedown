@@ -36,3 +36,10 @@ def get_all() -> list[SubscriptionTypeDTO]:
     subscription_type_service = __init_classes()
 
     return subscription_type_service.get_all()
+
+
+def create(subscription_type_data: dict) -> SubscriptionTypeDTO:
+    subscription_type_service = __init_classes()
+    print("subscription_type_data")
+    print(subscription_type_data)
+    return subscription_type_service.create(subscription_type_data)
