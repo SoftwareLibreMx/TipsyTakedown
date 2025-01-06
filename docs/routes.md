@@ -33,6 +33,7 @@ GET 'checkout/'
 GET "api/auth/sign_in"
 POST "api/auth/sign_uo"
 POST "api/auth/check_email"
+GET "api/auth/user_types"
 GET "auth/logout"
 
 GET "auth/google"

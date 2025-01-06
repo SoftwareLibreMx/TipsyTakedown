@@ -121,7 +121,7 @@ curl --location "$HOST/api/subscription_type" \
 curl --location "$HOST/checkout/?token=$AUTH_TOKEN"
 
 # ADMIN
-curl --location "http://localhost:8000/admin" \
+curl --location "$HOST/admin" \
 	-H "Authorization: $AUTH_TOKEN"
 
 # Auth - Sign Up
@@ -141,6 +141,10 @@ curl --location "$HOST/api/auth/check_email" \
     "email": "foo@gmail.com"
 }'
 
+# Auth - User Types
+curl --location '$HOST/api/auth/user_types' \
+	-H "Authorization: $AUTH_TOKEN" 
+
 # Auth - Sign In
 curl --location "$HOST/api/auth/sign_in" \
 --header 'Content-Type: application/json' \
@@ -148,6 +152,7 @@ curl --location "$HOST/api/auth/sign_in" \
     "email": "foo@foo.com",
     "password": "123123"
 }'
+
 
 # Auth - Sign Out
 curl --location 'http://localhost:8000/auth/logout' \

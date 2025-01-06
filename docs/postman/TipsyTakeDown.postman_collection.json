@@ -1072,6 +1072,34 @@
 					"response": []
 				},
 				{
+					"name": "Get Payment cycles Copy",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/auth/user_types",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"user_types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "logout",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
