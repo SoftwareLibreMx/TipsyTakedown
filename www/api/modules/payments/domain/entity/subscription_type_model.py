@@ -46,7 +46,7 @@ class SubscriptionTypeModel(BaseModel, TrackTimeMixin, SoftDeleteMixin):
             return errors, None
 
         return None, SubscriptionTypeModel(
-            id=str(uuid.uuid4()),
+            id=data.get('id', str(uuid.uuid4())),
             name=data.get('name', None),
             payment_cycle=data.get('payment_cycle', None),
             price=data.get('price', None),

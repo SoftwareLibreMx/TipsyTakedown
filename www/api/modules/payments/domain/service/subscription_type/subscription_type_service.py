@@ -40,6 +40,7 @@ class SubscriptionTypeService:
         if user.get("user_type") not in self.__valid_user_types:
             return "User is not authorized to create a subscription type", None
 
+        subscription_type_data.pop('id', None)
         error, subscription_type = SubscriptionTypeModel.from_dict(
             subscription_type_data)
 
