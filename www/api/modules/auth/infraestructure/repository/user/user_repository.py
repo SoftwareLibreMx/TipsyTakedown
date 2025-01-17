@@ -3,6 +3,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from api.libs.utils import process_filters
+from api.libs.domain_entity.user_type import UserType
 
 from ....domain.entity import UserModel
 
@@ -31,3 +32,6 @@ class UserRepository:
                 return None, user
         except Exception as e:
             return str(e), None
+
+    def get_user_types(self):
+        return UserType

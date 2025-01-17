@@ -101,11 +101,27 @@ curl -X POST "$HOST/api/payment/subscription" \
 curl --location "$HOST/api/subscription_type/8361c656-a59c-4d71-81b8-0198278413a4" \
 	-H "Authorization: $AUTH_TOKEN" 
 
+# Subscription Type Payment cycles- Get
+curl --location "$HOST/api/subscription_type/payment_cycles" \
+	-H "Authorization: $AUTH_TOKEN" 
+
+# Subscription Type - post
+curl --location "$HOST/api/subscription_type" \
+    -H "Authorization: $AUTH_TOKEN" 
+    -H 'Content-Type: application/json' \
+--data-raw '{
+    "name": "foo",
+    "payment_cycle":"MONTHLY",
+    "price":200.00,
+    "currency":"MXN",
+    "is_active": true
+}'
+
 # Checkout
 curl --location "$HOST/checkout/?token=$AUTH_TOKEN"
 
 # ADMIN
-curl --location "http://localhost:8000/admin" \
+curl --location "$HOST/admin" \
 	-H "Authorization: $AUTH_TOKEN"
 
 # Auth - Sign Up
@@ -125,6 +141,10 @@ curl --location "$HOST/api/auth/check_email" \
     "email": "foo@gmail.com"
 }'
 
+# Auth - User Types
+curl --location '$HOST/api/auth/user_types' \
+	-H "Authorization: $AUTH_TOKEN" 
+
 # Auth - Sign In
 curl --location "$HOST/api/auth/sign_in" \
 --header 'Content-Type: application/json' \
@@ -132,6 +152,7 @@ curl --location "$HOST/api/auth/sign_in" \
     "email": "foo@foo.com",
     "password": "123123"
 }'
+
 
 # Auth - Sign Out
 curl --location 'http://localhost:8000/auth/logout' \

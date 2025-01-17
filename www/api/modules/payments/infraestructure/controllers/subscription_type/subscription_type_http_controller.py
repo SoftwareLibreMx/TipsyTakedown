@@ -1,9 +1,9 @@
 import json
-from flask import Blueprint
+from flask import Blueprint, request
 
 from api.libs.domain_entity import UserType
 
-from api.libs.utils import api_response as Response, as_json_dumps, dataclass_to_json_dumps
+from api.libs.utils import api_response as Response, as_dict, dataclass_to_json_dumps
 from api.libs.utils import api_authorizer
 from api.libs.utils import as_dict
 
@@ -27,3 +27,34 @@ def all():
     subscription_types = subscription_type_app.get_all()
 
     return Response(json.dumps(subscription_types), status=200)
+
+
+@subscription_type_api.route('', methods=['POST'])
+@api_authorizer([UserType.ADMIN])
+def create(user):
+    data = request.get_json()
+
+    errors, subscription_type = subscription_type_app.create(user, data)
+
+    if errors:
+        return Response(json.dumps({"errors": errors}), status=404)
+
+    subscription_type_dict = as_dict(subscription_type)
+
+    return Response(json.dumps(
+        {
+            'id': subscription_type_dict.get('id'),
+            'name': subscription_type_dict.get('name'),
+            'price': subscription_type_dict.get('price'),
+            'currency': subscription_type_dict.get('currency'),
+            'payment_cycle': subscription_type_dict.get('payment_cycle'),
+            'is_active': subscription_type_dict.get('is_active')
+        }, default=str
+    ), status=201)
+
+
+@subscription_type_api.route('/payment_cycles', methods=['GET'])
+def get_payment_cycles():
+    payment_cycles = subscription_type_app.get_payment_cycles()
+
+    return Response(json.dumps({"payment_cycles": payment_cycles}), status=200)

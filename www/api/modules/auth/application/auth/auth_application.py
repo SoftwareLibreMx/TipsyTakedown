@@ -60,3 +60,9 @@ def check_user_type(
     auth_service = __init_classes()
 
     return auth_service.check_user_type(user, user_type_required)
+
+
+def get_user_types() -> list[str]:
+    auth_service = __init_classes()
+
+    return auth_service.get_user_types()

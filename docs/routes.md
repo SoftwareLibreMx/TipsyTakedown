@@ -25,12 +25,15 @@ POST 'api/auth/check_email'
 POST 'api/payment/'
 
 GET 'api/subscription_type/<subscription_type_id>'
+GET 'api/subscription_type/payment_cycles'
+POST 'api/subscription_type'
 
 GET 'checkout/'
 
 GET "api/auth/sign_in"
 POST "api/auth/sign_uo"
 POST "api/auth/check_email"
+GET "api/auth/user_types"
 GET "auth/logout"
 
 GET "auth/google"

@@ -727,6 +727,70 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Payment cycles",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/subscription_type/payment_cycles",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"subscription_type",
+								"payment_cycles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Subscription type",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"name\": \"foo\",\n\"payment_cycle\":\"MONTHLY\",\n\"price\":200.00,\n\"currency\":\"MXN\",\n\"is_active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/subscription_type",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"subscription_type"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1002,6 +1066,34 @@
 								"api",
 								"auth",
 								"sign_up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Payment cycles Copy",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/auth/user_types",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"user_types"
 							]
 						}
 					},
