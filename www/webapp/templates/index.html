@@ -19,11 +19,10 @@
 
         <div class="mx-5 row">
             {% for course in courses %}
-                <a class="col-3 mb-3" href="/course/{{course.get('id')}}">
+                <a class="col-3 mb-3" href="/course/{{course.get('course_id')}}/material/{{course.get('material_id')}}">
                     <div class="card rounded-4 shadow overflow-hidden">
-                        <img loading="auto" 
-                        src="https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/themes/2154219945/settings_images/f0cf18c-aaf7-fa10-cfb-be87e6d3881_14.jpg"
-                        >
+                        <img loading="auto" alt="{{course.get('course_name')}}"
+                        src="{{course.get('course_thumbnail')}}">
                     </div>
                 </a>
             {% endfor %}
